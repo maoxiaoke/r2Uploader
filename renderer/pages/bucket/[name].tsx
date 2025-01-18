@@ -22,6 +22,7 @@ import useMasonry from "../../hooks/useMasonry";
 import { NoBuckets } from "@/components/no-buckets";
 import { Spinner } from "@/components/spinner";
 import toast, { Toaster } from "react-hot-toast";
+import { usePlateform } from "@/hooks/usePlateform";
 
 import type { UploadFile } from "@/components/file-upload";
 
@@ -42,6 +43,7 @@ interface BucketObject {
 
 export default function BucketPage() {
   const router = useRouter();
+  const { isWindows } = usePlateform();
   const bucketName = router.query.name as string;
   const { buckets } = useBucketsContext();
   const currentBucket = buckets.find((bucket) => bucket.name === bucketName);
@@ -133,7 +135,9 @@ export default function BucketPage() {
           styl.headerHeight
         )}
       >
-        <div className="flex-1 drag opacity-0">hidden drag bar</div>
+        {!isWindows ? (
+          <div className="flex-1 drag opacity-0">hidden drag bar</div>
+        ) : null}
         <div>
           <FileUpload bucket={bucketName} onClose={appendFiles}>
             <Button
@@ -185,6 +189,9 @@ export default function BucketPage() {
             </Button>
           </SimpleUseTooltip>
         </div>
+        {isWindows ? (
+          <div className="flex-1 drag opacity-0">hidden drag bar</div>
+        ) : null}
       </header>
 
       {loading && (

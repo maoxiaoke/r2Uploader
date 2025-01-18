@@ -18,6 +18,7 @@ const ipcHandler = {
 
 const handlers = {
   ipc: ipcHandler,
+  platform: process.platform,
 };
 
 contextBridge.exposeInMainWorld("electron", handlers);
