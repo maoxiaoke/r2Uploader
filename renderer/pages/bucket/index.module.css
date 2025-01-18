@@ -1,0 +1,7 @@
+.headerHeight {
+  height: 52px;
+}
+
+.bodyHeight {
+  height: calc(100vh - 52px);
+}

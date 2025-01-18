@@ -1,0 +1,14 @@
+appId: com.zuyujiao.R2Uploader
+productName: R2Uploader
+copyright: Copyright © 2025 nazha
+directories:
+  output: dist
+  buildResources: resources
+files:
+  - from: .
+    filter:
+      - package.json
+      - app
+publish: null
+asar: true
+compression: maximum
