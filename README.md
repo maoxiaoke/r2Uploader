@@ -37,7 +37,7 @@ https://ysrazsingh.medium.com/how-cloudflare-r2-makes-my-life-easy-fb0fd453fff0
 
 ## Download
 
-[Download DMG](https://github.com/milanvarady/applite/releases/latest/download/Applite.dmg)
+[Download DMG](https://github.com/maoxiaoke/r2Uploader/releases/latest/download/R2Uploader-0.0.1-beta.0-arm64.dmg)
 
 ## Tutorial
 
