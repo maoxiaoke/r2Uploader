@@ -37,7 +37,9 @@ https://ysrazsingh.medium.com/how-cloudflare-r2-makes-my-life-easy-fb0fd453fff0
 
 ## Download
 
-[Download DMG](https://github.com/maoxiaoke/r2Uploader/releases/latest/download/R2Uploader-0.0.1-beta.0-arm64.dmg)
+For macOS ARM64: [Download DMG](https://github.com/maoxiaoke/r2Uploader/releases/latest/download/R2Uploader-0.0.1-beta.0-arm64.dmg)
+
+For Win: [Download EXE](https://github.com/maoxiaoke/r2Uploader/releases/latest/download/R2Uploader-0.0.1-beta.0-arm64.exe)
 
 ## Tutorial
 
