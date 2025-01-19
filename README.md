@@ -20,6 +20,15 @@ R2Uploader is an open-source application designed to streamline the upload and m
 
 R2Uploader aims to simplify the process of uploading and sharing R2 objects, serving as your R2 asset management assistant. The primary goal of this app is to provide convenience for non-technical users, so the UI was designed with simplicity and ease of use in mind.
 
+## RoadMap
+
+- **Search Functionality**
+- **Image Export and Copy**: Enable users to export and copy images to clipboard seamlessly for better usability
+- **Custom Domain Integration**
+- **Filter by created time**:  Introduce filtering options by creation time to streamline content organization
+- **Automatically download small objects to the computer**: Automate the download process for small files to improve efficiency and provide a fallback option in case of accidental deletion
+- **Support directories**
+
 ## Why Cloudflare R2
 
 https://ysrazsingh.medium.com/how-cloudflare-r2-makes-my-life-easy-fb0fd453fff0
@@ -38,6 +47,8 @@ https://ysrazsingh.medium.com/how-cloudflare-r2-makes-my-life-easy-fb0fd453fff0
 ## Download
 
 For macOS ARM64: [Download DMG](https://github.com/maoxiaoke/r2Uploader/releases/latest/download/R2Uploader-0.0.1-beta.0-arm64.dmg)
+
+For macOS Intel: [Download DMG](https://github.com/maoxiaoke/r2Uploader/releases/latest/download/R2Uploader-0.0.1-beta.0.dmg)
 
 For Win: [Download EXE](https://github.com/maoxiaoke/r2Uploader/releases/latest/download/R2Uploader.Setup.0.0.1-beta.0.exe)
 
