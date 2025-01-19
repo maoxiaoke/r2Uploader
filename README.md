@@ -62,7 +62,6 @@ For Win: [Download EXE](https://github.com/maoxiaoke/r2Uploader/releases/latest/
 <div style="text-align: center">
 <img src="https://pub-388464a2ac764e37ba36c5ea17d573ee.r2.dev/SCR-20250118-knlp.png" style="width: 90%;" />
 
-
 </div>
 
 

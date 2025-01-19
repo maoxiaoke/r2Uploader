@@ -97,37 +97,74 @@ ipcMain.handle("cf-get-buckets", async (evt, { cacheOnly = false }) => {
       ? storeBuckets(data?.result?.buckets ?? [], true)
       : [];
 
-  // Try to get Managed Domain
-  // https://developers.cloudflare.com/api/resources/r2/subresources/buckets/subresources/domains/subresources/managed/
+  let newestBuckets = updatedBuckets;
 
-  const needGetManagedDomainsBuckets = updatedBuckets.filter(
-    (bucket) => !bucket?.domains?.managed
-  );
+  try {
+    // get Managed Domain
+    // https://developers.cloudflare.com/api/resources/r2/subresources/buckets/subresources/domains/subresources/managed/
+    const needGetManagedDomainsBuckets = updatedBuckets.filter(
+      (bucket) => !bucket?.domains?.managed
+    );
 
-  const managedDomains = await Promise.all(
-    needGetManagedDomainsBuckets.map(async (bucket) => {
-      const response = await _fetch(
-        `https://api.cloudflare.com/client/v4/accounts/*/r2/buckets/${bucket.name}/domains/managed`,
-        {
-          method: "GET",
+    const managedDomains = await Promise.all(
+      needGetManagedDomainsBuckets.map(async (bucket) => {
+        const response = await _fetch(
+          `https://api.cloudflare.com/client/v4/accounts/*/r2/buckets/${bucket.name}/domains/managed`,
+          {
+            method: "GET",
+          }
+        );
+        const data = await response.json();
+
+        if (data?.success && data?.result) {
+          return {
+            ...bucket,
+            domains: {
+              managed: data.result,
+              custom: bucket.domains?.custom,
+            },
+          };
         }
-      );
-      const data = await response.json();
 
-      if (data?.success && data?.result) {
-        return {
-          ...bucket,
-          domains: {
-            managed: data.result,
-          },
-        };
-      }
+        return bucket;
+      })
+    );
 
-      return bucket;
-    })
-  );
+    // get the custom Domain
+    const needGetCustomDomainsBuckets = managedDomains.filter(
+      (bucket) => !bucket?.domains?.custom
+    );
 
-  const newestBuckets = storeBuckets(managedDomains, false);
+    const customDomainsUpdatedBuckets = await Promise.all(
+      needGetCustomDomainsBuckets.map(async (bucket) => {
+        const response = await _fetch(
+          `https://api.cloudflare.com/client/v4/accounts/*/r2/buckets/${bucket.name}/domains/custom`,
+          {
+            method: "GET",
+          }
+        );
+        const data = await response.json();
+
+        if (data?.success && data?.result) {
+          return {
+            ...bucket,
+            domains: {
+              managed: bucket.domains?.managed,
+              custom: {
+                domains: data.result?.domains ?? [],
+              },
+            },
+          };
+        }
+
+        return bucket;
+      })
+    );
+
+    newestBuckets = storeBuckets(customDomainsUpdatedBuckets, false);
+  } catch (error) {
+    // do nothing..., just log
+  }
 
   return {
     ...data,
