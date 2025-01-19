@@ -12,3 +12,7 @@ files:
 publish: null
 asar: true
 compression: maximum
+mac:
+  target:
+    - target: dmg
+      arch: [x64, arm64]
