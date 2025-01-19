@@ -28,6 +28,7 @@ R2Uploader aims to simplify the process of uploading and sharing R2 objects, ser
 - **Filter by created time**:  Introduce filtering options by creation time to streamline content organization
 - **Automatically download small objects to the computer**: Automate the download process for small files to improve efficiency and provide a fallback option in case of accidental deletion
 - **Support directories**
+- **Automatic Updates**
 
 ## Why Cloudflare R2
 
