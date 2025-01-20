@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 import { ScrollArea } from "components/ui/scroll-area";
 import { Button } from "components/ui/button";
 import styl from "./index.module.css";
@@ -47,6 +47,14 @@ export default function BucketPage() {
   const bucketName = router.query.name as string;
   const { buckets } = useBucketsContext();
   const currentBucket = buckets.find((bucket) => bucket.name === bucketName);
+
+  const customDomain = useMemo(() => {
+    const activeCustomDomain = (
+      currentBucket?.domains?.custom?.domains ?? []
+    ).filter((dom) => dom.enabled)[0];
+
+    return activeCustomDomain?.domain;
+  }, [currentBucket]);
 
   const [files, setFiles] = useState<BucketObject[]>([]);
   const [loading, setLoading] = useState(false);
@@ -225,6 +233,7 @@ export default function BucketPage() {
                   file={file}
                   onDeleteFile={onDelete}
                   managedDomain={currentBucket?.domains?.managed?.domain}
+                  customDomain={customDomain}
                 />
               ))}
             </div>

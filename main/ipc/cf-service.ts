@@ -130,8 +130,10 @@ ipcMain.handle("cf-get-buckets", async (evt, { cacheOnly = false }) => {
       })
     );
 
+    newestBuckets = storeBuckets(managedDomains, false);
+
     // get the custom Domain
-    const needGetCustomDomainsBuckets = managedDomains.filter(
+    const needGetCustomDomainsBuckets = newestBuckets.filter(
       (bucket) => !bucket?.domains?.custom
     );
 

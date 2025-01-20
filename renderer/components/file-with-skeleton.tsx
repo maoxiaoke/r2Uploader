@@ -19,6 +19,7 @@ interface FileWithSkeletonProps {
   };
   idx: number;
   managedDomain: string;
+  customDomain?: string;
   bucket: string;
   onDeleteFile: (object: string) => void;
 }
@@ -28,6 +29,7 @@ export function FileWithSkeleton({
   bucket,
   idx,
   managedDomain,
+  customDomain,
   onDeleteFile,
 }: FileWithSkeletonProps) {
   const [isLoading, setIsLoading] = useState(true);
@@ -37,6 +39,8 @@ export function FileWithSkeleton({
   const fileType = getFiletype(file.http_metadata.contentType ?? "");
 
   const FileIcon = FileTypeIcons[fileType];
+
+  const shareUrl = `https://${customDomain ?? managedDomain}/${file.key}`;
 
   const focusEle = (key: string) => {
     document.getElementById(key)?.focus();
@@ -50,12 +54,12 @@ export function FileWithSkeleton({
 
   const onOpenInBrowser = () => {
     window.electron.ipc.invoke("open-browser", {
-      url: `https://${managedDomain}/${file.key}`,
+      url: shareUrl,
     });
   };
 
   const onCopyPath = () => {
-    navigator.clipboard.writeText(`https://${managedDomain}/${file.key}`);
+    navigator.clipboard.writeText(shareUrl);
     toast.success("File path is copied to your clipboard!", {
       style: {
         fontSize: "13px",
@@ -115,7 +119,7 @@ export function FileWithSkeleton({
                 <Skeleton className="absolute inset-0 w-full h-[150px] rounded-sm bg-gray-400" />
               )}
               <img
-                src={`https://${managedDomain}/${file.key}`}
+                src={shareUrl}
                 alt={file.key}
                 className={cn(
                   "w-full rounded-sm bg-[#E7E7E7] focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2",
@@ -149,9 +153,7 @@ export function FileWithSkeleton({
           onMouseLeave={() => setShowCopy(false)}
           data-confetti-text="Copied!"
           onClick={() => {
-            navigator.clipboard.writeText(
-              `https://${managedDomain}/${file.key}`
-            );
+            navigator.clipboard.writeText(shareUrl);
             confetti();
           }}
         >
