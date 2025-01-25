@@ -19,29 +19,29 @@ export function FileContextMenu({
   onExport,
   onOpenInBrowser,
   onCopyPath,
+  onCopy2Clipboard,
   onDelete,
 }) {
   return (
     <ContextMenu>
       <ContextMenuTrigger>{children}</ContextMenuTrigger>
       <ContextMenuContent className="w-40 p-2">
-        {/* <ContextMenuItem className="text-sm" onClick={onExport}>
+        <ContextMenuItem className="text-sm" onClick={onExport}>
           Export
-        </ContextMenuItem> */}
+        </ContextMenuItem>
         <ContextMenuItem onClick={onOpenInBrowser}>
           Open in browser
         </ContextMenuItem>
-        <ContextMenuItem onClick={onCopyPath}>Copy path</ContextMenuItem>
-        {/* <ContextMenuSub>
+        <ContextMenuSub>
           <ContextMenuSubTrigger>Copy & Paste</ContextMenuSubTrigger>
           <ContextMenuSubContent className="w-48">
-            <ContextMenuItem>
+            <ContextMenuItem onClick={onCopy2Clipboard}>
               Copy to clipboard
               <ContextMenuShortcut>⌘C</ContextMenuShortcut>
             </ContextMenuItem>
             <ContextMenuItem onClick={onCopyPath}>Copy path</ContextMenuItem>
           </ContextMenuSubContent>
-        </ContextMenuSub> */}
+        </ContextMenuSub>
 
         <ContextMenuSeparator />
         <ContextMenuItem

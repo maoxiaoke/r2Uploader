@@ -1,4 +1,13 @@
-import { ipcMain, shell, dialog } from "electron";
+import {
+  ipcMain,
+  shell,
+  dialog,
+  BrowserWindow,
+  clipboard,
+  nativeImage,
+} from "electron";
+import { download } from "electron-dl";
+import { getCachePath } from "../helpers/cache";
 import fs from "node:fs";
 
 /**
@@ -9,21 +18,38 @@ ipcMain.handle("open-browser", async (evt, { url }) => {
   return true;
 });
 
-ipcMain.handle("export-file", async (event, { name, content }) => {
+ipcMain.handle("export-file", async (event, { url }) => {
   try {
-    const savePath = dialog.showSaveDialogSync({
-      defaultPath: name,
-      properties: ["createDirectory", "showOverwriteConfirmation"],
+    const win = BrowserWindow.getFocusedWindow();
+
+    const res = await download(win, url, {
+      saveAs: true,
     });
 
-    if (savePath) {
-      fs.writeFileSync(savePath, content);
-      return { success: true, path: savePath };
-    }
-    return { success: false, error: "No save path selected" };
+    console.log("res", res, url);
+    return true;
   } catch (error) {
-    return { success: false, error: error.message };
+    return false;
   }
+});
+
+ipcMain.handle("copy-2-clipboard", async (evt, { url }) => {
+  const win = BrowserWindow.getFocusedWindow();
+
+  const cachePath = getCachePath();
+
+  const downloadRes = await download(win, url, {
+    directory: cachePath,
+  });
+
+  const savePath = downloadRes.getSavePath();
+
+  const image = nativeImage.createFromPath(savePath);
+  clipboard.writeImage(image);
+
+  fs.unlinkSync(savePath);
+
+  return true;
 });
 
 ipcMain.handle("show-message-box-sync", (evt, { message, type, detail }) => {

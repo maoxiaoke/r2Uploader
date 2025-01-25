@@ -46,10 +46,14 @@ export function FileWithSkeleton({
     document.getElementById(key)?.focus();
   };
 
-  const onExport = () => {
-    window.electron.ipc.invoke("export-file", {
-      name: file.key,
+  const onExport = async () => {
+    const success = await window.electron.ipc.invoke("export-file", {
+      url: shareUrl,
     });
+
+    if (success) {
+      //
+    }
   };
 
   const onOpenInBrowser = () => {
@@ -99,6 +103,13 @@ export function FileWithSkeleton({
     }
   };
 
+  const onCopy2Clipboard = () => {
+    //
+    window.electron.ipc.invoke("copy-2-clipboard", {
+      url: shareUrl,
+    });
+  };
+
   return (
     <div className="mb-4 break-inside-avoid relative">
       <div
@@ -112,6 +123,7 @@ export function FileWithSkeleton({
           onOpenInBrowser={onOpenInBrowser}
           onCopyPath={onCopyPath}
           onDelete={onDelete}
+          onCopy2Clipboard={onCopy2Clipboard}
         >
           {fileType === "image" ? (
             <>
