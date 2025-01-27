@@ -2,7 +2,7 @@
   "private": true,
   "name": "r2uploader",
   "description": "User-friendly GUI application for Cloudflare R2",
-  "version": "0.0.1-beta.1",
+  "version": "0.0.1-beta.2",
   "author": "nazha <maoxiaoke@outlook.com>",
   "main": "app/background.js",
   "scripts": {

@@ -20,10 +20,54 @@ R2Uploader is an open-source application designed to streamline the upload and m
 
 R2Uploader aims to simplify the process of uploading and sharing R2 objects, serving as your R2 asset management assistant. The primary goal of this app is to provide convenience for non-technical users, so the UI was designed with simplicity and ease of use in mind.
 
+---
+
+<div style="display:flex; align-items: center;">
+  <div style="flex:1">
+  <h3>
+  Browse objects using the Masonry layout</h3>
+
+  R2uploader supports real-time preview of objects using the Masonry layout, making the process more convenient and intuitive. The dynamic grid display enhances the user experience, allowing for efficient browsing and management of uploaded content.
+  </div>
+
+  <div style="flex:1">
+    <img src="https://pub-388464a2ac764e37ba36c5ea17d573ee.r2.dev/r2-uploader-objects.png" style="width: 90%" />
+  </div>
+
+</div>
+
+<div style="display:flex; align-items: center;">
+  <div style="flex:1">
+    <img src="https://pub-388464a2ac764e37ba36c5ea17d573ee.r2.dev/SCR-20250127-phel.png" style="width: 90%" />
+  </div>
+  <div style="flex:1">
+  <h3>
+ Super Right-Click</h3>
+
+"Super Right-Click" offers easier management for each object: file export, object deletion, copy shareable link, copy to clipboard, and more. Dive in and explore the full range of features!
+  </div>
+
+</div>
+
+<div style="display:flex; align-items: center;">
+  <div style="flex:1">
+  <h3>
+  Support Search</h3>
+
+  R2uploader supports search functionality to find specific objects based on prefix.
+  </div>
+
+  <div style="flex:1">
+    <img src="https://pub-388464a2ac764e37ba36c5ea17d573ee.r2.dev/SCR-20250127-pial.png" style="width: 90%" />
+  </div>
+
+</div>
+
+
 ## RoadMap
 
-- **Search Functionality**
-- **Image Export and Copy**: Enable users to export and copy images to clipboard seamlessly for better usability
+- <del>**Search Functionality**</del>
+- <del>**Image Export and Copy**: Enable users to export and copy images to clipboard seamlessly for better usability </del>
 - **Custom Domain Integration**
 - **Filter by created time**:  Introduce filtering options by creation time to streamline content organization
 - **Automatically download small objects to the computer**: Automate the download process for small files to improve efficiency and provide a fallback option in case of accidental deletion
@@ -44,6 +88,7 @@ https://ysrazsingh.medium.com/how-cloudflare-r2-makes-my-life-easy-fb0fd453fff0
 <img src="https://pub-388464a2ac764e37ba36c5ea17d573ee.r2.dev/SCR-20250118-kdgo.png" style="width: 90%;display: inline-block;margin-top: 10px;" />
 
 </div>
+
 
 ## Download
 
