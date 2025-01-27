@@ -1,6 +1,7 @@
 import { Search, X } from "lucide-react";
 import { useState } from "react";
 import { Button } from "components/ui/button";
+import { SimpleUseTooltip } from "@/components/simple-use-tooltip";
 
 export const SearchArea = (props) => {
   const [showSearchInput, setShowSearchInput] = useState(false);
@@ -11,14 +12,16 @@ export const SearchArea = (props) => {
 
   if (!showSearchInput) {
     return (
-      <Button
-        variant="outline"
-        size="icon"
-        onClick={() => setShowSearchInput(true)}
-        className="bg-transparent shadow-none border-none"
-      >
-        <Search />
-      </Button>
+      <SimpleUseTooltip tips="search objects with prefix">
+        <Button
+          variant="outline"
+          size="icon"
+          onClick={() => setShowSearchInput(true)}
+          className="bg-transparent shadow-none border-none"
+        >
+          <Search />
+        </Button>
+      </SimpleUseTooltip>
     );
   }
 
