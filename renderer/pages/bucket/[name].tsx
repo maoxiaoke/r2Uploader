@@ -5,6 +5,7 @@ import { ScrollArea } from "components/ui/scroll-area";
 import { Button } from "components/ui/button";
 import styl from "./index.module.css";
 import { cn } from "lib/utils";
+import { useDebounce } from "@uidotdev/usehooks";
 import {
   House,
   Search,
@@ -20,9 +21,9 @@ import { FileUpload } from "@/components/file-upload";
 import { SimpleUseTooltip } from "@/components/simple-use-tooltip";
 import useMasonry from "../../hooks/useMasonry";
 import { NoBuckets } from "@/components/no-buckets";
-import { Spinner } from "@/components/spinner";
 import toast, { Toaster } from "react-hot-toast";
 import { usePlateform } from "@/hooks/usePlateform";
+import { SearchArea } from "@/components/search-area";
 
 import type { UploadFile } from "@/components/file-upload";
 
@@ -47,6 +48,9 @@ export default function BucketPage() {
   const bucketName = router.query.name as string;
   const { buckets } = useBucketsContext();
   const currentBucket = buckets.find((bucket) => bucket.name === bucketName);
+  const [prefix, setPrefix] = useState("");
+
+  const debouncedPrefix = useDebounce<string>(prefix, 500);
 
   const customDomain = useMemo(() => {
     const activeCustomDomain = (
@@ -75,6 +79,7 @@ export default function BucketPage() {
     window.electron.ipc
       .invoke("cf-get-bucket-objects", {
         bucketName,
+        prefix: debouncedPrefix,
       })
       .then((data) => {
         setCursor(data?.result_info);
@@ -84,7 +89,7 @@ export default function BucketPage() {
       .finally(() => {
         setLoading(false);
       });
-  }, [bucketName]);
+  }, [bucketName, debouncedPrefix]);
 
   const loadMore = () => {
     setIsLoadingMore(true);
@@ -92,6 +97,7 @@ export default function BucketPage() {
       .invoke("cf-get-bucket-objects", {
         bucketName,
         cursor: cursor.cursor,
+        prefix: debouncedPrefix,
       })
       .then((data) => {
         setCursor(data?.result_info);
@@ -139,14 +145,14 @@ export default function BucketPage() {
     <div className="no-drag">
       <header
         className={cn(
-          "flex items-center justify-between px-4 w-screen",
+          "flex items-center justify-between px-4 w-screen relative",
           styl.headerHeight
         )}
       >
         {!isWindows ? (
           <div className="flex-1 drag opacity-0">hidden drag bar</div>
         ) : null}
-        <div>
+        <div className="flex items-center">
           <FileUpload bucket={bucketName} onClose={appendFiles}>
             <Button
               variant="outline"
@@ -168,13 +174,7 @@ export default function BucketPage() {
             </Button>
           </SimpleUseTooltip>
 
-          <Button
-            variant="outline"
-            size="icon"
-            className="bg-transparent shadow-none border-none"
-          >
-            <Search />
-          </Button>
+          <SearchArea onChange={(prefix) => setPrefix(prefix)} value={prefix} />
 
           {/* <Button
             variant="outline"

@@ -6,7 +6,6 @@ import { Input } from "../components/ui/Input";
 import { Button } from "@/components/ui/button";
 import { CircleHelp, ArrowRight, Trash2, Rocket, Loader2 } from "lucide-react";
 import toast, { Toaster } from "react-hot-toast";
-import { Spinner } from "@/components/spinner";
 import { useConfigContext } from "@/context/config";
 import { useBucketsContext } from "@/context/buckets";
 import { CreateBucket } from "@/components/create-bucket";

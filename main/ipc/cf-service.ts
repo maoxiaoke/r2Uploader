@@ -186,15 +186,17 @@ ipcMain.handle(
     {
       bucketName,
       cursor,
+      prefix,
     }: {
       bucketName: string;
       cursor: string;
+      prefix?: string;
     }
   ) => {
     const response = await _fetch(
       `https://api.cloudflare.com/client/v4/accounts/*/r2/buckets/${bucketName}/objects${
         cursor ? `?cursor=${cursor}` : ""
-      }`,
+      }${prefix ? `?prefix=${prefix}` : ""}`,
       {
         method: "GET",
       }
