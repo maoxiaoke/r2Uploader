@@ -176,7 +176,7 @@ export default function HomePage() {
         </div>
 
         {loading ? (
-          <Spinner />
+          <Loader2 className="animate-spin mt-10" />
         ) : (
           <>
             {logined ? (

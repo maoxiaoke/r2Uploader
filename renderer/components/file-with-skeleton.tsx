@@ -52,7 +52,11 @@ export function FileWithSkeleton({
     });
 
     if (success) {
-      //
+      toast.success("file is exported!", {
+        style: {
+          fontSize: "13px",
+        },
+      });
     }
   };
 
@@ -103,11 +107,19 @@ export function FileWithSkeleton({
     }
   };
 
-  const onCopy2Clipboard = () => {
-    //
-    window.electron.ipc.invoke("copy-2-clipboard", {
+  const onCopy2Clipboard = async () => {
+    const success = await window.electron.ipc.invoke("copy-2-clipboard", {
       url: shareUrl,
+      copyFileType: fileType === "image" ? "image" : "text",
     });
+
+    if (success) {
+      toast.success("file content is copied to your clipboard!", {
+        style: {
+          fontSize: "13px",
+        },
+      });
+    }
   };
 
   return (
@@ -124,6 +136,7 @@ export function FileWithSkeleton({
           onCopyPath={onCopyPath}
           onDelete={onDelete}
           onCopy2Clipboard={onCopy2Clipboard}
+          showCopy2Clipboard={["text", "image", "json"].includes(fileType)}
         >
           {fileType === "image" ? (
             <>

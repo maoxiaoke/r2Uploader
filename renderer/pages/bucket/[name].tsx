@@ -204,7 +204,7 @@ export default function BucketPage() {
 
       {loading && (
         <div className="flex items-center justify-center h-[500px] w-full">
-          <Spinner />
+          <Loader2 className="animate-spin" />
         </div>
       )}
 

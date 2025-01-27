@@ -21,6 +21,7 @@ export function FileContextMenu({
   onCopyPath,
   onCopy2Clipboard,
   onDelete,
+  showCopy2Clipboard,
 }) {
   return (
     <ContextMenu>
@@ -35,10 +36,12 @@ export function FileContextMenu({
         <ContextMenuSub>
           <ContextMenuSubTrigger>Copy & Paste</ContextMenuSubTrigger>
           <ContextMenuSubContent className="w-48">
-            <ContextMenuItem onClick={onCopy2Clipboard}>
-              Copy to clipboard
-              <ContextMenuShortcut>⌘C</ContextMenuShortcut>
-            </ContextMenuItem>
+            {showCopy2Clipboard && (
+              <ContextMenuItem onClick={onCopy2Clipboard}>
+                Copy to clipboard
+                <ContextMenuShortcut>⌘C</ContextMenuShortcut>
+              </ContextMenuItem>
+            )}
             <ContextMenuItem onClick={onCopyPath}>Copy path</ContextMenuItem>
           </ContextMenuSubContent>
         </ContextMenuSub>

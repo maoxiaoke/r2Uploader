@@ -22,34 +22,46 @@ ipcMain.handle("export-file", async (event, { url }) => {
   try {
     const win = BrowserWindow.getFocusedWindow();
 
-    const res = await download(win, url, {
+    await download(win, url, {
       saveAs: true,
+      showBadge: true,
+      showProgressBar: true,
     });
 
-    console.log("res", res, url);
     return true;
   } catch (error) {
     return false;
   }
 });
 
-ipcMain.handle("copy-2-clipboard", async (evt, { url }) => {
-  const win = BrowserWindow.getFocusedWindow();
+ipcMain.handle("copy-2-clipboard", async (evt, { url, copyFileType }) => {
+  try {
+    const win = BrowserWindow.getFocusedWindow();
+    const cachePath = getCachePath();
 
-  const cachePath = getCachePath();
+    const downloadRes = await download(win, url, {
+      directory: cachePath,
+    });
 
-  const downloadRes = await download(win, url, {
-    directory: cachePath,
-  });
+    const savePath = downloadRes.getSavePath();
 
-  const savePath = downloadRes.getSavePath();
+    if (copyFileType === "image") {
+      const image = nativeImage.createFromPath(savePath);
+      clipboard.writeImage(image);
+    }
 
-  const image = nativeImage.createFromPath(savePath);
-  clipboard.writeImage(image);
+    if (copyFileType === "text") {
+      const fileContent = fs.readFileSync(savePath, "utf-8");
 
-  fs.unlinkSync(savePath);
+      clipboard.writeText(fileContent);
+    }
 
-  return true;
+    fs.unlinkSync(savePath);
+
+    return true;
+  } catch (e) {
+    return false;
+  }
 });
 
 ipcMain.handle("show-message-box-sync", (evt, { message, type, detail }) => {
