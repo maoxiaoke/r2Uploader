@@ -29,12 +29,12 @@ R2Uploader aims to simplify the process of uploading and sharing R2 objects, ser
       <p>R2uploader supports real-time preview of objects using the Masonry layout, making the process more convenient and intuitive. The dynamic grid display enhances the user experience, allowing for efficient browsing and management of uploaded content.</p>
     </td>
     <td style="vertical-align: middle; width: 50%;">
-      <img src="https://pub-388464a2ac764e37ba36c5ea17d573ee.r2.dev/r2-uploader-objects.png" style="width: 90%;" />
+      <img src="https://pub-388464a2ac764e37ba36c5ea17d573ee.r2.dev/r2-uploader-objects.png"  />
     </td>
   </tr>
   <tr>
     <td style="vertical-align: middle; width: 50%;">
-      <img src="https://pub-388464a2ac764e37ba36c5ea17d573ee.r2.dev/SCR-20250127-phel.png" style="width: 90%;" />
+      <img src="https://pub-388464a2ac764e37ba36c5ea17d573ee.r2.dev/SCR-20250127-phel.png" />
     </td>
     <td style="vertical-align: middle; width: 50%;">
       <h3>Super Right-Click</h3>
@@ -47,7 +47,7 @@ R2Uploader aims to simplify the process of uploading and sharing R2 objects, ser
       <p>R2uploader supports search functionality to find specific objects based on prefix.</p>
     </td>
     <td style="vertical-align: middle; width: 50%;">
-      <img src="https://pub-388464a2ac764e37ba36c5ea17d573ee.r2.dev/SCR-20250127-pial.png" style="width: 90%;" />
+      <img src="https://pub-388464a2ac764e37ba36c5ea17d573ee.r2.dev/SCR-20250127-pial.png" />
     </td>
   </tr>
 </table>
@@ -81,11 +81,11 @@ https://ysrazsingh.medium.com/how-cloudflare-r2-makes-my-life-easy-fb0fd453fff0
 
 ## Download
 
-For macOS ARM64: [Download DMG](https://github.com/maoxiaoke/r2Uploader/releases/latest/download/R2Uploader-0.0.1-beta.1-arm64.dmg)
+For macOS ARM64: [Download DMG](https://github.com/maoxiaoke/r2Uploader/releases/latest/download/R2Uploader-0.0.1-beta.2-arm64.dmg)
 
-For macOS Intel: [Download DMG](https://github.com/maoxiaoke/r2Uploader/releases/latest/download/R2Uploader-0.0.1-beta.1.dmg)
+For macOS Intel: [Download DMG](https://github.com/maoxiaoke/r2Uploader/releases/latest/download/R2Uploader-0.0.1-beta.2.dmg)
 
-For Win: [Download EXE](https://github.com/maoxiaoke/r2Uploader/releases/latest/download/R2Uploader.Setup.0.0.1-beta.1.exe)
+For Win: [Download EXE](https://github.com/maoxiaoke/r2Uploader/releases/latest/download/R2Uploader.Setup.0.0.1-beta.2.exe)
 
 ## Tutorial
 
