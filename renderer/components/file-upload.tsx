@@ -15,14 +15,21 @@ import {
   Loader,
   CircleCheckBig,
   CircleX,
+  RotateCcw,
+  RefreshCcwDot
 } from "lucide-react";
 import { ScrollArea } from "./ui/scroll-area";
-import { shortenPath } from "../lib/utils";
+import { shortenPath, prettifySize, getFiletype } from "../lib/utils";
+import { ConfettiCopyText } from "./confetti-copy-text";
+import { SimpleUseTooltip } from '@/components/simple-use-tooltip';
+import { FileTypeIcons } from "@/components/file-type-icons";
 
 const FileStatus = ({
   status,
+  message,
 }: {
   status: "uploading" | "completed" | "error";
+  message?: 'upload_failed' | 'file_exists' | string;
 }) => {
   if (status === "uploading") {
     return (
@@ -42,27 +49,57 @@ const FileStatus = ({
     );
   }
 
+  const fileExists = message === 'file_exists';
+
   return (
     <span className="flex items-center gap-1">
       <CircleX size={16} className="text-red-500" />
-      Upload failed
+      {fileExists ? 'File already exists' : 'Upload failed'}
     </span>
   );
 };
 
+const FileOperations = ({
+  status,
+  message,
+  onRetry,
+  onForceUpload,
+}: {
+  status: "uploading" | "completed" | "error";
+  message?: 'upload_failed' | 'file_exists' | string;
+  onRetry?: () => void;
+  onForceUpload?: () => void;
+}) => {
+  if (status === 'error') {
+    const fileExists = message === 'file_exists';
+
+    return fileExists ? (
+      <SimpleUseTooltip tips="Force upload">
+        <RefreshCcwDot className="cursor-pointer text-red-500" size={18} onClick={onForceUpload} />
+      </SimpleUseTooltip>
+    ) : <SimpleUseTooltip tips="Retry">
+      <RotateCcw className="cursor-pointer" size={18} onClick={onRetry} />
+      </SimpleUseTooltip>
+  }
+
+  return null;
+};
 export interface UploadFile {
   file: File;
   progress: number;
   status: "uploading" | "completed" | "error";
+  message?: 'upload_failed' | 'file_exists' | string;
 }
 
 export function FileUpload({
   children,
   bucket,
+  publicDomain,
   onClose,
 }: {
   children: React.ReactNode;
   bucket: string;
+  publicDomain: string;
   onClose?: (files: UploadFile[]) => void;
 }) {
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -72,17 +109,18 @@ export function FileUpload({
     fileInputRef.current?.click();
   };
 
-  const uploadFile = async (evt: React.ChangeEvent<HTMLInputElement>) => {
-    const evtFiles = evt.target.files;
+  const uploadFile = async (evt: React.ChangeEvent<HTMLInputElement> | File, forceUpload?: boolean) => {
+    const evtFiles = evt instanceof File ? [evt] : evt.target.files;
 
     if (!evtFiles?.length) {
       return;
     }
 
     const handleSignleFileUpload = async (file) => {
-      const idx = files.find((f) => f.file.path === file.path);
+      const idx = files.findIndex((f) => f.file.path === file.path);
 
-      if (!idx) {
+
+      if (idx === -1) {
         setFiles((prev) => [
           {
             file,
@@ -91,9 +129,29 @@ export function FileUpload({
           },
           ...prev,
         ]);
+      } else {
+        setFiles((prev) => [
+          ...prev.slice(0, idx),
+          {
+            ...prev[idx],
+            status: "uploading",
+          },
+          ...prev.slice(idx + 1),
+        ]);
       }
 
       try {
+        if (!forceUpload) {
+          const exists = await window.electron.ipc.invoke("cf-check-file-exists", {
+            url: `${publicDomain}/${file.name}`,
+          });
+  
+  
+          if (exists) {
+            throw new Error("file_exists");
+          }
+        }
+
         const rsp = await window.electron.ipc.invoke("cf-upload-file", {
           bucketName: bucket,
           fileName: file.name,
@@ -118,7 +176,7 @@ export function FileUpload({
           return;
         }
 
-        throw new Error("Upload failed");
+        throw new Error("upload_failed");
       } catch (error) {
         setFiles((prev) =>
           prev.map((f) => {
@@ -126,6 +184,7 @@ export function FileUpload({
               return {
                 ...f,
                 status: "error",
+                message: error.message,
               };
             }
 
@@ -203,23 +262,35 @@ export function FileUpload({
 
         {files?.length ? (
           <ScrollArea className="max-h-44">
-            {files.map((file) => (
-              <div
+            {files.map((file) => {
+              const FileIcon = FileTypeIcons[getFiletype(file.file.type)]
+
+              return (
+                <div
                 key={file.file.path}
                 className="bg-gray-100 rounded-lg p-4 flex items-center justify-between mt-1"
               >
                 <div className="flex items-center gap-4 text-sm">
-                  <FileType />
+                  <div className="text-2xl">
+
+                  <FileIcon  />
+                  </div>
                   <div>
-                    <div>{shortenPath(file.file.name, 36)}</div>
+                    <ConfettiCopyText text={shortenPath(file.file.name, 36)} shareUrl={`${publicDomain}/${file.file.name}`} />
                     <div className="text-xs text-secondary mt-1 flex items-center gap-1">
-                      {file.file.size} bytes ·{" "}
-                      <FileStatus status={file.status} />
+                      {prettifySize(file.file.size)} ·{" "}
+                      <FileStatus status={file.status} message={file.message} />
                     </div>
                   </div>
                 </div>
+
+                <div className="flex items-center gap-2 mr-2">
+                  <FileOperations status={file.status} message={file.message} onRetry={() => uploadFile(file.file)} onForceUpload={() => uploadFile(file.file, true)} />
+                </div>
+
               </div>
-            ))}
+              )
+            })}
           </ScrollArea>
         ) : null}
       </DialogContent>

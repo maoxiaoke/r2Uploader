@@ -18,6 +18,7 @@ const _fetch = async <T = any>(
     messages: string[];
     result: T;
   }>;
+  status: number;
 }> => {
   const config = getConfig();
   const accountId = config.accountId;
@@ -206,6 +207,21 @@ ipcMain.handle(
     return data;
   }
 );
+
+/**
+ * file exists
+ */
+ipcMain.handle("cf-check-file-exists", async (evt, { url }) => {
+  try {
+    const response = await _fetch(url, {
+      method: "HEAD",
+    });
+
+    return response.status === 200;
+  } catch (error) {
+    return false;
+  }
+});
 
 /**
  * Upload file to bucket

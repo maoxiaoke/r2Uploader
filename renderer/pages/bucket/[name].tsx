@@ -57,8 +57,12 @@ export default function BucketPage() {
       currentBucket?.domains?.custom?.domains ?? []
     ).filter((dom) => dom.enabled)[0];
 
+
     return activeCustomDomain?.domain;
   }, [currentBucket]);
+
+  const publicDomain = `https://${customDomain ?? currentBucket?.domains?.managed?.domain}`;
+
 
   const [files, setFiles] = useState<BucketObject[]>([]);
   const [loading, setLoading] = useState(false);
@@ -153,7 +157,7 @@ export default function BucketPage() {
           <div className="flex-1 drag opacity-0">hidden drag bar</div>
         ) : null}
         <div className="flex items-center">
-          <FileUpload bucket={bucketName} onClose={appendFiles}>
+          <FileUpload bucket={bucketName} onClose={appendFiles} publicDomain={publicDomain}>
             <Button
               variant="outline"
               size="icon"
@@ -232,8 +236,7 @@ export default function BucketPage() {
                   idx={idx}
                   file={file}
                   onDeleteFile={onDelete}
-                  managedDomain={currentBucket?.domains?.managed?.domain}
-                  customDomain={customDomain}
+                  publicDomain={publicDomain}
                 />
               ))}
             </div>

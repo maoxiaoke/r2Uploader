@@ -2,12 +2,11 @@ import { useState } from "react";
 import { cn, shortenPath } from "../lib/utils";
 import { Skeleton } from "./ui/skeleton";
 import { Badge } from "./ui/badge";
-import { Copy } from "lucide-react";
-import { useConfetti } from "@/hooks/useConfetti";
 import { getFiletype } from "@/lib/utils";
 import { FileTypeIcons } from "@/components/file-type-icons";
 import { FileContextMenu } from "./file-context-menu";
 import toast, { Toaster } from "react-hot-toast";
+import { ConfettiCopyText } from "./confetti-copy-text";
 
 interface FileWithSkeletonProps {
   file: {
@@ -18,8 +17,7 @@ interface FileWithSkeletonProps {
     };
   };
   idx: number;
-  managedDomain: string;
-  customDomain?: string;
+  publicDomain: string;
   bucket: string;
   onDeleteFile: (object: string) => void;
 }
@@ -28,19 +26,14 @@ export function FileWithSkeleton({
   file,
   bucket,
   idx,
-  managedDomain,
-  customDomain,
+  publicDomain,
   onDeleteFile,
 }: FileWithSkeletonProps) {
   const [isLoading, setIsLoading] = useState(true);
-  const [showCopy, setShowCopy] = useState(false);
-  const { animate, confetti } = useConfetti();
 
   const fileType = getFiletype(file.http_metadata.contentType ?? "");
-
   const FileIcon = FileTypeIcons[fileType];
-
-  const shareUrl = `https://${customDomain ?? managedDomain}/${file.key}`;
+  const shareUrl = `${publicDomain}/${file.key}`;
 
   const focusEle = (key: string) => {
     document.getElementById(key)?.focus();
@@ -172,25 +165,7 @@ export function FileWithSkeleton({
       </div>
 
       <div className="w-full text-center mt-1">
-        <span
-          className={`text-center inline-block text-secondary text-xs cursor-pointer hover:bg-[#f6f6f7] w-fit py-1 px-2 rounded transition-all duration-150 ease-in confetti-button ${animate}`}
-          onMouseEnter={() => setShowCopy(true)}
-          onMouseLeave={() => setShowCopy(false)}
-          data-confetti-text="Copied!"
-          onClick={() => {
-            navigator.clipboard.writeText(shareUrl);
-            confetti();
-          }}
-        >
-          {shortenPath(file.key, 24)}{" "}
-          <Copy
-            className="inline-block ml-1"
-            size="14"
-            style={{
-              visibility: showCopy ? "visible" : "hidden",
-            }}
-          />
-        </span>
+        <ConfettiCopyText text={shortenPath(file.key, 24)} shareUrl={shareUrl} className="text-xs text-secondary px-2"  />
       </div>
 
       <Badge className="absolute top-1 left-1 opacity-50 rounded py-0 px-1 text-[10px]">
