@@ -61,7 +61,7 @@ R2Uploader aims to simplify the process of uploading and sharing R2 objects, ser
 - **Filter by created time**:  Introduce filtering options by creation time to streamline content organization
 - **Automatically download small objects to the computer**: Automate the download process for small files to improve efficiency and provide a fallback option in case of accidental deletion
 - **Support directories**
-- **Automatic Updates**
+- <del>**Automatic Updates**</del>
 
 ## Why Cloudflare R2
 
@@ -81,9 +81,9 @@ https://ysrazsingh.medium.com/how-cloudflare-r2-makes-my-life-easy-fb0fd453fff0
 
 ## Download
 
-For macOS ARM64: [Download DMG](https://github.com/maoxiaoke/r2Uploader/releases/latest/download/R2Uploader-0.0.1-beta.2-arm64.dmg)
+For macOS ARM64: [Download DMG](https://github.com/maoxiaoke/r2Uploader/releases/latest/download/R2Uploader-0.0.5-arm64.dmg)
 
-For macOS Intel: [Download DMG](https://github.com/maoxiaoke/r2Uploader/releases/latest/download/R2Uploader-0.0.1-beta.2.dmg)
+For macOS Intel: [Download DMG](https://github.com/maoxiaoke/r2Uploader/releases/latest/download/R2Uploader-0.0.5-x64.dmg)
 
 For Win: [Download EXE](https://github.com/maoxiaoke/r2Uploader/releases/latest/download/R2Uploader.Setup.0.0.1-beta.2.exe)
 
