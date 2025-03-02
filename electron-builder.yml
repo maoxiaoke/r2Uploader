@@ -9,7 +9,10 @@ files:
     filter:
       - package.json
       - app
-publish: null
+publish:
+  provider: github
+  owner: maoxiaoke
+  repo: r2Uploader
 asar: true
 compression: maximum
 mac:

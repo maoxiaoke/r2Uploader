@@ -16,9 +16,16 @@ const ipcHandler = {
   invoke: ipcRenderer.invoke,
 };
 
+const updateHandler = {
+  onUpdateProgress(callback: (progress: { percent: number }) => void) {
+    return ipcHandler.on('download-progress', callback);
+  }
+};
+
 const handlers = {
   ipc: ipcHandler,
   platform: process.platform,
+  updater: updateHandler,
 };
 
 contextBridge.exposeInMainWorld("electron", handlers);
