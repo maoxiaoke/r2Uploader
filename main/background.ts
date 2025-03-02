@@ -26,9 +26,9 @@ function configureAutoUpdater(mainWindow: Electron.BrowserWindow) {
   autoUpdater.on('update-available', () => {
     dialog.showMessageBox({
       type: 'info',
-      title: '发现新版本',
-      message: '发现新版本，是否现在更新？',
-      buttons: ['是', '否']
+      title: 'Update Available',
+      message: 'A new version is available. Do you want to update now?',
+      buttons: ['Yes', 'No']
     }).then((result) => {
       if (result.response === 0) {
         autoUpdater.downloadUpdate();
@@ -39,8 +39,8 @@ function configureAutoUpdater(mainWindow: Electron.BrowserWindow) {
   // 没有新版本
   autoUpdater.on('update-not-available', () => {
     dialog.showMessageBox({
-      title: '没有新版本',
-      message: '当前已经是最新版本'
+      title: 'No Update Available',
+      message: 'You are using the latest version'
     });
   });
 
@@ -52,8 +52,8 @@ function configureAutoUpdater(mainWindow: Electron.BrowserWindow) {
   // 更新下载完毕
   autoUpdater.on('update-downloaded', () => {
     dialog.showMessageBox({
-      title: '安装更新',
-      message: '更新下载完毕，应用将重启并安装'
+      title: 'Install Update',
+      message: 'The update has been downloaded. The application will restart and install the update.'
     }).then(() => {
       autoUpdater.quitAndInstall();
     });
