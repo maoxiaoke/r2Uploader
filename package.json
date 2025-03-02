@@ -2,12 +2,13 @@
   "private": true,
   "name": "r2uploader",
   "description": "User-friendly GUI application for Cloudflare R2",
-  "version": "0.0.2",
+  "version": "0.0.4",
   "author": "nazha <maoxiaoke@outlook.com>",
   "main": "app/background.js",
   "scripts": {
     "dev": "nextron",
     "build": "nextron build",
+    "publish": "nextron build && electron-builder build --publish always",
     "postinstall": "electron-builder install-app-deps"
   },
   "dependencies": {

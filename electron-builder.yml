@@ -19,3 +19,12 @@ mac:
   target:
     - target: dmg
       arch: [x64, arm64]
+  artifactName: "${productName}-${version}-${arch}.${ext}"
+  category: public.app-category.developer-tools
+  darkModeSupport: true
+  hardenedRuntime: true
+  gatekeeperAssess: false
+  notarize: false
+  publish:
+    - provider: github
+      releaseType: release

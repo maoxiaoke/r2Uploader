@@ -214,7 +214,7 @@ export default function BucketPage() {
 
       {!loading && files.length === 0 && (
         <NoBuckets>
-          <FileUpload bucket={bucketName} onClose={update}>
+          <FileUpload bucket={bucketName} onClose={update} publicDomain={publicDomain}>
             <Button type="button" size="sm" className="mt-6 z-20">
               <Plus /> New Object
             </Button>
