@@ -169,7 +169,7 @@ export default function BucketPage() {
           styl.headerHeight
         )}
       >
-        <div className="flex items-center ml-20">
+        <div className={cn("flex items-center", isWindows ? "ml-0" : "ml-20")}>
         <Button
               variant="link"
               size="icon"
