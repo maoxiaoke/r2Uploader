@@ -1,5 +1,5 @@
 import path from "path";
-import { app, ipcMain, nativeTheme, dialog } from "electron";
+import { app, ipcMain, nativeTheme, dialog, globalShortcut, BrowserWindow } from "electron";
 import serve from "electron-serve";
 import { createWindow } from "./helpers";
 import { autoUpdater } from "electron-updater";
@@ -50,8 +50,31 @@ function configureAutoUpdater(mainWindow: Electron.BrowserWindow) {
     });
   });
 
-  //  
   autoUpdater.checkForUpdates();
+}
+
+function registerShortcuts(mainWindow: Electron.BrowserWindow) {
+  globalShortcut.register('CommandOrControl+Shift+X', () => {
+    if (mainWindow.isVisible()) {
+      mainWindow.hide();
+    } else {
+      mainWindow.show();
+    }
+  });
+
+  mainWindow.webContents.on('before-input-event', (event, input) => {
+    if (input.control || input.meta) {
+      if (input.key === 'r') {
+        mainWindow.reload();
+        event.preventDefault();
+      }
+    }
+
+    if ((input.control || input.meta) && input.shift && input.key === 'i') {
+      mainWindow.webContents.toggleDevTools();
+      event.preventDefault();
+    }
+  });
 }
 
 (async () => {
@@ -75,6 +98,8 @@ function configureAutoUpdater(mainWindow: Electron.BrowserWindow) {
     },
   });
 
+  registerShortcuts(mainWindow);
+
   if (isProd) {
     await mainWindow.loadURL("app://./home");
   } else {
@@ -83,9 +108,12 @@ function configureAutoUpdater(mainWindow: Electron.BrowserWindow) {
     mainWindow.webContents.openDevTools();
   }
 
-  // 配置自动更新
   configureAutoUpdater(mainWindow);
 })();
+
+app.on('will-quit', () => {
+  globalShortcut.unregisterAll();
+});
 
 app.on("window-all-closed", () => {
   // 对于 macOS，通常用户期望应用保持活动状态直到用户明确通过 Cmd + Q 退出

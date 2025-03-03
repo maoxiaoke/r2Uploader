@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { cn, shortenPath } from "../lib/utils";
 import { Skeleton } from "./ui/skeleton";
 import { Badge } from "./ui/badge";
@@ -38,6 +38,23 @@ export function FileWithSkeleton({
   const focusEle = (key: string) => {
     document.getElementById(key)?.focus();
   };
+
+  useEffect(() => {
+    const handleKeyDown = async (e: KeyboardEvent) => {
+      const activeElement = document.activeElement;
+      const isThisElementFocused = activeElement?.id === file.key;
+      
+      if (isThisElementFocused && (e.metaKey || e.ctrlKey) && e.key === 'c') {
+        e.preventDefault();
+        await onCopy2Clipboard();
+      }
+    };
+
+    document.addEventListener('keydown', handleKeyDown);
+    return () => {
+      document.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [file.key]);
 
   const onExport = async () => {
     const success = await window.electron.ipc.invoke("export-file", {
