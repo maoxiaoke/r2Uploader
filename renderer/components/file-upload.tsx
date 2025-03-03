@@ -1,4 +1,5 @@
 import { useRef, useState } from "react";
+import { useRouter } from "next/router";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -102,8 +103,10 @@ export function FileUpload({
   publicDomain: string;
   onClose?: (files: UploadFile[]) => void;
 }) {
+  const router = useRouter();
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [files, setFiles] = useState<Array<UploadFile>>([]);
+  const delimiterNames = router.query.delimiter as (string[] | undefined);
 
   const handleButtonClick = () => {
     fileInputRef.current?.click();
@@ -151,9 +154,11 @@ export function FileUpload({
           }
         }
 
+        const delimiter = delimiterNames ? delimiterNames.join('/') + '/' : '';
+
         const rsp = await window.electron.ipc.invoke("cf-upload-file", {
           bucketName: bucket,
-          fileName: file.name,
+          fileName:  delimiter + file.name,
           filePath: file.path,
           fileType: file.type,
         });

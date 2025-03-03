@@ -187,7 +187,7 @@ export default function BucketPage() {
             >
                 <CircleChevronLeft />
             </Button>
-        <div className="text-sm">{delimiterNames ? delimiterNames.join('/') : 'root'}</div>
+        <div className="text-sm">{delimiterNames ? 'root/' + delimiterNames.join('/') : 'root'}</div>
         </div>
         {!isWindows ? (
           <div className="flex-1 drag opacity-0">hidden drag bar</div>

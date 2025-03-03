@@ -165,7 +165,7 @@ export function FileWithSkeleton({
       </div>
 
       <div className="w-full text-center mt-1">
-        <ConfettiCopyText text={shortenPath(file.key, 24)} shareUrl={shareUrl} className="text-xs text-secondary px-2"  />
+        <ConfettiCopyText text={shortenPath(file.key?.split('/').pop() ?? '', 24)} shareUrl={shareUrl} className="text-xs text-secondary px-2"  />
       </div>
 
       <Badge className="absolute top-1 left-1 opacity-50 rounded py-0 px-1 text-[10px]">

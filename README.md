@@ -67,7 +67,7 @@ R2Uploader aims to simplify the process of uploading and sharing R2 objects, ser
 
 - <del>**Search Functionality**</del>
 - <del>**Image Export and Copy**: Enable users to export and copy images to clipboard seamlessly for better usability </del>
-- **Custom Domain Integration**
+- <del>**Custom Domain Integration**</del>
 - **Filter by created time**:  Introduce filtering options by creation time to streamline content organization
 - **Automatically download small objects to the computer**: Automate the download process for small files to improve efficiency and provide a fallback option in case of accidental deletion
 - <del>**Support directories**</del>
