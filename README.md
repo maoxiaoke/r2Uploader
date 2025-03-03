@@ -50,15 +50,16 @@ R2Uploader aims to simplify the process of uploading and sharing R2 objects, ser
       <img src="https://pub-388464a2ac764e37ba36c5ea17d573ee.r2.dev/SCR-20250127-pial.png" />
     </td>
   </tr>
-  <tr>
+    <tr>
+    <td style="vertical-align: middle; width: 50%;">
+      <img src="https://nazhaimage.xyz/r2-uploader-support-folders.png" />
+    </td>
     <td style="vertical-align: middle; width: 50%;">
       <h3>Support Delimiter</h3>
       <p>Folders are supported, and you can navigate through them using the delimiter feature.</p>
     </td>
-    <td style="vertical-align: middle; width: 50%;">
-      <img src="https://nazhaimage.xyz/r2-uploader-support-folders.png" />
-    </td>
   </tr>
+
 </table>
 
 
