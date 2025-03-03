@@ -63,8 +63,6 @@ export default function BucketPage() {
     return '';
   }, [delimiterNames, debouncedPrefix]);
 
-  console.log('delimiterNames', delimiterNames, bucketName,prefixByDelimiterAndSearch );
-
   const customDomain = useMemo(() => {
     const activeCustomDomain = (
       currentBucket?.domains?.custom?.domains ?? []
@@ -101,8 +99,6 @@ export default function BucketPage() {
       })
       .then((data) => {
         setCursor(data?.result_info);
-
-        console.log('data', data);
 
         setFiles(data?.result || []);
         setDelimiters(data?.result_info?.delimited || []);

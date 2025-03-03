@@ -50,6 +50,15 @@ R2Uploader aims to simplify the process of uploading and sharing R2 objects, ser
       <img src="https://pub-388464a2ac764e37ba36c5ea17d573ee.r2.dev/SCR-20250127-pial.png" />
     </td>
   </tr>
+  <tr>
+    <td style="vertical-align: middle; width: 50%;">
+      <h3>Support Delimiter</h3>
+      <p>Folders are supported, and you can navigate through them using the delimiter feature.</p>
+    </td>
+    <td style="vertical-align: middle; width: 50%;">
+      <img src="https://nazhaimage.xyz/r2-uploader-support-folders.png" />
+    </td>
+  </tr>
 </table>
 
 
@@ -60,7 +69,7 @@ R2Uploader aims to simplify the process of uploading and sharing R2 objects, ser
 - **Custom Domain Integration**
 - **Filter by created time**:  Introduce filtering options by creation time to streamline content organization
 - **Automatically download small objects to the computer**: Automate the download process for small files to improve efficiency and provide a fallback option in case of accidental deletion
-- **Support directories**
+- <del>**Support directories**</del>
 - <del>**Automatic Updates**</del>
 
 ## Why Cloudflare R2
