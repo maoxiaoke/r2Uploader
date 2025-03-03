@@ -127,7 +127,7 @@ export default function HomePage() {
       });
     }
 
-    router.push(`/bucket/${bucketName}`);
+    router.push(`/bucket/${bucketName}/delimiter`);
   };
 
   const create = async () => {
@@ -244,7 +244,7 @@ export default function HomePage() {
               </>
             ) : (
               <>
-                <div className="mt-5">
+                <div className="mt-5 max-w-64">
                   <div className="flex flex-col w-full items-start gap-1.5">
                     <label className="text-sm">Account Id</label>
                     <Input

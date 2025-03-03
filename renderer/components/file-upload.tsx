@@ -145,8 +145,7 @@ export function FileUpload({
           const exists = await window.electron.ipc.invoke("cf-check-file-exists", {
             url: `${publicDomain}/${file.name}`,
           });
-  
-  
+
           if (exists) {
             throw new Error("file_exists");
           }

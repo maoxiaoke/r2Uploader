@@ -13,16 +13,15 @@ if (isProd) {
   app.setPath("userData", `${app.getPath("userData")} (development)`);
 }
 
-// 配置自动更新
 function configureAutoUpdater(mainWindow: Electron.BrowserWindow) {
   if (!isProd) return;
 
-  // 检查更新出错
+  // error
   autoUpdater.on('error', (err) => {
     dialog.showErrorBox('Error', err.message);
   });
 
-  // 检查到新版本
+  // update available
   autoUpdater.on('update-available', () => {
     dialog.showMessageBox({
       type: 'info',
@@ -36,20 +35,12 @@ function configureAutoUpdater(mainWindow: Electron.BrowserWindow) {
     });
   });
 
-  // 没有新版本
-  autoUpdater.on('update-not-available', () => {
-    dialog.showMessageBox({
-      title: 'No Update Available',
-      message: 'You are using the latest version'
-    });
-  });
-
-  // 更新下载进度
+  // download progress
   autoUpdater.on('download-progress', (progressObj) => {
     mainWindow.webContents.send('download-progress', progressObj);
   });
 
-  // 更新下载完毕
+  // update downloaded
   autoUpdater.on('update-downloaded', () => {
     dialog.showMessageBox({
       title: 'Install Update',
@@ -59,7 +50,7 @@ function configureAutoUpdater(mainWindow: Electron.BrowserWindow) {
     });
   });
 
-  // 每次启动时检查更新
+  //  
   autoUpdater.checkForUpdates();
 }
 

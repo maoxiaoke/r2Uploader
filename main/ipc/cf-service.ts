@@ -5,6 +5,13 @@ import { getBuckets } from "../helpers/buckets";
 import { storeBuckets } from "../helpers/buckets";
 import fs from "node:fs";
 
+const qsStringify = (params: Record<string, any>) => {
+  return Object.entries(params)
+    .filter(([_, value]) => !!value)
+    .map(([key, value]) => `${key}=${value}`)
+    .join("&");
+};
+
 const _fetch = async <T = any>(
   url: string,
   params: any
@@ -188,16 +195,25 @@ ipcMain.handle(
       bucketName,
       cursor,
       prefix,
+      per_page = 1000,
+      delimiter = '/'
     }: {
       bucketName: string;
       cursor: string;
       prefix?: string;
+      per_page?: number;
+      delimiter?: string;
     }
   ) => {
+    const qs = qsStringify({
+      cursor,
+      prefix,
+      per_page,
+      delimiter,
+    });
+    console.log('qs', `https://api.cloudflare.com/client/v4/accounts/*/r2/buckets/${bucketName}/objects${qs ? `?${qs}` : ""}`);
     const response = await _fetch(
-      `https://api.cloudflare.com/client/v4/accounts/*/r2/buckets/${bucketName}/objects${
-        cursor ? `?cursor=${cursor}` : ""
-      }${prefix ? `?prefix=${prefix}` : ""}`,
+      `https://api.cloudflare.com/client/v4/accounts/*/r2/buckets/${bucketName}/objects${qs ? `?${qs}` : ""}`,
       {
         method: "GET",
       }
