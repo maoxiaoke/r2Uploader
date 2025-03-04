@@ -143,10 +143,14 @@ export function FileUpload({
         ]);
       }
 
+      const delimiter = delimiterNames ? delimiterNames.join('/') + '/' : '';
+
+      const fileName = delimiter + file.name;
+
       try {
         if (!forceUpload) {
           const exists = await window.electron.ipc.invoke("cf-check-file-exists", {
-            url: `${publicDomain}/${file.name}`,
+            url: `${publicDomain}/${fileName}`,
           });
 
           if (exists) {
@@ -154,11 +158,10 @@ export function FileUpload({
           }
         }
 
-        const delimiter = delimiterNames ? delimiterNames.join('/') + '/' : '';
 
         const rsp = await window.electron.ipc.invoke("cf-upload-file", {
           bucketName: bucket,
-          fileName:  delimiter + file.name,
+          fileName: fileName,
           filePath: file.path,
           fileType: file.type,
         });

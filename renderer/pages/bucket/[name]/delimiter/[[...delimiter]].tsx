@@ -63,6 +63,7 @@ export default function BucketPage() {
     return '';
   }, [delimiterNames, debouncedPrefix]);
 
+
   const customDomain = useMemo(() => {
     const activeCustomDomain = (
       currentBucket?.domains?.custom?.domains ?? []
@@ -142,13 +143,15 @@ export default function BucketPage() {
   };
 
   const appendFiles = (newFiles: UploadFile[]) => {
+    const delimiter = delimiterNames ? delimiterNames.join('/') + '/' : '';
+
     setFiles((prev) => [
       ...newFiles.map((file) => ({
         etag: "",
         http_metadata: {
           contentType: file.file.type,
         },
-        key: file.file.name,
+        key: delimiter + file.file.name,
         last_modified: new Date().toISOString(),
         size: file.file.size,
         storage_class: "standard" as const,
@@ -170,7 +173,7 @@ export default function BucketPage() {
         )}
       >
         <div className={cn("flex items-center", isWindows ? "ml-0" : "ml-20")}>
-        <Button
+        {delimiterNames ? <Button
               variant="link"
               size="icon"
               className="bg-transparent shadow-none border-none text-primary"
@@ -186,8 +189,8 @@ export default function BucketPage() {
               }}
             >
                 <CircleChevronLeft />
-            </Button>
-        <div className="text-sm">{delimiterNames ? 'root/' + delimiterNames.join('/') : 'root'}</div>
+            </Button> : null} 
+        { delimiterNames ? <div className="text-sm">{'root/' + delimiterNames.join('/')}</div> : null}
         </div>
         {!isWindows ? (
           <div className="flex-1 drag opacity-0">hidden drag bar</div>
