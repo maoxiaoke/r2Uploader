@@ -5,14 +5,12 @@ import {
   Dialog,
   DialogContent,
   DialogDescription,
-  DialogFooter,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
 import {
   CloudUpload,
-  FileType,
   Loader,
   CircleCheckBig,
   CircleX,
@@ -21,9 +19,9 @@ import {
 } from "lucide-react";
 import { ScrollArea } from "./ui/scroll-area";
 import { shortenPath, prettifySize, getFiletype } from "../lib/utils";
-import { ConfettiCopyText } from "./confetti-copy-text";
 import { SimpleUseTooltip } from '@/components/simple-use-tooltip';
 import { FileTypeIcons } from "@/components/file-type-icons";
+import { EditableConfettiCopyText } from "@/components/editable-confetti-copy-text";
 
 const FileStatus = ({
   status,
@@ -87,6 +85,7 @@ const FileOperations = ({
 };
 export interface UploadFile {
   file: File;
+  newName?: string;
   progress: number;
   status: "uploading" | "completed" | "error";
   message?: 'upload_failed' | 'file_exists' | string;
@@ -108,11 +107,19 @@ export function FileUpload({
   const [files, setFiles] = useState<Array<UploadFile>>([]);
   const delimiterNames = router.query.delimiter as (string[] | undefined);
 
+  const delimiter = delimiterNames ? delimiterNames.join('/') + '/' : '';
+
   const handleButtonClick = () => {
     fileInputRef.current?.click();
   };
 
-  const uploadFile = async (evt: React.ChangeEvent<HTMLInputElement> | File, forceUpload?: boolean) => {
+  const uploadFile = async (evt: React.ChangeEvent<HTMLInputElement> | File, {
+    forceUpload = false,
+    newName
+  }: {
+    forceUpload?: boolean;
+    newName?: string;
+  } = {}) => {
     const evtFiles = evt instanceof File ? [evt] : evt.target.files;
 
     if (!evtFiles?.length) {
@@ -138,14 +145,13 @@ export function FileUpload({
           {
             ...prev[idx],
             status: "uploading",
+            newName: newName,
           },
           ...prev.slice(idx + 1),
         ]);
       }
 
-      const delimiter = delimiterNames ? delimiterNames.join('/') + '/' : '';
-
-      const fileName = delimiter + file.name;
+      const fileName = delimiter + (newName ?? file.name);
 
       try {
         if (!forceUpload) {
@@ -216,6 +222,39 @@ export function FileUpload({
     }
   };
 
+  const changeFileName = async (file: UploadFile, newName: string) => {
+    const idx = files.findIndex((f) => f.file.path === file.file.path);
+
+    if (idx === -1) {
+      return;
+    }
+
+    const currentFile = files[idx];
+
+    if (!(currentFile.status === "completed" || currentFile.status === "error")) {
+      return;
+    }
+
+    const fileName = delimiter + currentFile.file.name;
+
+    if (currentFile.status === "completed") {
+      const exists = await window.electron.ipc.invoke("cf-check-file-exists", {
+        url: `${publicDomain}/${fileName}`,
+      });
+
+      if (exists) {
+        // delete the file
+        window.electron.ipc.invoke("cf-delete-object", {
+          bucket,
+          object: fileName,
+        });
+  
+      }
+    }
+
+    uploadFile(currentFile.file, { newName });
+  }
+
   return (
     <Dialog onOpenChange={handleOpenChange}>
       <DialogTrigger asChild>{children}</DialogTrigger>
@@ -271,6 +310,7 @@ export function FileUpload({
           <ScrollArea className="max-h-44">
             {files.map((file) => {
               const FileIcon = FileTypeIcons[getFiletype(file.file.type)]
+              const fileName = file.newName ?? file.file.name;
 
               return (
                 <div
@@ -283,7 +323,7 @@ export function FileUpload({
                   <FileIcon  />
                   </div>
                   <div>
-                    <ConfettiCopyText text={shortenPath(file.file.name, 36)} shareUrl={`${publicDomain}/${file.file.name}`} />
+                    <EditableConfettiCopyText text={shortenPath(fileName, 36)} shareUrl={`${publicDomain}/${fileName}`} canEdit={file.status === "completed" || file.status === "error"} onChangeName={(newName) => changeFileName(file, newName)} />
                     <div className="text-xs text-secondary mt-1 flex items-center gap-1">
                       {prettifySize(file.file.size)} ·{" "}
                       <FileStatus status={file.status} message={file.message} />
@@ -292,7 +332,7 @@ export function FileUpload({
                 </div>
 
                 <div className="flex items-center gap-2 mr-2">
-                  <FileOperations status={file.status} message={file.message} onRetry={() => uploadFile(file.file)} onForceUpload={() => uploadFile(file.file, true)} />
+                  <FileOperations status={file.status} message={file.message} onRetry={() => uploadFile(file.file)} onForceUpload={() => uploadFile(file.file, { forceUpload: true })} />
                 </div>
 
               </div>

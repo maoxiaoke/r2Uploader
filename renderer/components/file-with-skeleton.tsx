@@ -181,7 +181,7 @@ export function FileWithSkeleton({
         </FileContextMenu>
       </div>
 
-      <div className="w-full text-center mt-1">
+      <div className="w-full text-center mt-1 flex items-center justify-center">
         <ConfettiCopyText text={shortenPath(file.key?.split('/').pop() ?? '', 24)} shareUrl={shareUrl} className="text-xs text-secondary px-2"  />
       </div>
 

@@ -151,7 +151,7 @@ export default function BucketPage() {
         http_metadata: {
           contentType: file.file.type,
         },
-        key: delimiter + file.file.name,
+        key: delimiter + (file?.newName ?? file.file.name),
         last_modified: new Date().toISOString(),
         size: file.file.size,
         storage_class: "standard" as const,
