@@ -1,5 +1,3 @@
-> R2Uploader is currently in its beta phase and may encounter glitches or malfunctions. Users should be aware that the system is still under development and may not operate flawlessly. It is advisable to proceed with caution and report any issues to the support team for resolution.
-
 # R2Uploader
 
 User-friendly GUI application for Cloudflare R2.
