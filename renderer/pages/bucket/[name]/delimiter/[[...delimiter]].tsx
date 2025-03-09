@@ -92,8 +92,6 @@ export default function BucketPage() {
       return;
     }
 
-    console.log('prefixByDelimiterAndSearch', prefixByDelimiterAndSearch);
-
     setLoading(true);
     window.electron.ipc
       .invoke("cf-get-bucket-objects", {
