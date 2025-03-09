@@ -1,14 +1,21 @@
 import { Search, X } from "lucide-react";
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import { Button } from "components/ui/button";
 import { SimpleUseTooltip } from "@/components/simple-use-tooltip";
 
 export const SearchArea = (props) => {
   const [showSearchInput, setShowSearchInput] = useState(false);
+  const inputRef = useRef<HTMLInputElement>(null);
 
   const onChange = (evt: React.ChangeEvent<HTMLInputElement>) => {
     props?.onChange?.(evt.target.value);
   };
+
+  useEffect(() => {
+    if (showSearchInput) {
+      inputRef.current?.focus();
+    }
+  }, [showSearchInput]);
 
   if (!showSearchInput) {
     return (
@@ -36,6 +43,7 @@ export const SearchArea = (props) => {
         </div>
         <input
           type="text"
+          ref={inputRef}
           id="text-search"
           className="border border-gray-300 text-secondary text-sm rounded-sm focus:outline-none focus:ring-ring focus:border-ring block w-full ps-8 p-1.5 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-ring dark:focus:border-ring"
           placeholder="Search..."

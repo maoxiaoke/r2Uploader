@@ -60,7 +60,7 @@ export default function BucketPage() {
       return delimiterNames.join('/') + '/' + debouncedPrefix;
     }
 
-    return '';
+    return debouncedPrefix;
   }, [delimiterNames, debouncedPrefix]);
 
 
@@ -91,6 +91,8 @@ export default function BucketPage() {
     if (!bucketName) {
       return;
     }
+
+    console.log('prefixByDelimiterAndSearch', prefixByDelimiterAndSearch);
 
     setLoading(true);
     window.electron.ipc
