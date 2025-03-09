@@ -102,7 +102,7 @@ For macOS ARM64: [Download DMG](https://github.com/maoxiaoke/r2Uploader/releases
 
 For macOS Intel: [Download DMG](https://github.com/maoxiaoke/r2Uploader/releases/latest/download/R2Uploader-x64.dmg)
 
-For Win: [Download EXE](https://github.com/maoxiaoke/r2Uploader/releases/latest/download/R2Uploader.Setup.0.0.1-beta.2.exe)
+For Win: [Download EXE](https://github.com/maoxiaoke/r2Uploader/releases/latest/download/R2Uploader.Setup.1.0.3.exe)
 
 ## Tutorial
 
