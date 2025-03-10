@@ -4,6 +4,7 @@ import { getConfig } from "../helpers/get-config";
 import { getBuckets } from "../helpers/buckets";
 import { storeBuckets } from "../helpers/buckets";
 import fs from "node:fs";
+import { createDefaultFileStream } from "../helpers/create-default-file-stream";
 
 const qsStringify = (params: Record<string, any>) => {
   return Object.entries(params)
@@ -396,6 +397,25 @@ ipcMain.handle("cf-delete-object", async (evt, { bucket, object }) => {
     }
   );
 
+  const data = await response.json();
+
+  return data;
+});
+
+ipcMain.handle("cf-create-folder", async (event, { bucketName, fileName }) => {
+  const defaultFileStream = await createDefaultFileStream();
+
+  console.log('fileName', fileName);
+  const response = await _fetch(
+    `https://api.cloudflare.com/client/v4/accounts/*/r2/buckets/${bucketName}/objects/${fileName}`,
+    {
+      method: "PUT",
+      body: defaultFileStream,
+      headers: {
+        "Content-Type": "text/plain",
+      },
+    }
+  );
   const data = await response.json();
 
   return data;

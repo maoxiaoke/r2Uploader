@@ -14,6 +14,7 @@ import {
   Loader2,
   RefreshCcw,
   Plus,
+  FolderPlus,
   CircleChevronLeft,
 } from "lucide-react";
 import { FileWithSkeleton } from "@/components/file-with-skeleton";
@@ -26,6 +27,7 @@ import toast, { Toaster } from "react-hot-toast";
 import { usePlateform } from "@/hooks/usePlateform";
 import { SearchArea } from "@/components/search-area";
 import { shortenPath } from '@/lib/utils'
+import { CreateFolder } from "@/components/create-folder";
 
 import type { UploadFile } from "@/components/file-upload";
 
@@ -205,6 +207,27 @@ export default function BucketPage() {
               <Upload />
             </Button>
           </FileUpload>
+
+          <CreateFolder bucketName={bucketName} delimiter={delimiterNames?.join('/') ?? ''} publicDomain={publicDomain}
+            onSuccess={() => {
+              update();
+            }}
+            onError={(errMsg) => {
+              toast.error(errMsg, {
+                style: {
+                  fontSize: "13px",
+                },
+              });
+            }}
+          >
+            <Button
+              variant="outline"
+              size="icon"
+              className="bg-transparent shadow-none border-none"
+            >
+              <FolderPlus />
+            </Button>
+          </CreateFolder>
 
           <SimpleUseTooltip tips="Refresh current bucket">
             <Button
