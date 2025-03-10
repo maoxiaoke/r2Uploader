@@ -405,7 +405,6 @@ ipcMain.handle("cf-delete-object", async (evt, { bucket, object }) => {
 ipcMain.handle("cf-create-folder", async (event, { bucketName, fileName }) => {
   const defaultFileStream = await createDefaultFileStream();
 
-  console.log('fileName', fileName);
   const response = await _fetch(
     `https://api.cloudflare.com/client/v4/accounts/*/r2/buckets/${bucketName}/objects/${fileName}`,
     {
