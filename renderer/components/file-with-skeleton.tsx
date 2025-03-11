@@ -34,6 +34,7 @@ export function FileWithSkeleton({
   const fileType = getFiletype(file.http_metadata.contentType ?? "");
   const FileIcon = FileTypeIcons[fileType];
   const shareUrl = `${publicDomain}/${file.key}`;
+  const [isOpen, setIsOpen] = useState(false);
 
   const focusEle = (key: string) => {
     document.getElementById(key)?.focus();
@@ -141,6 +142,7 @@ export function FileWithSkeleton({
         }}
       >
         <FileContextMenu
+          onOpenChange={(op) => setIsOpen(op)}
           onExport={onExport}
           onOpenInBrowser={onOpenInBrowser}
           onCopyPath={onCopyPath}
@@ -158,7 +160,8 @@ export function FileWithSkeleton({
                 alt={file.key}
                 className={cn(
                   "w-full rounded-sm bg-[#E7E7E7] focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2",
-                  isLoading ? "opacity-0" : "opacity-100"
+                  isLoading ? "opacity-0" : "opacity-100",
+                  isOpen ? 'outline-none ring-2 ring-ring ring-offset-2' : ''
                 )}
                 loading="lazy"
                 id={file.key}

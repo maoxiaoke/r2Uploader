@@ -22,9 +22,10 @@ export function FileContextMenu({
   onCopy2Clipboard,
   onDelete,
   showCopy2Clipboard,
+  onOpenChange,
 }) {
   return (
-    <ContextMenu>
+    <ContextMenu onOpenChange={onOpenChange}>
       <ContextMenuTrigger>{children}</ContextMenuTrigger>
       <ContextMenuContent className="w-40 p-2">
         <ContextMenuItem className="text-sm" onClick={onExport}>
