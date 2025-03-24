@@ -1,7 +1,13 @@
 import { useEffect } from "react";
 import { v4 as uuidv4 } from 'uuid';
 
-export const usePaste = (callback: (files: File[]) => Promise<void>) => {
+export const usePaste = (callback: (files: File[]) => Promise<void>, {
+  publicDomain,
+  delimiter,
+}: {
+  publicDomain: string;
+  delimiter: string;
+}) => {
   const onPaste = async (event: ClipboardEvent) => {
     event.preventDefault();
 
@@ -10,15 +16,23 @@ export const usePaste = (callback: (files: File[]) => Promise<void>) => {
 
     for (const item of Array.from(items)) {
       if (item.type.indexOf('image') !== -1) {
-        const file = item.getAsFile();
+        let file = item.getAsFile();
 
-        // generate a unique file name
-        const fileName = `${uuidv4()}.png`;
-        const renamedFile = new File([file], fileName, { type: file.type });
+        const fileName = delimiter + file.name;
 
-        if (renamedFile) {
+        const exists = await window.electron.ipc.invoke("cf-check-file-exists", {
+          url: `${publicDomain}/${fileName}`,
+        });
+
+        if (exists) {
+          // generate a unique file name
+          const uniqueFileName = `${uuidv4()}.${file.type.split('/')[1]}`;
+          file = new File([file], uniqueFileName, { type: file.type });
+        }
+
+        if (file) {
           try {
-            await callback([renamedFile]);
+            await callback([file]);
           } catch (error) {
             console.error('上传失败:', error);
           }

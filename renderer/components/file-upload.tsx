@@ -88,6 +88,7 @@ export interface UploadFile {
   file: File;
   newName?: string;
   progress: number;
+  from: 'paste' | 'upload';
   status: "uploading" | "completed" | "error";
   message?: 'upload_failed' | 'file_exists' | string;
 }
@@ -139,6 +140,7 @@ export function FileUpload({
             file,
             progress: 0,
             status: "uploading",
+            from: fromPaste ? 'paste' : 'upload',
           },
           ...prev,
         ]);
@@ -229,7 +231,10 @@ export function FileUpload({
 
   usePaste((files) => uploadFile(files[0], {
     fromPaste: true,
-  }));
+  }), {
+    publicDomain,
+    delimiter,
+  });
 
   const handleOpenChange = (isOpen) => {
     if (!isOpen) {
@@ -352,7 +357,7 @@ export function FileUpload({
                 </div>
 
                 <div className="flex items-center gap-2 mr-2">
-                  <FileOperations status={file.status} message={file.message} onRetry={() => uploadFile(file.file)} onForceUpload={() => uploadFile(file.file, { forceUpload: true })} />
+                  <FileOperations status={file.status} message={file.message} onRetry={() => uploadFile(file.file, { fromPaste: file.from === 'paste' })} onForceUpload={() => uploadFile(file.file, { forceUpload: true, fromPaste: file.from === 'paste' })} />
                 </div>
 
               </div>
