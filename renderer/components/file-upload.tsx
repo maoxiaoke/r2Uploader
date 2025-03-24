@@ -22,6 +22,7 @@ import { shortenPath, prettifySize, getFiletype } from "../lib/utils";
 import { SimpleUseTooltip } from '@/components/simple-use-tooltip';
 import { FileTypeIcons } from "@/components/file-type-icons";
 import { EditableConfettiCopyText } from "@/components/editable-confetti-copy-text";
+import { usePaste } from "@/hooks/usePaste";
 
 const FileStatus = ({
   status,
@@ -115,11 +116,14 @@ export function FileUpload({
 
   const uploadFile = async (evt: React.ChangeEvent<HTMLInputElement> | File, {
     forceUpload = false,
-    newName
+    newName,
+    fromPaste = false
   }: {
     forceUpload?: boolean;
     newName?: string;
+    fromPaste?: boolean;
   } = {}) => {
+    let savePath = null;
     const evtFiles = evt instanceof File ? [evt] : evt.target.files;
 
     if (!evtFiles?.length) {
@@ -128,7 +132,6 @@ export function FileUpload({
 
     const handleSignleFileUpload = async (file) => {
       const idx = files.findIndex((f) => f.file.path === file.path);
-
 
       if (idx === -1) {
         setFiles((prev) => [
@@ -164,12 +167,23 @@ export function FileUpload({
           }
         }
 
+        debugger;
+
+        // if the file path is not set, download the file
+        if (!file.path && !fromPaste) {
+          const oldPath = delimiter + file.name;
+          console.log('downloading file', `${publicDomain}/${oldPath}`);
+          savePath = await window.electron.ipc.invoke("download-file", {
+            url: `${publicDomain}/${oldPath}`,
+          });
+        }
 
         const rsp = await window.electron.ipc.invoke("cf-upload-file", {
           bucketName: bucket,
           fileName: fileName,
-          filePath: file.path,
+          filePath: savePath ?? file.path,
           fileType: file.type,
+          fromPaste: fromPaste,
         });
 
         if (rsp.success) {
@@ -204,11 +218,21 @@ export function FileUpload({
             return f;
           })
         );
+      } finally {
+        if (savePath) {
+          window.electron.ipc.invoke("remove-cache-file", {
+            path: savePath,
+          });
+        }
       }
     };
 
     Array.from(evtFiles).forEach(handleSignleFileUpload);
   };
+
+  usePaste((files) => uploadFile(files[0], {
+    fromPaste: true,
+  }));
 
   const handleOpenChange = (isOpen) => {
     if (!isOpen) {
@@ -248,7 +272,6 @@ export function FileUpload({
           bucket,
           object: fileName,
         });
-  
       }
     }
 

@@ -1,4 +1,4 @@
-import { ipcMain } from "electron";
+import { ipcMain, clipboard } from "electron";
 import fetch from "node-fetch";
 import { getConfig } from "../helpers/get-config";
 import { getBuckets } from "../helpers/buckets";
@@ -252,14 +252,27 @@ ipcMain.handle(
       fileName,
       filePath,
       fileType,
+      fromPaste
     }: {
       bucketName: string;
       fileName: string;
       filePath: string;
       fileType: string;
+      fromPaste: boolean;
     }
   ) => {
-    const file = fs.createReadStream(filePath);
+    let file;
+
+    if (fromPaste) {
+      const imageData = clipboard.readImage();
+      // Convert NativeImage to Buffer instead of trying to use it as a file path
+      const imageBuffer = imageData.toPNG();
+      file = imageBuffer;
+    } else {
+      file = fs.createReadStream(filePath);
+    }
+
+    console.log('uploading file', filePath, fileName, file);
 
     const response = await _fetch(
       `https://api.cloudflare.com/client/v4/accounts/*/r2/buckets/${bucketName}/objects/${fileName}`,

@@ -64,6 +64,34 @@ ipcMain.handle("copy-2-clipboard", async (evt, { url, copyFileType }) => {
   }
 });
 
+/**
+ * download the file and return the save path
+ */
+ipcMain.handle("download-file", async (evt, { url }) => {
+  try {
+    const win = BrowserWindow.getFocusedWindow();
+    const cachePath = getCachePath();
+
+    console.log('downloading file', url, cachePath);
+
+    const downloadRes = await download(win, url, {
+      directory: cachePath,
+    });
+
+    const savePath = downloadRes.getSavePath();
+    return savePath;
+  } catch (e) {
+    return false;
+  }
+})
+
+ipcMain.handle("remove-cache-file", async (evt, { path }) => {
+  if (fs.existsSync(path)) {
+    fs.unlinkSync(path);
+  }
+});
+
+
 ipcMain.handle("show-message-box-sync", (evt, { message, type, detail }) => {
   const actionStatus = dialog.showMessageBoxSync({
     message,
