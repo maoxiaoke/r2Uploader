@@ -212,7 +212,6 @@ ipcMain.handle(
       per_page,
       delimiter,
     });
-    // console.log('qs', `https://api.cloudflare.com/client/v4/accounts/*/r2/buckets/${bucketName}/objects${qs ? `?${qs}` : ""}`);
     const response = await _fetch(
       `https://api.cloudflare.com/client/v4/accounts/*/r2/buckets/${bucketName}/objects${qs ? `?${qs}` : ""}`,
       {
