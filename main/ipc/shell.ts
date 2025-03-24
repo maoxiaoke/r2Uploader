@@ -72,8 +72,6 @@ ipcMain.handle("download-file", async (evt, { url }) => {
     const win = BrowserWindow.getFocusedWindow();
     const cachePath = getCachePath();
 
-    console.log('downloading file', url, cachePath);
-
     const downloadRes = await download(win, url, {
       directory: cachePath,
     });
@@ -81,7 +79,7 @@ ipcMain.handle("download-file", async (evt, { url }) => {
     const savePath = downloadRes.getSavePath();
     return savePath;
   } catch (e) {
-    return false;
+    return null;
   }
 })
 

@@ -167,12 +167,9 @@ export function FileUpload({
           }
         }
 
-        debugger;
-
         // if the file path is not set, download the file
         if (!file.path && !fromPaste) {
           const oldPath = delimiter + file.name;
-          console.log('downloading file', `${publicDomain}/${oldPath}`);
           savePath = await window.electron.ipc.invoke("download-file", {
             url: `${publicDomain}/${oldPath}`,
           });
