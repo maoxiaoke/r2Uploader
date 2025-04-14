@@ -12,3 +12,4 @@ next-env.d.ts
 /app
 dist
 .local.env
+.vercel
