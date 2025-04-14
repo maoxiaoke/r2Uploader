@@ -1,0 +1,551 @@
+<!DOCTYPE html>
+<html lang="en" class="light scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>R2Uploader - Simple Cloudflare R2 Desktop Client</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Georgia&display=swap" rel="stylesheet">
+    <style>
+        /* Define custom variables similar to reference.html for better replication */
+        :root {
+            --background-white-main: #ffffff;
+            --text-primary: #000000;
+            --text-secondary: #535350;
+            --text-tertiary: #A6A6A6;
+            --text-onblack: #ffffff;
+            --border-main: #E6E6E6;
+            --fill-tsp-white-light: #FAFAFA;
+            --background-menu-white: #ffffff;
+            --Button-primary-black: #121213;
+            --Button-secondary-gray: #F0F0F0;
+            --icon-primary: #000000;
+            --icon-onblack: #ffffff;
+            --logo-color: #000000;
+            --gradual-gray-0: rgba(250,250,250,0);
+            --gradual-gray-100: #383739; /* Assuming dark mode equivalent */
+
+             /* Rainbow animation colors */
+             --color-1: #ff7f50; /* Coral */
+             --color-2: #ff6347; /* Tomato */
+             --color-3: #ffd700; /* Gold */
+             --color-4: #98fb98; /* PaleGreen */
+             --color-5: #add8e6; /* LightBlue */
+        }
+
+        html.dark {
+            --background-white-main: #121213;
+            --text-primary: #ffffff;
+            --text-secondary: #b0b0b0;
+            --text-tertiary: #777777;
+            --border-main: #383739;
+            --fill-tsp-white-light: #1f1f1f;
+            --background-menu-white: #2a2a2a;
+            --Button-primary-black: #ffffff;
+            --Button-secondary-gray: #383739;
+            --text-onblack: #000000;
+            --icon-primary: #ffffff;
+            --icon-onblack: #000000;
+            --logo-color: #ffffff;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--background-white-main);
+            color: var(--text-primary);
+        }
+
+        .font-georgia {
+            font-family: 'Georgia', serif;
+        }
+        .font-serif { /* Assuming font-serif maps to Georgia in the reference */
+             font-family: 'Georgia', serif;
+        }
+
+        /* Keyframes from reference.html */
+        @keyframes animate-rainbow {
+          0% { background-position: 0% 50%; }
+          50% { background-position: 100% 50%; }
+          100% { background-position: 0% 50%; }
+        }
+
+        .animate-rainbow {
+            animation: animate-rainbow 5s linear infinite;
+            background-size: 200% 200%;
+        }
+
+        /* Scroll Animation Base Styles */
+        .scroll-animate {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+        }
+
+        .scroll-animate.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+         /* Style for the rainbow button */
+        .rainbow-button {
+            background: linear-gradient(90deg, hsl(var(--color-1)), hsl(var(--color-5)), hsl(var(--color-3)), hsl(var(--color-4)), hsl(var(--color-2)));
+            background-size: 200% 200%;
+            animation: animate-rainbow 5s linear infinite;
+        }
+         .rainbow-button-bg {
+            background: linear-gradient(var(--Button-primary-black), var(--Button-primary-black)),
+                        linear-gradient(rgba(18, 18, 19, 1) 50%, rgba(18, 18, 19, 0.6) 80%, rgba(18, 18, 19, 0)),
+                        linear-gradient(90deg, hsl(var(--color-1)), hsl(var(--color-5)), hsl(var(--color-3)), hsl(var(--color-4)), hsl(var(--color-2)));
+            background-clip: padding-box, border-box, border-box;
+            background-origin: border-box;
+            border: calc(0.08 * 1rem) solid transparent;
+        }
+         .rainbow-button::before {
+            content: '';
+            position: absolute;
+            bottom: -20%;
+            left: 50%;
+            z-index: -1; /* Ensure it's behind the button text */
+            height: 20%; /* 1/5 of button height */
+            width: 60%; /* 3/5 of button width */
+            transform: translateX(-50%);
+            background: linear-gradient(90deg, hsl(var(--color-1)), hsl(var(--color-5)), hsl(var(--color-3)), hsl(var(--color-4)), hsl(var(--color-2)));
+            filter: blur(calc(0.8 * 1rem));
+            animation: animate-rainbow 5s linear infinite; /* Apply animation */
+            background-size: 200% 200%; /* Match button background size */
+         }
+
+
+         /* Styles for hover effects on community/event cards */
+        .group .group-hover\/item-btns\:opacity-100 { opacity: 0; transition: opacity 0.2s ease-in-out; }
+        .group:hover .group-hover\/item-btns\:opacity-100 { opacity: 1; }
+
+         .group .group-hover\:opacity-0 { opacity: 1; transition: opacity 0.3s ease-in-out; }
+         .group:hover .group-hover\:opacity-0 { opacity: 0; }
+
+         .group .group-hover\:opacity-100 { opacity: 0; transition: opacity 0.3s ease-in-out; }
+         .group:hover .group-hover\:opacity-100 { opacity: 1; }
+
+         /* Card hover enhancements */
+         .card-hover-effect {
+             transition: transform 0.3s ease-out, box-shadow 0.3s ease-out;
+         }
+         .card-hover-effect:hover {
+             transform: translateY(-5px);
+             box-shadow: 0 10px 20px rgba(0,0,0,0.05), 0 6px 6px rgba(0,0,0,0.07);
+         }
+         html.dark .card-hover-effect:hover {
+              box-shadow: 0 10px 20px rgba(255,255,255,0.05), 0 6px 6px rgba(255,255,255,0.07);
+         }
+
+    </style>
+     <script>
+        // Basic dark mode toggle logic
+        function setupDarkMode() {
+             const toggleButton = document.getElementById('darkModeToggle');
+             if (!toggleButton) return;
+
+            const applyTheme = (theme) => {
+                if (theme === 'dark') {
+                    document.documentElement.classList.add('dark');
+                    localStorage.theme = 'dark';
+                } else {
+                    document.documentElement.classList.remove('dark');
+                    localStorage.theme = 'light';
+                }
+            };
+
+            // Apply initial theme
+            const currentTheme = localStorage.theme || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+            applyTheme(currentTheme);
+
+            toggleButton.addEventListener('click', () => {
+                const newTheme = document.documentElement.classList.contains('dark') ? 'light' : 'dark';
+                applyTheme(newTheme);
+            });
+        }
+
+        // Call setup function after DOM is ready
+        document.addEventListener('DOMContentLoaded', setupDarkMode);
+    </script>
+</head>
+<body class="bg-[var(--background-white-main)] text-[var(--text-primary)]">
+     <!-- Example Dark Mode Toggle Button (can be placed in header) -->
+     <!-- <button id="darkModeToggle" class="fixed top-4 right-4 p-2 rounded bg-gray-200 dark:bg-gray-700">Toggle Dark Mode</button> -->
+
+    <main class="flex min-h-screen flex-col items-center justify-between">
+        <!-- Header Placeholder (if needed) -->
+        <!-- <header class="sticky top-0 z-50 w-full border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60"> ... </header> -->
+
+        <!-- Hero Section -->
+        <div class="relative w-full flex flex-col items-center justify-center pt-[120px] md:pt-[180px] pb-[60px] md:pb-[100px] px-4 overflow-hidden">
+            <div class="absolute inset-0 z-0 opacity-50 dark:opacity-20">
+                 <!-- Optional background pattern or gradient -->
+            </div>
+            <div class="z-10 flex flex-col items-center gap-6 text-center max-w-3xl scroll-animate">
+                 <h1 class="font-serif text-4xl md:text-6xl font-medium leading-tight">
+                     The Easiest Way to Manage Cloudflare R2
+                 </h1>
+                 <p class="text-[var(--text-secondary)] text-lg md:text-xl font-light leading-relaxed">
+                     R2Uploader provides a simple, visual desktop client for uploading, browsing, and managing your R2 storage. No command line needed.
+                 </p>
+                 <div class="flex gap-4 mt-4">
+                    <a href="#pricing" class="px-8 py-3 rounded-full bg-[var(--Button-primary-black)] text-[var(--text-onblack)] font-semibold hover:opacity-90 transition-opacity transform hover:scale-105">
+                        View Pricing
+                    </a>
+                     <a href="#github-link" target="_blank" rel="noopener noreferrer" class="px-8 py-3 rounded-full border border-[var(--border-main)] bg-transparent text-[var(--text-primary)] font-semibold hover:bg-[var(--fill-tsp-white-light)] transition-colors transform hover:scale-105">
+                        View on GitHub
+                    </a>
+                 </div>
+            </div>
+             <!-- Optional: Placeholder for R2Uploader screenshot/GIF -->
+             <div class="mt-16 w-full max-w-4xl scroll-animate" style="transition-delay: 0.2s;">
+                 <img src="./assets/screenshot.png" alt="R2Uploader Screenshot" class="rounded-lg shadow-xl border border-[var(--border-main)] hidden">
+                  <div class="w-full h-64 bg-gray-200 dark:bg-gray-700 rounded-lg shadow-xl border border-[var(--border-main)] flex items-center justify-center text-[var(--text-tertiary)]">
+                     (Placeholder for R2Uploader Screenshot/GIF)
+                 </div>
+             </div>
+        </div>
+
+
+        <!-- Features Section (How R2Uploader Works) -->
+         <div id="features" class="w-full max-w-6xl px-4 py-16 md:py-24">
+             <h2 class="font-serif text-3xl md:text-4xl font-medium text-center mb-16 scroll-animate">How R2Uploader Simplifies Your Workflow</h2>
+             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                 <!-- Feature Card 1: Connect -->
+                 <div class="flex flex-col items-center text-center p-6 bg-[var(--fill-tsp-white-light)] rounded-lg border border-[var(--border-main)] scroll-animate card-hover-effect">
+                     <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-key-round mb-4 text-blue-500"><path d="M2 18v3c0 .6.4 1 1 1h4v-3h3v-3h2l1.4-1.4a6.5 6.5 0 1 0-4-4Z"/><circle cx="16.5" cy="7.5" r=".5" fill="currentColor"/></svg>
+                     <h3 class="text-lg font-semibold mb-2">Secure Connection</h3>
+                     <p class="text-sm text-[var(--text-secondary)]">Easily connect using your Cloudflare Account ID & R2 API Token. Credentials stored securely locally.</p>
+                 </div>
+                 <!-- Feature Card 2: Browse -->
+                 <div class="flex flex-col items-center text-center p-6 bg-[var(--fill-tsp-white-light)] rounded-lg border border-[var(--border-main)] scroll-animate card-hover-effect" style="transition-delay: 0.1s;">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-layout-grid mb-4 text-green-500"><rect width="7" height="7" x="3" y="3" rx="1"/><rect width="7" height="7" x="14" y="3" rx="1"/><rect width="7" height="7" x="14" y="14" rx="1"/><rect width="7" height="7" x="3" y="14" rx="1"/></svg>
+                     <h3 class="text-lg font-semibold mb-2">Visual Browsing</h3>
+                     <p class="text-sm text-[var(--text-secondary)]">Navigate buckets and objects intuitively with a clean Masonry layout. Supports folder structures.</p>
+                 </div>
+                 <!-- Feature Card 3: Upload -->
+                 <div class="flex flex-col items-center text-center p-6 bg-[var(--fill-tsp-white-light)] rounded-lg border border-[var(--border-main)] scroll-animate card-hover-effect" style="transition-delay: 0.2s;">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-upload-cloud mb-4 text-purple-500"><path d="M4 14.899A7 7 0 1 1 15.71 8h1.79a4.5 4.5 0 0 1 2.5 8.242"/><path d="M12 12v9"/><path d="m16 16-4-4-4 4"/></svg>
+                     <h3 class="text-lg font-semibold mb-2">Effortless Uploads</h3>
+                     <p class="text-sm text-[var(--text-secondary)]">Drag & drop or select files. Smart overwrite prevention ensures data safety.</p>
+                 </div>
+                 <!-- Feature Card 4: Manage -->
+                 <div class="flex flex-col items-center text-center p-6 bg-[var(--fill-tsp-white-light)] rounded-lg border border-[var(--border-main)] scroll-animate card-hover-effect" style="transition-delay: 0.3s;">
+                     <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-mouse-pointer-click mb-4 text-orange-500"><path d="M9 9l10.5 3L14 20.5 9 9z"/><path d="M12.5 12.5L4 4l.5-2.5L6 6l6.5 6.5z"/><path d="M7.3 21.8C6.8 21.3 6.3 21 5.8 21c-.5 0-1 .3-1.3.8"/><path d="M13.8 18.8c.5.5 1 .8 1.5.8s1-.3 1.3-.8"/></svg>
+                      <h3 class="text-lg font-semibold mb-2">Simple Management</h3>
+                     <p class="text-sm text-[var(--text-secondary)]">Use the "Super Right-Click" menu to delete, export, copy shareable links (with custom domain support!), and more.</p>
+                 </div>
+             </div>
+        </div>
+
+        <!-- Core Advantages Section (Replaced Benchmarks) -->
+         <div id="advantages" class="w-full bg-[var(--fill-tsp-white-light)] py-16 md:py-24 px-4">
+             <div class="max-w-6xl mx-auto">
+                 <h2 class="font-serif text-3xl md:text-4xl font-medium text-center mb-16 scroll-animate">Why Choose R2Uploader?</h2>
+                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                     <!-- Advantage 1: Ease of Use -->
+                     <div class="flex flex-col p-6 scroll-animate card-hover-effect bg-[var(--background-menu-white)] rounded-lg border border-[var(--border-main)]" style="transition-delay: 0s;">
+                          <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-smile mb-3 text-yellow-500"><circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><line x1="9" x2="9.01" y1="9" y2="9"/><line x1="15" x2="15.01" y1="9" y2="9"/></svg>
+                         <h3 class="text-lg font-semibold mb-2">Unmatched Simplicity</h3>
+                         <p class="text-sm text-[var(--text-secondary)]">Designed for everyone. Manage your R2 storage visually without needing any command-line skills.</p>
+                     </div>
+                      <!-- Advantage 2: Efficiency -->
+                     <div class="flex flex-col p-6 scroll-animate card-hover-effect bg-[var(--background-menu-white)] rounded-lg border border-[var(--border-main)]" style="transition-delay: 0.1s;">
+                         <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-zap mb-3 text-red-500"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+                         <h3 class="text-lg font-semibold mb-2">Boost Productivity</h3>
+                         <p class="text-sm text-[var(--text-secondary)]">Visual browsing, quick search, and convenient right-click actions save you valuable time.</p>
+                     </div>
+                      <!-- Advantage 3: Desktop Native -->
+                     <div class="flex flex-col p-6 scroll-animate card-hover-effect bg-[var(--background-menu-white)] rounded-lg border border-[var(--border-main)]" style="transition-delay: 0.2s;">
+                          <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-monitor-smartphone mb-3 text-indigo-500"><path d="M18 8V6a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2v7a2 2 0 0 0 2 2h8"/><path d="M10 19v-3.96 3.15"/><path d="M7 19h5"/><rect width="6" height="10" x="16" y="12" rx="2"/></svg>
+                         <h3 class="text-lg font-semibold mb-2">Native Desktop Experience</h3>
+                         <p class="text-sm text-[var(--text-secondary)]">Enjoy a smooth, responsive interface on macOS and Windows. Secure local credential storage.</p>
+                     </div>
+                      <!-- Advantage 4: R2 Benefits -->
+                      <div class="flex flex-col p-6 scroll-animate card-hover-effect bg-[var(--background-menu-white)] rounded-lg border border-[var(--border-main)]" style="transition-delay: 0.3s;">
+                         <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-dollar-sign mb-3 text-teal-500"><line x1="12" x2="12" y1="2" y2="22"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+                         <h3 class="text-lg font-semibold mb-2">Leverage R2's Power</h3>
+                         <p class="text-sm text-[var(--text-secondary)]">Benefit from Cloudflare R2's low-cost storage and zero egress fees, made easily accessible.</p>
+                     </div>
+                     <!-- Advantage 5: Open Source -->
+                     <div class="flex flex-col p-6 scroll-animate card-hover-effect bg-[var(--background-menu-white)] rounded-lg border border-[var(--border-main)]" style="transition-delay: 0.4s;">
+                         <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-github mb-3 text-gray-600 dark:text-gray-400"><path d="M15 22v-4a4.8 4.8 0 0 0-1-3.5c3 0 6-1.5 6-6.5.08-1.3-.32-2.7-.94-3.8a5.4 5.4 0 0 0-1.64-3.1c-.18-.48-.18-1-.02-1.5c.18-.5.56-1 1.1-1.34.5-.38 1-.56 1.6-.56.78.04 1.6.38 2.2 1c.6-.62 1.3-.98 2-1.2a10 10 0 0 0-6.6-2.1c-2.5 0-5 1-7 3a10 10 0 0 0-7 7c0 5 3 6.5 6 6.5-1 1-1.5 2.5-1.5 4V22"/><path d="M9 18c-4.51 2-5-2-7-2"/></svg>
+                         <h3 class="text-lg font-semibold mb-2">Open Source & Transparent</h3>
+                         <p class="text-sm text-[var(--text-secondary)]">Trustworthy and community-driven. Inspect the code, contribute, and help shape the future.</p>
+                     </div>
+                      <!-- Advantage 6: Auto Updates -->
+                     <div class="flex flex-col p-6 scroll-animate card-hover-effect bg-[var(--background-menu-white)] rounded-lg border border-[var(--border-main)]" style="transition-delay: 0.5s;">
+                         <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-refresh-cw mb-3 text-cyan-500"><path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"/><path d="M21 3v5h-5"/><path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16"/><path d="M3 21v-5h5"/></svg>
+                         <h3 class="text-lg font-semibold mb-2">Always Up-to-Date</h3>
+                         <p class="text-sm text-[var(--text-secondary)]">Automatic updates powered by `electron-updater` ensure you always have the latest features and fixes.</p>
+                     </div>
+                 </div>
+             </div>
+         </div>
+
+
+        <!-- Community Highlights Section (Updated Placeholders) -->
+        <div id="community" class="w-full py-16 md:py-24 px-4">
+            <div class="max-w-6xl mx-auto">
+                <div class="flex flex-col items-center gap-2.5 mb-12">
+                     <div class="self-stretch font-serif text-[var(--text-primary)] text-center text-3xl md:text-5xl font-medium leading-[110%] scroll-animate">See R2Uploader in Action</div>
+                     <div class="max-w-[700px] text-[var(--text-tertiary)] text-center text-base md:text-lg font-light leading-relaxed scroll-animate" style="transition-delay: 0.1s;">How developers, designers, and teams use R2Uploader.</div>
+                </div>
+                 <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
+                     <!-- Community Card 1: Web Dev -->
+                     <div class="rounded-lg md:rounded-[18px] overflow-hidden border border-[var(--border-main)] bg-[var(--background-menu-white)] cursor-pointer group scroll-animate card-hover-effect" style="transition-delay: 0s;">
+                         <div class="relative overflow-hidden rounded-t-lg md:rounded-t-[18px]">
+                             <div class="relative w-full aspect-[4/3] bg-gray-200 dark:bg-gray-700 flex items-center justify-center">
+                                 <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-code-xml text-[var(--text-tertiary)]"><path d="m18 16 4-4-4-4"/><path d="m6 8-4 4 4 4"/><path d="m14.5 4-5 16"/></svg>
+                                 <!-- Replace with actual image/screenshot -->
+                                 <!-- <img alt="Web Dev Use Case" class="object-cover w-full h-full" src="placeholder-webdev.jpg"> -->
+                             </div>
+                             <div class="absolute inset-0 flex flex-col justify-end items-center opacity-0 group-hover:opacity-100 transition-opacity duration-200 group-hover/item-btns:opacity-100">
+                                 <div class="w-full p-4 bg-gradient-to-b from-transparent via-[rgba(250,250,250,0.8)] to-[var(--background-menu-white)] dark:via-[rgba(56,55,57,0.8)] dark:to-[var(--gradual-gray-100)]">
+                                     <div class="flex flex-col gap-1.5">
+                                         <button class="h-10 w-full rounded-full bg-[var(--Button-primary-black)] flex items-center justify-center gap-1.5 hover:opacity-90 transform hover:scale-105">
+                                             <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--icon-onblack)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 22v-4a4.8 4.8 0 0 0-1-3.5c3 0 6-1.5 6-6.5a5.4 5.4 0 0 0-1.8-4"/><path d="M9 18c-4.51 2-5-2-7-2"/></svg>
+                                             <span class="text-[var(--text-onblack)] text-sm font-semibold">View on GitHub</span>
+                                         </button>
+                                     </div>
+                                 </div>
+                             </div>
+                         </div>
+                         <div class="w-full p-3 md:p-4 flex flex-col items-start gap-1">
+                             <h3 class="w-full text-[var(--text-primary)] text-ellipsis break-words line-clamp-2 text-base font-semibold min-h-[48px]">Static Site Asset Hosting</h3>
+                             <span class="flex-1 text-[var(--text-tertiary)] text-xs md:text-[13px] leading-[18px] truncate">For Web Developers</span>
+                         </div>
+                     </div>
+                      <!-- Community Card 2: Designer -->
+                     <div class="rounded-lg md:rounded-[18px] overflow-hidden border border-[var(--border-main)] bg-[var(--background-menu-white)] cursor-pointer group scroll-animate card-hover-effect" style="transition-delay: 0.1s;">
+                          <div class="relative overflow-hidden rounded-t-lg md:rounded-t-[18px]">
+                             <div class="relative w-full aspect-[4/3] bg-gray-200 dark:bg-gray-700 flex items-center justify-center">
+                                  <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-image text-[var(--text-tertiary)]"><rect width="18" height="18" x="3" y="3" rx="2" ry="2"/><circle cx="9" cy="9" r="2"/><path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21"/></svg>
+                                 <!-- Replace with actual image/screenshot -->
+                                 <!-- <img alt="Designer Use Case" class="object-cover w-full h-full" src="placeholder-designer.jpg"> -->
+                             </div>
+                             <div class="absolute inset-0 flex flex-col justify-end items-center opacity-0 group-hover:opacity-100 transition-opacity duration-200 group-hover/item-btns:opacity-100">
+                                 <div class="w-full p-4 bg-gradient-to-b from-transparent via-[rgba(250,250,250,0.8)] to-[var(--background-menu-white)] dark:via-[rgba(56,55,57,0.8)] dark:to-[var(--gradual-gray-100)]">
+                                     <div class="flex flex-col gap-1.5">
+                                         <button class="h-10 w-full rounded-full bg-[var(--Button-primary-black)] flex items-center justify-center gap-1.5 hover:opacity-90 transform hover:scale-105">
+                                              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--icon-onblack)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 22v-4a4.8 4.8 0 0 0-1-3.5c3 0 6-1.5 6-6.5a5.4 5.4 0 0 0-1.8-4"/><path d="M9 18c-4.51 2-5-2-7-2"/></svg>
+                                             <span class="text-[var(--text-onblack)] text-sm font-semibold">View on GitHub</span>
+                                         </button>
+                                     </div>
+                                 </div>
+                             </div>
+                         </div>
+                          <div class="w-full p-3 md:p-4 flex flex-col items-start gap-1">
+                             <h3 class="w-full text-[var(--text-primary)] text-ellipsis break-words line-clamp-2 text-base font-semibold min-h-[48px]">Portfolio & Asset Backup</h3>
+                             <span class="flex-1 text-[var(--text-tertiary)] text-xs md:text-[13px] leading-[18px] truncate">For Designers & Photographers</span>
+                         </div>
+                     </div>
+                      <!-- Community Card 3: Teams -->
+                     <div class="rounded-lg md:rounded-[18px] overflow-hidden border border-[var(--border-main)] bg-[var(--background-menu-white)] cursor-pointer group scroll-animate card-hover-effect" style="transition-delay: 0.2s;">
+                          <div class="relative overflow-hidden rounded-t-lg md:rounded-t-[18px]">
+                             <div class="relative w-full aspect-[4/3] bg-gray-200 dark:bg-gray-700 flex items-center justify-center">
+                                  <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-users text-[var(--text-tertiary)]"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+                                 <!-- Replace with actual image/screenshot -->
+                                 <!-- <img alt="Team Use Case" class="object-cover w-full h-full" src="placeholder-team.jpg"> -->
+                             </div>
+                             <div class="absolute inset-0 flex flex-col justify-end items-center opacity-0 group-hover:opacity-100 transition-opacity duration-200 group-hover/item-btns:opacity-100">
+                                 <div class="w-full p-4 bg-gradient-to-b from-transparent via-[rgba(250,250,250,0.8)] to-[var(--background-menu-white)] dark:via-[rgba(56,55,57,0.8)] dark:to-[var(--gradual-gray-100)]">
+                                     <div class="flex flex-col gap-1.5">
+                                         <button class="h-10 w-full rounded-full bg-[var(--Button-primary-black)] flex items-center justify-center gap-1.5 hover:opacity-90 transform hover:scale-105">
+                                             <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--icon-onblack)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 22v-4a4.8 4.8 0 0 0-1-3.5c3 0 6-1.5 6-6.5a5.4 5.4 0 0 0-1.8-4"/><path d="M9 18c-4.51 2-5-2-7-2"/></svg>
+                                             <span class="text-[var(--text-onblack)] text-sm font-semibold">View on GitHub</span>
+                                         </button>
+                                     </div>
+                                 </div>
+                             </div>
+                         </div>
+                         <div class="w-full p-3 md:p-4 flex flex-col items-start gap-1">
+                             <h3 class="w-full text-[var(--text-primary)] text-ellipsis break-words line-clamp-2 text-base font-semibold min-h-[48px]">Simple Project File Sharing</h3>
+                             <span class="flex-1 text-[var(--text-tertiary)] text-xs md:text-[13px] leading-[18px] truncate">For Small Teams</span>
+                         </div>
+                     </div>
+                 </div>
+                  <div class="flex items-center justify-center mt-12 md:mt-16">
+                     <a class="group rounded-full relative inline-flex h-11 rainbow-button-bg cursor-pointer items-center justify-center px-8 py-2 font-medium text-primary-foreground transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 before:content-[''] transform hover:scale-105" href="#github-link"> // Link to GitHub
+                          <button class="relative flex w-fit cursor-pointer items-center justify-center rounded-lg border-none bg-transparent text-primary-foreground px-0">
+                               <span class="relative flex items-center justify-center font-semibold">
+                                    <span class="group inline-flex items-center text-[var(--text-onblack)] font-medium group-hover:opacity-80 duration-300">
+                                         <span class="relative top-[-1px] hidden sm:block">Explore on GitHub</span>
+                                         <span class="relative top-[-1px] block sm:hidden">GitHub</span>
+                                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" class="ml-1 size-4"><path d="m9 18 6-6-6-6"></path></svg>
+                                    </span>
+                               </span>
+                          </button>
+                     </a>
+                 </div>
+             </div>
+         </div>
+
+         <!-- Pricing Section (Updated Placeholder) -->
+         <div id="pricing" class="w-full py-16 md:py-24 px-4">
+             <div class="flex flex-col justify-center items-center gap-4 md:gap-8 self-stretch mb-12">
+                 <div class="font-serif text-[var(--text-primary)] text-center text-3xl md:text-5xl font-medium leading-[110%] scroll-animate">Pricing</div>
+                 <p class="text-[var(--text-tertiary)] text-center max-w-2xl scroll-animate" style="transition-delay: 0.1s;">Simple, one-time purchase. Own R2Uploader forever.</p> // Updated pricing model based on README mention of Lemon Squeezy
+             </div>
+             <div class="mx-auto max-w-[1000px]">
+                 <div class="flex flex-col items-center justify-center gap-10">
+                     <div class="flex gap-6 flex-col items-center w-full justify-center">
+                         <!-- Single Pricing Card: Lifetime -->
+                         <div class="w-full md:w-[448px] max-w-full flex flex-col p-8 gap-6 rounded-[20px] border-2 border-blue-500 bg-[var(--background-menu-white)] relative scroll-animate card-hover-effect">
+                             <div class="absolute top-0 right-0 bg-blue-500 text-white text-xs font-bold px-3 py-1 rounded-bl-lg">Lifetime License</div>
+                             <div class="self-stretch flex flex-col items-start gap-2 mt-4">
+                                 <div class="text-[var(--text-primary)] text-base font-bold leading-5">
+                                     <span class="font-georgia">R2Uploader Pro</span>
+                                 </div>
+                                 <div class="flex flex-col w-full">
+                                     <div class="flex w-full items-baseline gap-1 text-[var(--text-primary)] font-normal">
+                                         <span class="text-[32px] font-semibold leading-[40px]">$XX</span> <span class="text-gray-400 text-xl">(One-Time)</span> // Placeholder price
+                                     </div>
+                                      <p class="text-sm text-[var(--text-secondary)] mt-1">Includes all current and future updates.</p>
+                                 </div>
+                             </div>
+                             <span class="flex w-full flex-col mb-1">
+                                 <button class="inline-flex items-center justify-center whitespace-nowrap text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring bg-blue-600 text-white h-[40px] px-[16px] gap-[6px] hover:bg-blue-700 rounded-full transform hover:scale-105">Purchase Now</button> // Link to Lemon Squeezy checkout
+                             </span>
+                              <ul class="self-stretch space-y-3 text-[var(--text-secondary)]">
+                                 <li class="flex items-start gap-2 self-stretch">
+                                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--icon-primary)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-check flex-shrink-0 mt-1"><path d="M20 6 9 17l-5-5"></path></svg>
+                                     <span class="text-sm font-normal leading-[22px]">All core features (Upload, Browse, Manage, Search).</span>
+                                 </li>
+                                 <li class="flex items-start gap-2 self-stretch">
+                                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--icon-primary)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-check flex-shrink-0 mt-1"><path d="M20 6 9 17l-5-5"></path></svg>
+                                     <span class="text-sm font-normal leading-[22px]">Visual Masonry Layout.</span>
+                                 </li>
+                                  <li class="flex items-start gap-2 self-stretch">
+                                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--icon-primary)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-check flex-shrink-0 mt-1"><path d="M20 6 9 17l-5-5"></path></svg>
+                                     <span class="text-sm font-normal leading-[22px]">"Super Right-Click" context menu.</span>
+                                 </li>
+                                  <li class="flex items-start gap-2 self-stretch">
+                                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--icon-primary)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-check flex-shrink-0 mt-1"><path d="M20 6 9 17l-5-5"></path></svg>
+                                     <span class="text-sm font-normal leading-[22px]">Custom Domain Support.</span>
+                                 </li>
+                                  <li class="flex items-start gap-2 self-stretch">
+                                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--icon-primary)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-check flex-shrink-0 mt-1"><path d="M20 6 9 17l-5-5"></path></svg>
+                                     <span class="text-sm font-normal leading-[22px]">Smart Overwrite Prevention.</span>
+                                 </li>
+                                  <li class="flex items-start gap-2 self-stretch">
+                                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--icon-primary)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-check flex-shrink-0 mt-1"><path d="M20 6 9 17l-5-5"></path></svg>
+                                     <span class="text-sm font-normal leading-[22px]">Cross-Platform (macOS & Windows).</span>
+                                 </li>
+                                  <li class="flex items-start gap-2 self-stretch">
+                                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--icon-primary)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-check flex-shrink-0 mt-1"><path d="M20 6 9 17l-5-5"></path></svg>
+                                     <span class="text-sm font-normal leading-[22px]">Lifetime Updates.</span>
+                                 </li>
+                             </ul>
+                         </div>
+                     </div>
+                      <div class="text-center mt-6">
+                         <span class="text-base font-normal text-[var(--text-tertiary)]">Need help or have questions?</span>
+                         <a href="#contact-link" class="text-base leading-[22px] text-blue-600 hover:text-blue-700 underline ms-1">Contact Support</a>
+                     </div>
+                 </div>
+             </div>
+         </div>
+
+         <!-- Removed Events Section -->
+
+         <!-- Footer -->
+        <footer class="w-full border-t border-[var(--border-main)] mt-16">
+            <div class="flex justify-center md:px-[20px] lg:px-[80px] xl:px-[137px] 2xl:px-[180px] max-md:px-[12px] max-md:pt-[40px] max-md:pb-[24px] px-[20px]">
+                 <div class="flex flex-col items-start gap-10 max-md:p-0 max-md:gap-0 pt-16 pb-[36px] md:px-[60px] lg:px-[50px] px-[20px] w-full max-w-[1440px]">
+                     <div class="flex flex-col lg:flex-row justify-between max-md:items-center items-start self-stretch gap-[16px]">
+                         <!-- Footer Logo & Desc -->
+                         <div class="flex flex-col gap-[4px] max-md:gap-[18px] max-md:w-full max-md:px-[20px]">
+                             <div class="flex items-center max-md:justify-start gap-[6px]">
+                                  <span class="text-2xl font-bold font-georgia text-[var(--logo-color)]">R2Uploader</span>
+                             </div>
+                             <span class="text-[12px] text-[var(--text-secondary)] whitespace-pre-wrap max-md:text-start max-w-[350px]">
+                                The user-friendly GUI desktop application
+                                to simplify managing Cloudflare R2.
+                             </span>
+                             <div class="text-[var(--text-tertiary)] max-md:text-center max-w-[357px] text-[13px] max-md:leading-[140%] max-md:text-[10px] text-start font-normal leading-[22px] capitalize mt-4">© 2024 R2Uploader // Update year if needed</div>
+                         </div>
+                         <!-- Footer Links -->
+                          <div class="flex items-start sm:flex-col md:flex-row flex-col gap-10 max-md:px-[20px] max-md:w-full max-md:py-[20px]">
+                             <div class="flex w-[164px] flex-col items-start gap-3">
+                                 <div class="text-[var(--text-primary)] text-base font-semibold leading-5">Community</div>
+                                 <div class="flex gap-[4px] justify-center items-center">
+                                     <a href="#github-link" target="_blank" rel="noopener noreferrer" class="text-[var(--text-secondary)] text-sm font-medium leading-5 hover:underline duration-150">GitHub</a>
+                                     <svg xmlns="http://www.w3.org/2000/svg" width="17" height="17" viewBox="0 0 17 17" fill="none" class="text-[var(--text-tertiary)]"><g clip-path="url(#footerLinkArrowClip)"><path d="M4.66699 5.16699H11.3337V11.8337" stroke="currentColor" stroke-width="1.33333" stroke-linecap="round" stroke-linejoin="round"></path><path d="M4.66699 11.8337L11.3337 5.16699" stroke="currentColor" stroke-width="1.33333" stroke-linecap="round" stroke-linejoin="round"></path></g><defs><clipPath id="footerLinkArrowClip"><rect width="17" height="17" fill="white"></rect></clipPath></defs></svg>
+                                 </div>
+                                 <!-- Add other community links if applicable -->
+                             </div>
+                              <div class="flex w-[164px] flex-col items-start gap-3">
+                                 <div class="text-[var(--text-primary)] text-base font-semibold leading-5">Company</div>
+                                 <!-- <div class="flex gap-[4px] justify-center items-center">
+                                     <a href="#" class="text-[var(--text-secondary)] text-sm font-medium leading-5 hover:underline duration-150">About</a>
+                                 </div> -->
+                                 <div class="flex gap-[4px] justify-center items-center">
+                                     <a href="#contact-link" class="text-[var(--text-secondary)] text-sm font-medium leading-5 hover:underline duration-150">Contact Us / Support</a>
+                                 </div>
+                             </div>
+                              <div class="flex w-[164px] flex-col items-start gap-3">
+                                 <div class="text-[var(--text-primary)] text-base font-semibold leading-5">Resources</div>
+                                  <div class="flex gap-[4px] justify-center items-center">
+                                     <a href="#docs-link" class="text-[var(--text-secondary)] text-sm font-medium leading-5 hover:underline duration-150">Documentation</a>
+                                 </div>
+                                 <div class="flex gap-[4px] justify-center items-center">
+                                     <a href="/LICENSE.txt" target="_blank" class="text-[var(--text-secondary)] text-sm font-medium leading-5 hover:underline duration-150">License (MIT)</a>
+                                 </div>
+                                 <!-- <div class="flex gap-[4px] justify-center items-center">
+                                     <a href="#" class="text-[var(--text-secondary)] text-sm font-medium leading-5 hover:underline duration-150">Privacy policy</a>
+                                 </div>
+                                 <div class="flex gap-[4px] justify-center items-center">
+                                     <a href="#" class="text-[var(--text-secondary)] text-sm font-medium leading-5 hover:underline duration-150">Terms of service</a>
+                                 </div> -->
+                             </div>
+                         </div>
+                     </div>
+                     <!-- Footer Slogan -->
+                     <div class="flex justify-center gap-[10px] items-center max-md:pt-[18px] max-md:mt-[18px] w-full pt-[36px] border-t border-[rgba(0,0,0,0.06)] dark:border-[rgba(255,255,255,0.1)] border-solid">
+                           <!-- Placeholder for slogan icon -->
+                          <svg xmlns="http://www.w3.org/2000/svg" width="19" height="19" viewBox="0 0 19 19" fill="none"><g clip-path="url(#sloganIconClip)"><path fill-rule="evenodd" clip-rule="evenodd" d="M11.6716 5.85035L16.6453 0.918945H18.1053L15.94 4.99201C17.639 5.57349 18.8605 7.18428 18.8605 9.08035C18.8605 11.4663 16.9263 13.4005 14.5405 13.4005C12.1546 13.4005 10.2205 11.4663 10.2205 9.08035C10.2205 7.96714 10.6415 6.95226 11.333 6.1863H11.3328L11.3354 6.1837C11.4413 6.06657 11.5536 5.95527 11.6716 5.85035Z" fill="#B9B9B7" fill-opacity="0.7"></path><path fill-rule="evenodd" clip-rule="evenodd" d="M1.92502 5.85035L6.89873 0.918945H8.35875L6.19343 4.99201C7.8924 5.57349 9.11388 7.18428 9.11388 9.08035C9.11388 11.4663 7.17975 13.4005 4.79388 13.4005C2.40801 13.4005 0.473877 11.4663 0.473877 9.08035C0.473877 7.96714 0.894925 6.95226 1.58645 6.1863H1.58618L1.5888 6.1837C1.69472 6.06657 1.80698 5.95527 1.92502 5.85035Z" fill="#B9B9B7" fill-opacity="0.7"></path></g><defs><clipPath id="sloganIconClip"><rect width="19" height="19" fill="white"></rect></clipPath></defs></svg>
+                         <div class="text-[#B9B9B7] text-center max-md:text-[14px] text-[16px] italic font-medium font-serif leading-7">Upload smarter, not harder.</div>
+                     </div>
+                 </div>
+            </div>
+        </footer>
+
+    </main>
+
+    <!-- Scroll Animation Script -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const observerOptions = {
+                root: null, // relative to the viewport
+                rootMargin: '0px',
+                threshold: 0.1 // Trigger when 10% of the element is visible
+            };
+
+            const observerCallback = (entries, observer) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('visible');
+                        // Optional: Stop observing once animated
+                        // observer.unobserve(entry.target);
+                    }
+                    // Optional: Remove 'visible' class if element scrolls out of view
+                    // else {
+                    //     entry.target.classList.remove('visible');
+                    // }
+                });
+            };
+
+            const observer = new IntersectionObserver(observerCallback, observerOptions);
+
+            const elementsToAnimate = document.querySelectorAll('.scroll-animate');
+            elementsToAnimate.forEach(el => {
+                observer.observe(el);
+            });
+        });
+    </script>
+</body>
+</html> 
