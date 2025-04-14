@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>R2Uploader - Simple Cloudflare R2 Management</title>
+    <link rel="icon" href="favicon.svg" type="image/svg+xml">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@400;500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Solway&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(180deg, #FFFFFF 0%, #EDEDED 100%);
+        }
+        .font-serif {
+            font-family: 'Playfair Display', serif;
+        }
+        .font-solway {
+            font-family: 'Solway', serif;
+            font-weight: 600;
+        }
+        .feature-card {
+            background-color: #FAFAFA;
+            border: 1px solid rgba(0,0,0,0.1);
+            border-radius: 1.125rem; /* 18px */
+            padding: 1.5rem; /* 24px */
+            transition: transform 0.3s ease-out, box-shadow 0.3s ease-out;
+        }
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .animate-fadeIn {
+            animation: fadeIn 0.8s ease-out forwards;
+        }
+        .animate-slideUp {
+            animation: slideUp 0.8s ease-out forwards;
+        }
+        .delay-100 { animation-delay: 100ms; }
+        .delay-200 { animation-delay: 200ms; }
+        .delay-300 { animation-delay: 300ms; }
+        .delay-500 { animation-delay: 500ms; }
+    </style>
+</head>
+<body class="text-gray-800">
+
+    <!-- Header -->
+    <header id="main-header" class="sticky top-0 bg-white/80 backdrop-blur-md z-50 shadow-sm">
+        <nav class="container mx-auto px-6 py-4 flex justify-between items-center max-w-7xl">
+            <div class="font-solway text-2xl font-semibold text-gray-900">R2Uploader</div>
+            <div class="space-x-6 hidden md:flex">
+                <a href="#features" class="text-gray-600 hover:text-gray-900">Features</a>
+                <a href="#why" class="text-gray-600 hover:text-gray-900">Why R2 Uploader?</a>
+                <a href="#download" class="text-gray-600 hover:text-gray-900">Download</a>
+                <a href="#contact" class="text-gray-600 hover:text-gray-900">Contact</a>
+            </div>
+            <a href="#download" class="bg-black text-white px-5 py-2 rounded-full hover:bg-gray-800 transition duration-150 text-sm font-semibold hidden md:inline-block">Get Started</a>
+            <!-- Mobile Menu Button (optional) -->
+        </nav>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="container mx-auto px-6 pt-24 pb-16 text-center flex flex-col items-center max-w-4xl overflow-hidden">
+        <h1 class="font-serif text-4xl md:text-6xl font-medium text-black mb-4 leading-tight opacity-0 animate-slideUp">
+            Simplify Cloudflare R2 Management
+        </h1>
+        <p class="text-lg md:text-xl text-gray-600 font-light mb-8 max-w-3xl opacity-0 animate-slideUp delay-100">
+            R2Uploader is a user-friendly GUI desktop application designed to streamline the upload and management of your Cloudflare R2 objects. Perfect for non-technical users.
+        </p>
+        <div class="mb-12 opacity-0 animate-fadeIn delay-200">
+            <img src="https://pub-388464a2ac764e37ba36c5ea17d573ee.r2.dev/r2-uploader-screenshot.png" alt="R2Uploader Screenshot" class="rounded-lg shadow-xl border border-gray-200 max-w-full h-auto">
+        </div>
+        <div class="flex flex-col sm:flex-row gap-4 opacity-0 animate-slideUp delay-300">
+            <a href="https://github.com/maoxiaoke/r2Uploader/releases/latest/download/R2Uploader-arm64.dmg" class="bg-black text-white px-8 py-3 rounded-full text-lg font-semibold hover:bg-gray-800 transition duration-150">macOS (ARM)</a>
+            <a href="https://github.com/maoxiaoke/r2Uploader/releases/latest/download/R2Uploader-x64.dmg" class="bg-gray-200 text-gray-800 px-8 py-3 rounded-full text-lg font-semibold hover:bg-gray-300 transition duration-150">macOS (Intel)</a>
+             <a href="https://github.com/maoxiaoke/r2Uploader/releases/latest/download/R2Uploader.Setup.1.0.3.exe" class="bg-gray-200 text-gray-800 px-8 py-3 rounded-full text-lg font-semibold hover:bg-gray-300 transition duration-150">Windows</a>
+        </div>
+         <p class="text-xs text-gray-500 mt-4">Requires license, but free usage is available. <a href="#license-info" class="underline">More info</a></p>
+    </section>
+
+    <!-- Features Section -->
+    <section id="features" class="container mx-auto px-6 py-20 max-w-7xl">
+        <h2 class="font-serif text-3xl md:text-5xl font-medium text-black text-center mb-6">Feature Gallery</h2>
+        <p class="text-lg text-gray-600 text-center mb-16 max-w-3xl mx-auto font-light">Explore how R2Uploader makes Cloudflare R2 simple and intuitive.</p>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 opacity-0 animate-fadeIn delay-500">
+            <!-- Feature 1: Masonry Layout -->
+            <div class="feature-card">
+                <img src="https://pub-388464a2ac764e37ba36c5ea17d573ee.r2.dev/r2-uploader-objects.png" alt="Masonry Layout" class="rounded-md mb-4 border border-gray-200 aspect-video object-cover">
+                <h3 class="font-serif text-xl font-medium text-black mb-2">Visual Object Browsing</h3>
+                <p class="text-gray-600 text-sm leading-relaxed">Browse objects using the Masonry layout for a more convenient and intuitive experience. Preview images and manage assets efficiently.</p>
+            </div>
+
+            <!-- Feature 2: Super Right-Click -->
+            <div class="feature-card">
+                 <img src="https://pub-388464a2ac764e37ba36c5ea17d573ee.r2.dev/SCR-20250127-phel.png" alt="Super Right-Click" class="rounded-md mb-4 border border-gray-200 aspect-video object-contain bg-white">
+                <h3 class="font-serif text-xl font-medium text-black mb-2">Super Right-Click</h3>
+                <p class="text-gray-600 text-sm leading-relaxed">Easily manage each object: export files, delete objects, copy shareable links (with custom domain support!), copy to clipboard, and more.</p>
+            </div>
+
+             <!-- Feature 3: Search -->
+            <div class="feature-card">
+                 <img src="https://pub-388464a2ac764e37ba36c5ea17d573ee.r2.dev/SCR-20250127-pial.png" alt="Search Functionality" class="rounded-md mb-4 border border-gray-200 aspect-video object-contain bg-white">
+                <h3 class="font-serif text-xl font-medium text-black mb-2">Powerful Search</h3>
+                <p class="text-gray-600 text-sm leading-relaxed">Quickly find specific objects using prefix-based search. No more endless scrolling!</p>
+            </div>
+
+             <!-- Feature 4: Folders -->
+            <div class="feature-card">
+                <img src="https://nazhaimage.xyz/r2-uploader-support-folders.png" alt="Folder Support" class="rounded-md mb-4 border border-gray-200 aspect-video object-cover">
+                <h3 class="font-serif text-xl font-medium text-black mb-2">Folder Support</h3>
+                <p class="text-gray-600 text-sm leading-relaxed">Organize your objects logically. Navigate through folders easily using the delimiter feature.</p>
+            </div>
+
+            <!-- Feature 5: Smart Uploads -->
+            <div class="feature-card">
+                <img src="https://nazhaimage.xyz/change-your-file-name-after-uploading.png" alt="Smart Uploads" class="rounded-md mb-4 border border-gray-200 aspect-video object-contain bg-white">
+                <h3 class="font-serif text-xl font-medium text-black mb-2">Smart Uploads</h3>
+                <p class="text-gray-600 text-sm leading-relaxed">Avoid accidental overwrites. R2Uploader checks for existing files and lets you rename duplicates before uploading.</p>
+            </div>
+
+             <!-- Feature 6: Custom Domain -->
+            <div class="feature-card">
+                <!-- Placeholder for Custom Domain Image if available -->
+                 <div class="rounded-md mb-4 border border-gray-200 aspect-video bg-gray-100 flex items-center justify-center">
+                     <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-globe-2 text-gray-400"><circle cx="12" cy="12" r="10"/><path d="M6.3 7a6 6 0 0 1 11.4 0"/><path d="M17.7 17a6 6 0 0 1-11.4 0"/></svg>
+                 </div>
+                <h3 class="font-serif text-xl font-medium text-black mb-2">Custom Domain Integration</h3>
+                <p class="text-gray-600 text-sm leading-relaxed">Share your R2 objects using your own domain for professional, branded links.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Why R2Uploader Section -->
+    <section id="why" class="bg-gray-50 py-20 px-6">
+        <div class="container mx-auto max-w-4xl text-center">
+            <h2 class="font-serif text-3xl md:text-5xl font-medium text-black mb-6">Why R2Uploader?</h2>
+            <p class="text-lg text-gray-600 mb-8 font-light">Managing Cloudflare R2 shouldn't be complex. R2Uploader provides an intuitive interface, making uploads, browsing, and sharing effortless, especially for those who prefer a GUI over command lines.</p>
+        </div>
+    </section>
+
+    <!-- Roadmap Section -->
+    <section id="roadmap" class="container mx-auto px-6 py-20 max-w-4xl">
+        <h2 class="font-serif text-3xl md:text-5xl font-medium text-black text-center mb-6">Future Plans</h2>
+        <p class="text-lg text-gray-600 text-center mb-12 max-w-3xl mx-auto font-light">We're constantly improving R2Uploader. Here's what's coming next:</p>
+        <ul class="list-disc list-inside space-y-2 text-gray-700 text-center max-w-md mx-auto">
+            <li>Filter objects by creation time</li>
+            <li>Option to automatically download small objects</li>
+            <li>Continued performance and UI enhancements</li>
+        </ul>
+    </section>
+
+     <!-- Download Section -->
+    <section id="download" class="bg-gray-900 text-white py-20 px-6">
+        <div class="container mx-auto max-w-4xl text-center">
+            <h2 class="font-serif text-3xl md:text-5xl font-medium mb-6">Download R2Uploader</h2>
+            <p class="text-lg text-gray-300 mb-12 font-light">Get started with the easiest way to manage your Cloudflare R2 assets.</p>
+            <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                <a href="https://github.com/maoxiaoke/r2Uploader/releases/latest/download/R2Uploader-arm64.dmg" class="bg-white text-black px-8 py-3 rounded-full text-lg font-semibold hover:bg-gray-200 transition duration-150">macOS (ARM)</a>
+                <a href="https://github.com/maoxiaoke/r2Uploader/releases/latest/download/R2Uploader-x64.dmg" class="bg-white text-black px-8 py-3 rounded-full text-lg font-semibold hover:bg-gray-200 transition duration-150">macOS (Intel)</a>
+                <a href="https://github.com/maoxiaoke/r2Uploader/releases/latest/download/R2Uploader.Setup.1.0.3.exe" class="bg-white text-black px-8 py-3 rounded-full text-lg font-semibold hover:bg-gray-200 transition duration-150">Windows</a>
+            </div>
+             <p class="text-xs text-gray-400 mt-4">Latest version: Check <a href="https://github.com/maoxiaoke/r2Uploader/releases/latest" target="_blank" rel="noopener noreferrer" class="underline">GitHub Releases</a></p>
+        </div>
+    </section>
+
+    <!-- Tutorial / Setup / License Info -->
+    <section id="setup" class="container mx-auto px-6 py-20 max-w-4xl">
+         <h2 class="font-serif text-3xl md:text-5xl font-medium text-black text-center mb-12">Getting Started</h2>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
+            <div>
+                <h3 class="font-serif text-2xl font-medium text-black mb-4">Cloudflare Setup</h3>
+                <p class="text-gray-600 mb-4 font-light">You'll need your Cloudflare Account ID and an R2 API Token.</p>
+                <ol class="list-decimal list-inside space-y-2 text-gray-700 text-sm">
+                    <li>Log in to Cloudflare Dashboard, find Account ID in URL.</li>
+                    <li>Go to R2 -> Manage API Tokens.</li>
+                    <li>Create a new API Token with "Admin Read & Write" permissions for your bucket.</li>
+                    <li>Copy the Access Key ID and Secret Access Key provided.</li>
+                </ol>
+                <p class="text-xs text-gray-500 mt-2">Your credentials are stored securely locally.</p>
+                 <a href="https://github.com/maoxiaoke/r2Uploader#how-to-get-cloudflares-account-id-and-r2-token" target="_blank" rel="noopener noreferrer" class="text-blue-600 hover:underline text-sm mt-4 inline-block">View Full Tutorial on GitHub</a>
+            </div>
+            <div id="license-info">
+                 <h3 class="font-serif text-2xl font-medium text-black mb-4">License Activation</h3>
+                 <p class="text-gray-600 mb-4 font-light">R2Uploader requires a license key for full functionality, though free usage is possible.</p>
+                <ol class="list-decimal list-inside space-y-2 text-gray-700 text-sm">
+                     <li>After purchase via <a href="https://anotherme.lemonsqueezy.com/buy/f9d4edca-2436-4247-a567-9002fb95a8e8" target="_blank" rel="noopener noreferrer" class="text-blue-600 hover:underline">Lemon Squeezy</a>, you'll receive a license key via email.</li>
+                     <li>If you can't find it, check your orders at <a href="https://app.lemonsqueezy.com/my-orders/" target="_blank" rel="noopener noreferrer" class="text-blue-600 hover:underline">Lemon Squeezy My Orders</a>.</li>
+                     <li>Enter the license key in the R2Uploader application when prompted.</li>
+                 </ol>
+                 <p class="text-xs text-gray-500 mt-2">Thank you for supporting R2Uploader development!</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="bg-gray-100 py-20 px-6">
+        <div class="container mx-auto max-w-4xl text-center">
+            <h2 class="font-serif text-3xl md:text-5xl font-medium text-black mb-6">Contact & Support</h2>
+            <p class="text-lg text-gray-600 mb-12 font-light">Have questions or feedback? Get in touch!</p>
+            <div class="flex flex-col sm:flex-row gap-6 justify-center items-center">
+                <a href="mailto:maoxiaoke@outlook.com" class="text-blue-600 hover:underline">Email: maoxiaoke@outlook.com</a>
+                <a href="https://t.me/+m3vKoZMPtoE5NDc1" target="_blank" rel="noopener noreferrer" class="text-blue-600 hover:underline">Telegram Group: nazha's land</a>
+                <a href="https://x.com/xiaokedada" target="_blank" rel="noopener noreferrer" class="text-blue-600 hover:underline">X/Twitter: @xiaokedada</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="container mx-auto px-6 py-10 text-center text-gray-600 text-sm max-w-7xl border-t border-gray-200">
+        <div class="mb-4">
+            R2Uploader is licensed under the <a href="https://choosealicense.com/licenses/gpl-3.0/" target="_blank" rel="noopener noreferrer" class="underline">GPL v3.0 License</a>.
+             See <a href="https://github.com/maoxiaoke/r2Uploader/blob/main/LICENSE.txt" target="_blank" rel="noopener noreferrer" class="underline">LICENSE.txt</a> for details.
+        </div>
+        <div>
+            &copy; 2024 Maoxiaoke. All rights reserved.
+        </div>
+         <div class="mt-4 text-xs text-gray-500 italic flex justify-center items-center gap-2">
+             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 19 19" fill="none" class="opacity-70"><g clip-path="url(#clip0_footer)"><path fill-rule="evenodd" clip-rule="evenodd" d="M11.6716 5.85035L16.6453 0.918945H18.1053L15.94 4.99201C17.639 5.57349 18.8605 7.18428 18.8605 9.08035C18.8605 11.4663 16.9263 13.4005 14.5405 13.4005C12.1546 13.4005 10.2205 11.4663 10.2205 9.08035C10.2205 7.96714 10.6415 6.95226 11.333 6.1863H11.3328L11.3354 6.1837C11.4413 6.06657 11.5536 5.95527 11.6716 5.85035Z" fill="#B9B9B7"></path><path fill-rule="evenodd" clip-rule="evenodd" d="M1.92502 5.85035L6.89873 0.918945H8.35875L6.19343 4.99201C7.8924 5.57349 9.11388 7.18428 9.11388 9.08035C9.11388 11.4663 7.17975 13.4005 4.79388 13.4005C2.40801 13.4005 0.473877 11.4663 0.473877 9.08035C0.473877 7.96714 0.894925 6.95226 1.58645 6.1863H1.58618L1.5888 6.1837C1.69472 6.06657 1.80698 5.95527 1.92502 5.85035Z" fill="#B9B9B7"></path></g><defs><clipPath id="clip0_footer"><rect width="19" height="19" fill="white"></rect></clipPath></defs></svg>
+             Less structure, more intelligence.
+        </div>
+    </footer>
+
+</body>
+</html> 

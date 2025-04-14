@@ -1,0 +1,10 @@
+<svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <!-- Chevrons -->
+    <g fill="#64748B">
+        <path d="M5.4 21.6L16 11L26.6 21.6" opacity="0.4"/>
+        <path d="M5.4 18.5L16 7.9L26.6 18.5" opacity="0.5"/>
+        <path d="M5.4 15.4L16 4.8L26.6 15.4" opacity="0.6"/>
+    </g>
+    <!-- Center Point -->
+    <circle cx="16" cy="16" r="1" fill="#64748B" opacity="0.9"/>
+</svg> 
