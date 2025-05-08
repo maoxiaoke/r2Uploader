@@ -21,13 +21,13 @@ import { FileWithSkeleton } from "@/components/file-with-skeleton";
 import { useBucketsContext } from "@/context/buckets";
 import { FileUpload } from "@/components/file-upload";
 import { SimpleUseTooltip } from "@/components/simple-use-tooltip";
-import useMasonry from "@/hooks/useMasonry";
 import { NoBuckets } from "@/components/no-buckets";
 import toast, { Toaster } from "react-hot-toast";
 import { usePlateform } from "@/hooks/usePlateform";
 import { SearchArea } from "@/components/search-area";
 import { shortenPath } from '@/lib/utils'
 import { CreateFolder } from "@/components/create-folder";
+import { Masonry } from "react-plock";
 
 import type { UploadFile } from "@/components/file-upload";
 
@@ -86,7 +86,6 @@ export default function BucketPage() {
     is_truncated: false,
   });
 
-  const masonryContainer = useMasonry();
   const hasDelimiters = delimiters.length > 0;
 
   useEffect(() => {
@@ -165,6 +164,7 @@ export default function BucketPage() {
   const onDelete = (object: string) => {
     setFiles((files) => files.filter((file) => file.key !== object));
   };
+  
 
   return (
     <div className="no-drag">
@@ -310,20 +310,31 @@ export default function BucketPage() {
             {
               hasDelimiters ? (<div className="text-sm pl-4 mt-2">Objects ({files.length})</div>): null
             }
+            
             <div
-              className="p-4 grid items-start gap-4 grid-cols-4"
-              ref={masonryContainer}
+              className="p-4"
+              // ref={masonryContainer}
             >
-              {files.map((file, idx) => (
-                <FileWithSkeleton
-                  bucket={bucketName}
-                  key={file.key}
-                  idx={idx}
-                  file={file}
-                  onDeleteFile={onDelete}
-                  publicDomain={publicDomain}
-                />
-              ))}
+              <Masonry
+                key={files.length}
+                items={files}
+                render={(file, idx) => (
+                  <FileWithSkeleton   
+                    bucket={bucketName}
+                    key={file.key}
+                    idx={idx}
+                    file={file}
+                    onDeleteFile={onDelete}
+                    publicDomain={publicDomain}
+                  />
+                )}
+                config={{
+                  columns: [4, 4, 4],
+                  gap: [20, 20, 20],
+                  media: [640, 768, 1024],
+                  useBalancedLayout: true, // Enable balanced layout
+                }}
+              />
             </div>
 
             {cursor?.is_truncated ? (
