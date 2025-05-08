@@ -107,6 +107,7 @@ export function FileUpload({
   const router = useRouter();
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [files, setFiles] = useState<Array<UploadFile>>([]);
+  const [isDraggingOver, setIsDraggingOver] = useState(false);
   const delimiterNames = router.query.delimiter as (string[] | undefined);
 
   const delimiter = delimiterNames ? delimiterNames.join('/') + '/' : '';
@@ -115,7 +116,7 @@ export function FileUpload({
     fileInputRef.current?.click();
   };
 
-  const uploadFile = async (evt: React.ChangeEvent<HTMLInputElement> | File, {
+  const uploadFile = async (evt: React.ChangeEvent<HTMLInputElement> | File | FileList, {
     forceUpload = false,
     newName,
     fromPaste = false
@@ -125,7 +126,7 @@ export function FileUpload({
     fromPaste?: boolean;
   } = {}) => {
     let savePath = null;
-    const evtFiles = evt instanceof File ? [evt] : evt.target.files;
+    const evtFiles = evt instanceof File ? [evt] : (evt instanceof FileList ? Array.from(evt) : evt.target.files);
 
     if (!evtFiles?.length) {
       return;
@@ -280,6 +281,28 @@ export function FileUpload({
     uploadFile(currentFile.file, { newName });
   }
 
+  const handleDragOver = (e: React.DragEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setIsDraggingOver(true);
+  };
+
+  const handleDragLeave = (e: React.DragEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setIsDraggingOver(false);
+  };
+
+  const handleDrop = (e: React.DragEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setIsDraggingOver(false);
+    const droppedFiles = e.dataTransfer.files;
+    if (droppedFiles && droppedFiles.length > 0) {
+      uploadFile(droppedFiles);
+    }
+  };
+
   return (
     <Dialog onOpenChange={handleOpenChange}>
       <DialogTrigger asChild>{children}</DialogTrigger>
@@ -296,10 +319,16 @@ export function FileUpload({
           </div>
         </DialogHeader>
 
-        <div className="flex items-center justify-center w-full">
+        <div
+          id="dropzone"
+          className="flex items-center justify-center w-full"
+          onDragOver={handleDragOver}
+          onDragLeave={handleDragLeave}
+          onDrop={handleDrop}
+        >
           <label
             htmlFor="dropzone-file"
-            className="flex flex-col items-center justify-center w-full border-gray-300 border-dashed cursor-pointer dark:hover:bg-gray-800 dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600 border py-6 rounded-lg"
+            className={`flex flex-col items-center justify-center w-full border-gray-300 border-dashed cursor-pointer dark:hover:bg-gray-800 dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600 border py-6 rounded-lg ${isDraggingOver ? 'bg-gray-100' : ''}`}
           >
             <div className="flex flex-col items-center justify-center">
               <CloudUpload />
