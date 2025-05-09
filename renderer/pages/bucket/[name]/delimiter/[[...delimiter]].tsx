@@ -28,7 +28,7 @@ import { SearchArea } from "@/components/search-area";
 import { shortenPath } from '@/lib/utils'
 import { CreateFolder } from "@/components/create-folder";
 import { Masonry } from "react-plock";
-import { useFolderCover, useAllDelimiters } from "@/hooks/useFolderCover";
+import { useDelimiters } from "@/hooks/useDelimiters";
 
 import type { UploadFile } from "@/components/file-upload";
 import type { BucketObject } from "../../../../../shared/types";
@@ -71,7 +71,7 @@ export default function BucketPage() {
   const [files, setFiles] = useState<BucketObject[]>([]);
   const [delimiters, setDelimiters] = useState<string[]>([]);
 
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [isLoadingMore, setIsLoadingMore] = useState(false);
   const [cursor, setCursor] = useState({
     cursor: "",
@@ -80,15 +80,13 @@ export default function BucketPage() {
 
   const hasDelimiters = delimiters.length > 0;
 
-  useFolderCover((delimiterNames ?? []).join('/') + '/', bucketName, files, publicDomain);
-  const cachedDelimiters = useAllDelimiters((delimiterNames ?? []).join('/') + '/', bucketName);
+  const cachedDelimiters = useDelimiters((delimiterNames ?? []).join('/') + '/', bucketName);
 
   useEffect(() => {
     if (!bucketName) {
       return;
     }
 
-    setLoading(true);
     window.electron.ipc
       .invoke("cf-get-bucket-objects", {
         bucketName,
@@ -307,7 +305,6 @@ export default function BucketPage() {
             {
               hasDelimiters ? (<div className="text-sm pl-4 mt-2">Objects ({files.length})</div>): null
             }
-            
             <div
               className="p-4"
             >

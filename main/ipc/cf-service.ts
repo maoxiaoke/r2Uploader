@@ -1,7 +1,7 @@
 import { ipcMain, clipboard } from "electron";
 import fetch from "node-fetch";
 import { getConfig } from "../helpers/get-config";
-import { getBuckets } from "../helpers/buckets";
+import { getBuckets, getBucket, getBucketPublicDomain } from "../helpers/buckets";
 import { storeBuckets } from "../helpers/buckets";
 import { appendBucketObjects, appendBucketDelimiters, deleteBucketObject } from '../helpers/data'
 import fs from "node:fs";
@@ -232,6 +232,20 @@ ipcMain.handle(
         appendBucketDelimiters(bucketName, (data?.result_info?.delimited ?? []).map(delimiter => ({
           key: delimiter,
         })  ));
+      }
+
+      if (delimiter !== '/') {
+        const findTheFirstImageOfThisFolder = data?.result?.find(object => object.http_metadata?.contentType?.startsWith('image/'));
+        const bucket  = getBucket(bucketName);
+        const publicDomain = getBucketPublicDomain(bucketName);
+
+        if (findTheFirstImageOfThisFolder) {
+          const cover = `${publicDomain}/${findTheFirstImageOfThisFolder.key}`;
+          appendBucketDelimiters(bucketName, [{
+            key: delimiter,
+            coverImage: cover
+          }]);
+        }
       }
     } catch (error) {
       // do nothing...

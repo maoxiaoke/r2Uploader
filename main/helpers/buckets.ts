@@ -16,6 +16,21 @@ export const getBuckets = (): Bucket[] => {
   return safeParse(bucketsPath, []);
 };
 
+export const getBucket = (bucketName: string): Bucket | undefined => {
+  const buckets = getBuckets();
+  return buckets.find((bucket) => bucket.name === bucketName);
+};
+
+export const getBucketPublicDomain = (bucketName: string): string | undefined => {
+  const bucket = getBucket(bucketName);
+
+  const customDomain = (
+    bucket?.domains?.custom?.domains ?? []
+  ).filter((dom) => dom.enabled)[0];
+
+  return `https://${customDomain ?? bucket?.domains?.managed?.domain}`;
+};
+
 export const storeBuckets = (buckets: Bucket[] | Bucket, clear = true) => {
   const _buckets = Array.isArray(buckets) ? buckets : [buckets];
   const storedBuckets = getBuckets();

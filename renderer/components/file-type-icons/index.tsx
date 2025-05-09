@@ -24,8 +24,6 @@ export function ImageIcon(props: React.SVGProps<SVGSVGElement>) {
   )
 }
 
-
-
 export function FontIcon(props: React.SVGProps<SVGSVGElement>) {
   return (
     <svg

@@ -1,12 +1,12 @@
 import { useState, useEffect } from "react";
 import { cn, shortenPath } from "../lib/utils";
-import { Skeleton } from "./ui/skeleton";
 import { Badge } from "./ui/badge";
 import { getFiletype } from "@/lib/utils";
 import { FileTypeIcons } from "@/components/file-type-icons";
 import { FileContextMenu } from "./file-context-menu";
 import toast, { Toaster } from "react-hot-toast";
 import { ConfettiCopyText } from "./confetti-copy-text";
+import { FileRenderer } from "./file-renderer";
 
 interface FileWithSkeletonProps {
   file: {
@@ -21,6 +21,7 @@ interface FileWithSkeletonProps {
   bucket: string;
   onDeleteFile: (object: string) => void;
 }
+
 
 export function FileWithSkeleton({
   file,
@@ -44,7 +45,7 @@ export function FileWithSkeleton({
     const handleKeyDown = async (e: KeyboardEvent) => {
       const activeElement = document.activeElement;
       const isThisElementFocused = activeElement?.id === file.key;
-      
+
       if (isThisElementFocused && (e.metaKey || e.ctrlKey) && e.key === 'c') {
         e.preventDefault();
         await onCopy2Clipboard();
@@ -151,26 +152,14 @@ export function FileWithSkeleton({
           showCopy2Clipboard={["text", "image", "json"].includes(fileType)}
         >
           {fileType === "image" ? (
-            <>
-              {isLoading && (
-                <Skeleton className="absolute inset-0 w-full h-[150px] rounded-sm bg-gray-400" />
-              )}
-              <img
-                src={shareUrl}
-                alt={file.key}
-                className={cn(
-                  "w-full rounded-sm bg-[#E7E7E7] focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2",
-                  isLoading ? "opacity-0" : "opacity-100",
-                  isOpen ? 'outline-none ring-2 ring-ring ring-offset-2' : ''
-                )}
-                loading="lazy"
-                id={file.key}
-                tabIndex={idx}
-                onLoad={() => setIsLoading(false)}
-                onError={() => setIsLoading(false)}
-                onClick={() => focusEle(file.key)}
-              />
-            </>
+            <FileRenderer
+              fileType={fileType}
+              file={file}
+              shareUrl={shareUrl}
+              isOpen={isOpen}
+              focusEle={focusEle}
+              idx={idx}
+            />
           ) : (
             <div
               id={file.key}
