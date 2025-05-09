@@ -46,3 +46,20 @@ export interface Config {
   activated: boolean;
   instance_id: string;
 }
+
+
+export interface BucketObject {
+  etag: string;
+  http_metadata: {
+    contentType: string;
+  };
+  key: string;
+  last_modified: string;
+  size: number;
+  storage_class: "standard";
+}
+
+export interface BucketDelimiter {
+  key: string;
+  coverImage?: string;
+}

@@ -3,6 +3,7 @@ import fetch from "node-fetch";
 import { getConfig } from "../helpers/get-config";
 import { getBuckets } from "../helpers/buckets";
 import { storeBuckets } from "../helpers/buckets";
+import { appendBucketObjects, appendBucketDelimiters, deleteBucketObject } from '../helpers/data'
 import fs from "node:fs";
 import { createDefaultFileStream } from "../helpers/create-default-file-stream";
 
@@ -24,6 +25,9 @@ const _fetch = async <T = any>(
       message: string;
     }>;
     messages: string[];
+    result_info?: {
+      delimited: string[];
+    };
     result: T;
   }>;
   status: number;
@@ -220,6 +224,19 @@ ipcMain.handle(
     );
     const data = await response.json();
 
+    try {
+      if (data?.result) {
+        appendBucketObjects(bucketName, data?.result ?? []);
+      }
+      if (data?.result_info) {
+        appendBucketDelimiters(bucketName, (data?.result_info?.delimited ?? []).map(delimiter => ({
+          key: delimiter,
+        })  ));
+      }
+    } catch (error) {
+      // do nothing...
+    }
+
     return data;
   }
 );
@@ -407,6 +424,14 @@ ipcMain.handle("cf-delete-object", async (evt, { bucket, object }) => {
   );
 
   const data = await response.json();
+
+  try {
+    if (data?.success) {
+      deleteBucketObject(bucket, object);
+    }
+  } catch (error) {
+    // do nothing...
+  }
 
   return data;
 });

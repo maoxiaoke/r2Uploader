@@ -28,22 +28,13 @@ import { SearchArea } from "@/components/search-area";
 import { shortenPath } from '@/lib/utils'
 import { CreateFolder } from "@/components/create-folder";
 import { Masonry } from "react-plock";
+import { useFolderCover, useAllDelimiters } from "@/hooks/useFolderCover";
 
 import type { UploadFile } from "@/components/file-upload";
+import type { BucketObject } from "../../../../../shared/types";
 
 export async function generateStaticParams() {
   return [{ name: "example" }];
-}
-
-interface BucketObject {
-  etag: string;
-  http_metadata: {
-    contentType: string;
-  };
-  key: string;
-  last_modified: string;
-  size: number;
-  storage_class: "standard";
 }
 
 export default function BucketPage() {
@@ -56,6 +47,7 @@ export default function BucketPage() {
   const [prefix, setPrefix] = useState("");
 
   const debouncedPrefix = useDebounce<string>(prefix, 500);
+
 
   const prefixByDelimiterAndSearch = useMemo(() => {
     if (delimiterNames) {
@@ -87,6 +79,9 @@ export default function BucketPage() {
   });
 
   const hasDelimiters = delimiters.length > 0;
+
+  useFolderCover((delimiterNames ?? []).join('/') + '/', bucketName, files, publicDomain);
+  const cachedDelimiters = useAllDelimiters((delimiterNames ?? []).join('/') + '/', bucketName);
 
   useEffect(() => {
     if (!bucketName) {
@@ -298,7 +293,9 @@ export default function BucketPage() {
               }}>
                 <div className="flex w-32 flex-col items-center">
                   <div className="h-1.5 w-4/5 rounded-tl rounded-tr bg-[#A0ABC5]"></div>
-                  <div className="aspect-3/2 h-24 w-full rounded bg-[#68748D]" ></div>
+                  <div className="aspect-3/2 h-24 w-full rounded bg-[#68748D]" >
+                    { cachedDelimiters?.[dir]?.coverImage ? <img src={cachedDelimiters?.[dir]?.coverImage} alt="cover" className="w-full h-full object-cover rounded" /> : null}
+                  </div>
                   <div className="text-xs text-center text-secondary mt-1">{shortenPath(dir.split('/').filter(Boolean).slice(-1)[0], 20)}</div>
                 </div>
               </div>
@@ -313,7 +310,6 @@ export default function BucketPage() {
             
             <div
               className="p-4"
-              // ref={masonryContainer}
             >
               <Masonry
                 key={files.length}
