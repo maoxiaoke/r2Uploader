@@ -49,17 +49,25 @@ export interface Config {
 
 
 export interface BucketObject {
-  etag: string;
-  http_metadata: {
+  etag?: string;
+  http_metadata?: {
     contentType: string;
   };
   key: string;
-  last_modified: string;
-  size: number;
-  storage_class: "standard";
+  last_modified?: string;
+  size?: number;
+  storage_class?: "Standard";
+
+  cover?: CoverImage;
 }
 
 export interface BucketDelimiter {
   key: string;
   coverImage?: string;
+}
+
+export interface CoverImage {
+  url?: string;
+  width: number;
+  height: number;
 }

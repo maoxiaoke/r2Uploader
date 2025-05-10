@@ -29,6 +29,7 @@
     "electron-store": "^8.2.0",
     "electron-updater": "^6.3.9",
     "electron-util": "^0.18.1",
+    "image-size": "^2.0.2",
     "install": "^0.13.0",
     "lucide-react": "^0.469.0",
     "motion": "^11.15.0",

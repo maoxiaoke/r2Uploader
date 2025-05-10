@@ -6,6 +6,8 @@ import { storeBuckets } from "../helpers/buckets";
 import { appendBucketObjects, appendBucketDelimiters, deleteBucketObject } from '../helpers/data'
 import fs from "node:fs";
 import { createDefaultFileStream } from "../helpers/create-default-file-stream";
+import { getCover } from "../helpers/getCover";
+
 
 const qsStringify = (params: Record<string, any>) => {
   return Object.entries(params)
@@ -223,7 +225,6 @@ ipcMain.handle(
       }
     );
     const data = await response.json();
-
     try {
       if (data?.result) {
         appendBucketObjects(bucketName, data?.result ?? []);
@@ -234,20 +235,21 @@ ipcMain.handle(
         })  ));
       }
 
-      if (delimiter !== '/') {
-        const findTheFirstImageOfThisFolder = data?.result?.find(object => object.http_metadata?.contentType?.startsWith('image/'));
-        const bucket  = getBucket(bucketName);
-        const publicDomain = getBucketPublicDomain(bucketName);
+      const delimiterFromPrefix = prefix?.split('/')?.slice(0, -1).join('/') + '/';
 
+      if (delimiterFromPrefix !== '/') {
+        const findTheFirstImageOfThisFolder = data?.result?.find(object => object.http_metadata?.contentType?.startsWith('image/'));
+        const publicDomain = getBucketPublicDomain(bucketName);
         if (findTheFirstImageOfThisFolder) {
           const cover = `${publicDomain}/${findTheFirstImageOfThisFolder.key}`;
           appendBucketDelimiters(bucketName, [{
-            key: delimiter,
+            key: delimiterFromPrefix,
             coverImage: cover
           }]);
         }
       }
     } catch (error) {
+      console.log('error', error);
       // do nothing...
     }
 
@@ -301,17 +303,40 @@ ipcMain.handle(
     } else {
       file = fs.createReadStream(filePath);
     }
-    const response = await _fetch(
+    const response = await _fetch<{
+      key: string;
+      size: number;
+      etag: string;
+      version: string;
+      uploaded: string;
+      storage_class: 'Standard';
+    }>(
       `https://api.cloudflare.com/client/v4/accounts/*/r2/buckets/${bucketName}/objects/${fileName}`,
       {
         method: "PUT",
         body: file,
         headers: {
-          "Content-Type": fileType ?? "application/octet-stream",
+          "Content-Type": fileType ?? "application/octet-stream"
         },
       }
     );
     const data = await response.json();
+
+    try {
+      if (data?.success && data?.result?.key) {
+        const cover = await getCover(filePath, fileType);
+
+        if (cover) {
+          appendBucketObjects(bucketName, [{
+            ...data?.result,
+            cover: cover
+          }]);
+        }
+      }
+
+    } catch (error) {
+      console.log('error', error);
+    }
 
     return data;
   }
@@ -438,14 +463,6 @@ ipcMain.handle("cf-delete-object", async (evt, { bucket, object }) => {
   );
 
   const data = await response.json();
-
-  try {
-    if (data?.success) {
-      deleteBucketObject(bucket, object);
-    }
-  } catch (error) {
-    // do nothing...
-  }
 
   return data;
 });

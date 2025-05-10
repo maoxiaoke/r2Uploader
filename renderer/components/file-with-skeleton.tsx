@@ -153,6 +153,7 @@ export function FileWithSkeleton({
         >
           {fileType === "image" ? (
             <FileRenderer
+              setIsLoading={setIsLoading}
               fileType={fileType}
               file={file}
               shareUrl={shareUrl}

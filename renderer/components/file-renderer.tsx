@@ -23,6 +23,8 @@ export type BaseRendererProps = {
 
 
 export const FileRenderer = ({
+  isLoading,
+  setIsLoading,
   fileType,
   file,
   shareUrl,
@@ -32,8 +34,6 @@ export const FileRenderer = ({
   }: BaseRendererProps & {
     fileType: string;
   }) => {
-  const [isLoading, setIsLoading] = useState(true);
-
   return (
     <>
       {isLoading && (

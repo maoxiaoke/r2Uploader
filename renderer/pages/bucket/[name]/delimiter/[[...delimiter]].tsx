@@ -48,7 +48,6 @@ export default function BucketPage() {
 
   const debouncedPrefix = useDebounce<string>(prefix, 500);
 
-
   const prefixByDelimiterAndSearch = useMemo(() => {
     if (delimiterNames) {
       return delimiterNames.join('/') + '/' + debouncedPrefix;
@@ -56,7 +55,6 @@ export default function BucketPage() {
 
     return debouncedPrefix;
   }, [delimiterNames, debouncedPrefix]);
-
 
   const customDomain = useMemo(() => {
     const activeCustomDomain = (
@@ -90,7 +88,7 @@ export default function BucketPage() {
     window.electron.ipc
       .invoke("cf-get-bucket-objects", {
         bucketName,
-        prefix: prefixByDelimiterAndSearch
+        prefix: prefixByDelimiterAndSearch,
       })
       .then((data) => {
         setCursor(data?.result_info);
@@ -148,7 +146,7 @@ export default function BucketPage() {
         key: delimiter + (file?.newName ?? file.file.name),
         last_modified: new Date().toISOString(),
         size: file.file.size,
-        storage_class: "standard" as const,
+        storage_class: "Standard" as const,
       })),
       ...prev,
     ]);

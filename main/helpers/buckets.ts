@@ -26,7 +26,7 @@ export const getBucketPublicDomain = (bucketName: string): string | undefined =>
 
   const customDomain = (
     bucket?.domains?.custom?.domains ?? []
-  ).filter((dom) => dom.enabled)[0];
+  ).filter((dom) => dom.enabled)?.[0]?.domain;
 
   return `https://${customDomain ?? bucket?.domains?.managed?.domain}`;
 };
