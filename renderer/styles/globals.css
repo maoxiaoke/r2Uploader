@@ -129,6 +129,11 @@
 
   body {
     @apply font-sans antialiased text-foreground;
+    background-color: #fdfcfb;
+  }
+
+  .dark body {
+    background-color: #fdfcfb;
   }
 
   #__next {
