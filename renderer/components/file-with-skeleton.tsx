@@ -7,21 +7,14 @@ import { FileContextMenu } from "./file-context-menu";
 import toast, { Toaster } from "react-hot-toast";
 import { ConfettiCopyText } from "./confetti-copy-text";
 import { FileRenderer } from "./file-renderer";
-
+import { BucketObject } from "../../shared/types";
 interface FileWithSkeletonProps {
-  file: {
-    etag: string;
-    key: string;
-    http_metadata: {
-      contentType: string;
-    };
-  };
+  file: BucketObject;
   idx: number;
   publicDomain: string;
   bucket: string;
   onDeleteFile: (object: string) => void;
 }
-
 
 export function FileWithSkeleton({
   file,
@@ -46,15 +39,15 @@ export function FileWithSkeleton({
       const activeElement = document.activeElement;
       const isThisElementFocused = activeElement?.id === file.key;
 
-      if (isThisElementFocused && (e.metaKey || e.ctrlKey) && e.key === 'c') {
+      if (isThisElementFocused && (e.metaKey || e.ctrlKey) && e.key === "c") {
         e.preventDefault();
         await onCopy2Clipboard();
       }
     };
 
-    document.addEventListener('keydown', handleKeyDown);
+    document.addEventListener("keydown", handleKeyDown);
     return () => {
-      document.removeEventListener('keydown', handleKeyDown);
+      document.removeEventListener("keydown", handleKeyDown);
     };
   }, [file.key]);
 
@@ -175,7 +168,11 @@ export function FileWithSkeleton({
       </div>
 
       <div className="w-full text-center mt-1 flex items-center justify-center">
-        <ConfettiCopyText text={shortenPath(file.key?.split('/').pop() ?? '', 24)} shareUrl={shareUrl} className="text-xs text-secondary px-2"  />
+        <ConfettiCopyText
+          text={shortenPath(file.key?.split("/").pop() ?? "", 24)}
+          shareUrl={shareUrl}
+          className="text-xs text-secondary px-2"
+        />
       </div>
 
       <Badge className="absolute top-1 left-1 opacity-50 rounded py-0 px-1 text-[10px]">

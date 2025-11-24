@@ -20,6 +20,7 @@
     "@radix-ui/react-tooltip": "^1.1.6",
     "@react-spring/web": "^9.7.5",
     "@uidotdev/usehooks": "^2.4.1",
+    "antd": "^6.0.0",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "cmdk": "^1.0.4",

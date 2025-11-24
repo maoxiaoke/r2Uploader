@@ -25,10 +25,11 @@ import { NoBuckets } from "@/components/no-buckets";
 import toast, { Toaster } from "react-hot-toast";
 import { usePlateform } from "@/hooks/usePlateform";
 import { SearchArea } from "@/components/search-area";
-import { shortenPath } from '@/lib/utils'
+import { shortenPath } from "@/lib/utils";
 import { CreateFolder } from "@/components/create-folder";
-import { Masonry } from "react-plock";
+// import { Masonry } from "react-plock";
 import { useDelimiters } from "@/hooks/useDelimiters";
+import { Masonry } from "antd";
 
 import type { UploadFile } from "@/components/file-upload";
 import type { BucketObject } from "../../../../../shared/types";
@@ -41,7 +42,7 @@ export default function BucketPage() {
   const router = useRouter();
   const { isWindows } = usePlateform();
   const bucketName = router.query.name as string;
-  const delimiterNames = router.query.delimiter as (string[] | undefined);
+  const delimiterNames = router.query.delimiter as string[] | undefined;
   const { buckets } = useBucketsContext();
   const currentBucket = buckets.find((bucket) => bucket.name === bucketName);
   const [prefix, setPrefix] = useState("");
@@ -50,7 +51,7 @@ export default function BucketPage() {
 
   const prefixByDelimiterAndSearch = useMemo(() => {
     if (delimiterNames) {
-      return delimiterNames.join('/') + '/' + debouncedPrefix;
+      return delimiterNames.join("/") + "/" + debouncedPrefix;
     }
 
     return debouncedPrefix;
@@ -64,7 +65,9 @@ export default function BucketPage() {
     return activeCustomDomain?.domain;
   }, [currentBucket]);
 
-  const publicDomain = `https://${customDomain ?? currentBucket?.domains?.managed?.domain}`;
+  const publicDomain = `https://${
+    customDomain ?? currentBucket?.domains?.managed?.domain
+  }`;
 
   const [files, setFiles] = useState<BucketObject[]>([]);
   const [delimiters, setDelimiters] = useState<string[]>([]);
@@ -78,7 +81,10 @@ export default function BucketPage() {
 
   const hasDelimiters = delimiters.length > 0;
 
-  const cachedDelimiters = useDelimiters((delimiterNames ?? []).join('/') + '/', bucketName);
+  const cachedDelimiters = useDelimiters(
+    (delimiterNames ?? []).join("/") + "/",
+    bucketName
+  );
 
   useEffect(() => {
     if (!bucketName) {
@@ -107,13 +113,16 @@ export default function BucketPage() {
       .invoke("cf-get-bucket-objects", {
         bucketName,
         cursor: cursor.cursor,
-        prefix: prefixByDelimiterAndSearch
+        prefix: prefixByDelimiterAndSearch,
       })
       .then((data) => {
         setCursor(data?.result_info);
 
         setFiles((prev) => [...prev, ...(data?.result || [])]);
-        setDelimiters((prev) => [...prev, ...(data?.result_info?.delimited || [])]);
+        setDelimiters((prev) => [
+          ...prev,
+          ...(data?.result_info?.delimited || []),
+        ]);
       })
       .finally(() => {
         setIsLoadingMore(false);
@@ -124,7 +133,7 @@ export default function BucketPage() {
     window.electron.ipc
       .invoke("cf-get-bucket-objects", {
         bucketName,
-        prefix: prefixByDelimiterAndSearch
+        prefix: prefixByDelimiterAndSearch,
       })
       .then((data) => {
         setCursor(data?.result_info);
@@ -135,7 +144,7 @@ export default function BucketPage() {
   };
 
   const appendFiles = (newFiles: UploadFile[]) => {
-    const delimiter = delimiterNames ? delimiterNames.join('/') + '/' : '';
+    const delimiter = delimiterNames ? delimiterNames.join("/") + "/" : "";
 
     setFiles((prev) => [
       ...newFiles.map((file) => ({
@@ -155,7 +164,6 @@ export default function BucketPage() {
   const onDelete = (object: string) => {
     setFiles((files) => files.filter((file) => file.key !== object));
   };
-  
 
   return (
     <div className="no-drag">
@@ -166,7 +174,8 @@ export default function BucketPage() {
         )}
       >
         <div className={cn("flex items-center", isWindows ? "ml-0" : "ml-20")}>
-        {delimiterNames ? <Button
+          {delimiterNames ? (
+            <Button
               variant="link"
               size="icon"
               className="bg-transparent shadow-none border-none text-primary"
@@ -177,19 +186,30 @@ export default function BucketPage() {
                   return;
                 }
 
-                const slicedDelimiterNames = delimiterNames?.slice(0, -1).join('/');
-                router.push(`/bucket/${bucketName}/delimiter/${slicedDelimiterNames}`);
+                const slicedDelimiterNames = delimiterNames
+                  ?.slice(0, -1)
+                  .join("/");
+                router.push(
+                  `/bucket/${bucketName}/delimiter/${slicedDelimiterNames}`
+                );
               }}
             >
-                <CircleChevronLeft />
-            </Button> : null} 
-        { delimiterNames ? <div className="text-sm">{'root/' + delimiterNames.join('/')}</div> : null}
+              <CircleChevronLeft />
+            </Button>
+          ) : null}
+          {delimiterNames ? (
+            <div className="text-sm">{"root/" + delimiterNames.join("/")}</div>
+          ) : null}
         </div>
         {!isWindows ? (
           <div className="flex-1 drag opacity-0">hidden drag bar</div>
         ) : null}
         <div className="flex items-center">
-          <FileUpload bucket={bucketName} onClose={appendFiles} publicDomain={publicDomain}>
+          <FileUpload
+            bucket={bucketName}
+            onClose={appendFiles}
+            publicDomain={publicDomain}
+          >
             <Button
               variant="outline"
               size="icon"
@@ -199,7 +219,10 @@ export default function BucketPage() {
             </Button>
           </FileUpload>
 
-          <CreateFolder bucketName={bucketName} delimiter={delimiterNames?.join('/') ?? ''} publicDomain={publicDomain}
+          <CreateFolder
+            bucketName={bucketName}
+            delimiter={delimiterNames?.join("/") ?? ""}
+            publicDomain={publicDomain}
             onSuccess={() => {
               update();
             }}
@@ -267,7 +290,11 @@ export default function BucketPage() {
 
       {!loading && files.length === 0 && (
         <NoBuckets>
-          <FileUpload bucket={bucketName} onClose={update} publicDomain={publicDomain}>
+          <FileUpload
+            bucket={bucketName}
+            onClose={update}
+            publicDomain={publicDomain}
+          >
             <Button type="button" size="sm" className="mt-6 z-20">
               <Plus /> New Object
             </Button>
@@ -278,53 +305,68 @@ export default function BucketPage() {
       {!loading && files.length > 0 && (
         <div className="h-80 no-drag">
           <ScrollArea className={cn(styl.bodyHeight, "")}>
-          {hasDelimiters ? (
-        <div className="no-drag p-4">
-          <div className="text-sm">Folders ({delimiters.length})</div>
-          <div className="flex gap-4 mt-4">
-            {delimiters.map((dir) => (
-              <div key={dir} className="cursor-pointer" onClick={() => {
-                const withoutSlash = dir.split('/').filter(Boolean).join('/');
-                router.push(`/bucket/${bucketName}/delimiter/${withoutSlash}`);
-              }}>
-                <div className="flex w-32 flex-col items-center">
-                  <div className="h-1.5 w-4/5 rounded-tl rounded-tr bg-[#A0ABC5]"></div>
-                  <div className="aspect-3/2 h-24 w-full rounded bg-[#68748D]" >
-                    { cachedDelimiters?.[dir]?.coverImage ? <img src={cachedDelimiters?.[dir]?.coverImage} alt="cover" className="w-full h-full object-cover rounded" /> : null}
-                  </div>
-                  <div className="text-xs text-center text-secondary mt-1">{shortenPath(dir.split('/').filter(Boolean).slice(-1)[0], 20)}</div>
+            {hasDelimiters ? (
+              <div className="no-drag p-4">
+                <div className="text-sm">Folders ({delimiters.length})</div>
+                <div className="flex gap-4 mt-4">
+                  {delimiters.map((dir) => (
+                    <div
+                      key={dir}
+                      className="cursor-pointer"
+                      onClick={() => {
+                        const withoutSlash = dir
+                          .split("/")
+                          .filter(Boolean)
+                          .join("/");
+                        router.push(
+                          `/bucket/${bucketName}/delimiter/${withoutSlash}`
+                        );
+                      }}
+                    >
+                      <div className="flex w-32 flex-col items-center">
+                        <div className="h-1.5 w-4/5 rounded-tl rounded-tr bg-[#A0ABC5]"></div>
+                        <div className="aspect-3/2 h-24 w-full rounded bg-[#68748D]">
+                          {cachedDelimiters?.[dir]?.coverImage ? (
+                            <img
+                              src={cachedDelimiters?.[dir]?.coverImage}
+                              alt="cover"
+                              className="w-full h-full object-cover rounded"
+                            />
+                          ) : null}
+                        </div>
+                        <div className="text-xs text-center text-secondary mt-1">
+                          {shortenPath(
+                            dir.split("/").filter(Boolean).slice(-1)[0],
+                            20
+                          )}
+                        </div>
+                      </div>
+                    </div>
+                  ))}
                 </div>
               </div>
-            ))}
-          </div>
-        </div>
-      ) : null}
+            ) : null}
 
-            {
-              hasDelimiters ? (<div className="text-sm pl-4 mt-2">Objects ({files.length})</div>): null
-            }
-            <div
-              className="p-4"
-            >
+            {hasDelimiters ? (
+              <div className="text-sm pl-4 mt-2">Objects ({files.length})</div>
+            ) : null}
+            <div className="p-4">
               <Masonry
+                fresh
                 key={files.length}
-                items={files}
-                render={(file, idx) => (
-                  <FileWithSkeleton   
+                items={files?.map((file) => ({ data: file, key: file.key }))}
+                itemRender={({ data, index }) => (
+                  <FileWithSkeleton
                     bucket={bucketName}
-                    key={file.key}
-                    idx={idx}
-                    file={file}
+                    key={data.key}
+                    idx={index}
+                    file={data}
                     onDeleteFile={onDelete}
                     publicDomain={publicDomain}
                   />
                 )}
-                config={{
-                  columns: [4, 4, 4],
-                  gap: [20, 20, 20],
-                  media: [640, 768, 1024],
-                  useBalancedLayout: true, // Enable balanced layout
-                }}
+                columns={4}
+                gutter={16}
               />
             </div>
 
