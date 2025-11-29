@@ -202,7 +202,7 @@ export default function BucketPage() {
           ) : null}
         </div>
         {!isWindows ? (
-          <div className="flex-1 drag opacity-0">hidden drag bar</div>
+          <div className="flex-1 drag opacity-0 h-full">hidden drag bar</div>
         ) : null}
         <div className="flex items-center">
           <FileUpload
@@ -278,7 +278,7 @@ export default function BucketPage() {
           </SimpleUseTooltip>
         </div>
         {isWindows ? (
-          <div className="flex-1 drag opacity-0">hidden drag bar</div>
+          <div className="flex-1 drag opacity-0 h-full">hidden drag bar</div>
         ) : null}
       </header>
 
