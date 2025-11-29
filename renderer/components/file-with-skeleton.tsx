@@ -6,6 +6,7 @@ import { FileTypeIcons } from "@/components/file-type-icons";
 import { FileContextMenu } from "./file-context-menu";
 import toast, { Toaster } from "react-hot-toast";
 import { ConfettiCopyText } from "./confetti-copy-text";
+import { EditableConfettiCopyText } from "@/components/editable-confetti-copy-text";
 import { FileRenderer } from "./file-renderer";
 import { BucketObject } from "../../shared/types";
 interface FileWithSkeletonProps {
@@ -14,6 +15,7 @@ interface FileWithSkeletonProps {
   publicDomain: string;
   bucket: string;
   onDeleteFile: (object: string) => void;
+  onRenameFile: (oldKey: string, newKey: string) => void;
 }
 
 export function FileWithSkeleton({
@@ -22,6 +24,7 @@ export function FileWithSkeleton({
   idx,
   publicDomain,
   onDeleteFile,
+  onRenameFile,
 }: FileWithSkeletonProps) {
   const [isLoading, setIsLoading] = useState(true);
 
@@ -127,6 +130,58 @@ export function FileWithSkeleton({
     }
   };
 
+  const onRename = async (newName: string) => {
+    const segments = file.key.split("/");
+    const oldFileName = segments.pop() ?? "";
+    const prefix = segments.length ? `${segments.join("/")}/` : "";
+
+    const newKey = `${prefix}${newName}`;
+
+    if (newKey === file.key) {
+      return;
+    }
+
+    try {
+      const exists = await window.electron.ipc.invoke("cf-check-file-exists", {
+        url: `${publicDomain}/${newKey}`,
+      });
+
+      if (exists) {
+        toast.error("Target file already exists!", {
+          style: {
+            fontSize: "13px",
+          },
+        });
+        return;
+      }
+
+      const res = await window.electron.ipc.invoke("cf-rename-object", {
+        bucket,
+        oldObjectKey: file.key,
+        newObjectKey: newKey,
+        publicDomain,
+        contentType: file.http_metadata?.contentType,
+      });
+
+      if (res?.success) {
+        onRenameFile(file.key, newKey);
+        return;
+      }
+
+      toast.error("Fail to rename!", {
+        style: {
+          fontSize: "13px",
+        },
+      });
+    } catch (error) {
+      toast.error("Fail to rename!", {
+        style: {
+          fontSize: "13px",
+        },
+      });
+    }
+  };
+
   return (
     <div className="mb-4 break-inside-avoid relative">
       <div
@@ -168,10 +223,12 @@ export function FileWithSkeleton({
       </div>
 
       <div className="w-full text-center mt-1 flex items-center justify-center">
-        <ConfettiCopyText
+        <EditableConfettiCopyText
           text={shortenPath(file.key?.split("/").pop() ?? "", 24)}
           shareUrl={shareUrl}
           className="text-xs text-secondary px-2"
+          canEdit
+          onChangeName={onRename}
         />
       </div>
 

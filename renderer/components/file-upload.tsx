@@ -15,11 +15,11 @@ import {
   CircleCheckBig,
   CircleX,
   RotateCcw,
-  RefreshCcwDot
+  RefreshCcwDot,
 } from "lucide-react";
 import { ScrollArea } from "./ui/scroll-area";
 import { shortenPath, prettifySize, getFiletype } from "../lib/utils";
-import { SimpleUseTooltip } from '@/components/simple-use-tooltip';
+import { SimpleUseTooltip } from "@/components/simple-use-tooltip";
 import { FileTypeIcons } from "@/components/file-type-icons";
 import { EditableConfettiCopyText } from "@/components/editable-confetti-copy-text";
 import { usePaste } from "@/hooks/usePaste";
@@ -29,7 +29,7 @@ const FileStatus = ({
   message,
 }: {
   status: "uploading" | "completed" | "error";
-  message?: 'upload_failed' | 'file_exists' | string;
+  message?: "upload_failed" | "file_exists" | string;
 }) => {
   if (status === "uploading") {
     return (
@@ -49,12 +49,12 @@ const FileStatus = ({
     );
   }
 
-  const fileExists = message === 'file_exists';
+  const fileExists = message === "file_exists";
 
   return (
     <span className="flex items-center gap-1">
       <CircleX size={16} className="text-red-500" />
-      {fileExists ? 'File already exists' : 'Upload failed'}
+      {fileExists ? "File already exists" : "Upload failed"}
     </span>
   );
 };
@@ -66,20 +66,26 @@ const FileOperations = ({
   onForceUpload,
 }: {
   status: "uploading" | "completed" | "error";
-  message?: 'upload_failed' | 'file_exists' | string;
+  message?: "upload_failed" | "file_exists" | string;
   onRetry?: () => void;
   onForceUpload?: () => void;
 }) => {
-  if (status === 'error') {
-    const fileExists = message === 'file_exists';
+  if (status === "error") {
+    const fileExists = message === "file_exists";
 
     return fileExists ? (
       <SimpleUseTooltip tips="Force upload">
-        <RefreshCcwDot className="cursor-pointer text-red-500" size={18} onClick={onForceUpload} />
+        <RefreshCcwDot
+          className="cursor-pointer text-red-500"
+          size={18}
+          onClick={onForceUpload}
+        />
       </SimpleUseTooltip>
-    ) : <SimpleUseTooltip tips="Retry">
-      <RotateCcw className="cursor-pointer" size={18} onClick={onRetry} />
+    ) : (
+      <SimpleUseTooltip tips="Retry">
+        <RotateCcw className="cursor-pointer" size={18} onClick={onRetry} />
       </SimpleUseTooltip>
+    );
   }
 
   return null;
@@ -88,9 +94,9 @@ export interface UploadFile {
   file: File;
   newName?: string;
   progress: number;
-  from: 'paste' | 'upload';
+  from: "paste" | "upload";
   status: "uploading" | "completed" | "error";
-  message?: 'upload_failed' | 'file_exists' | string;
+  message?: "upload_failed" | "file_exists" | string;
 }
 
 export function FileUpload({
@@ -108,25 +114,33 @@ export function FileUpload({
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [files, setFiles] = useState<Array<UploadFile>>([]);
   const [isDraggingOver, setIsDraggingOver] = useState(false);
-  const delimiterNames = router.query.delimiter as (string[] | undefined);
+  const delimiterNames = router.query.delimiter as string[] | undefined;
 
-  const delimiter = delimiterNames ? delimiterNames.join('/') + '/' : '';
+  const delimiter = delimiterNames ? delimiterNames.join("/") + "/" : "";
 
   const handleButtonClick = () => {
     fileInputRef.current?.click();
   };
 
-  const uploadFile = async (evt: React.ChangeEvent<HTMLInputElement> | File | FileList, {
-    forceUpload = false,
-    newName,
-    fromPaste = false
-  }: {
-    forceUpload?: boolean;
-    newName?: string;
-    fromPaste?: boolean;
-  } = {}) => {
+  const uploadFile = async (
+    evt: React.ChangeEvent<HTMLInputElement> | File | FileList,
+    {
+      forceUpload = false,
+      newName,
+      fromPaste = false,
+    }: {
+      forceUpload?: boolean;
+      newName?: string;
+      fromPaste?: boolean;
+    } = {}
+  ) => {
     let savePath = null;
-    const evtFiles = evt instanceof File ? [evt] : (evt instanceof FileList ? Array.from(evt) : evt.target.files);
+    const evtFiles =
+      evt instanceof File
+        ? [evt]
+        : evt instanceof FileList
+        ? Array.from(evt)
+        : evt.target.files;
 
     if (!evtFiles?.length) {
       return;
@@ -141,7 +155,7 @@ export function FileUpload({
             file,
             progress: 0,
             status: "uploading",
-            from: fromPaste ? 'paste' : 'upload',
+            from: fromPaste ? "paste" : "upload",
           },
           ...prev,
         ]);
@@ -161,9 +175,12 @@ export function FileUpload({
 
       try {
         if (!forceUpload) {
-          const exists = await window.electron.ipc.invoke("cf-check-file-exists", {
-            url: `${publicDomain}/${fileName}`,
-          });
+          const exists = await window.electron.ipc.invoke(
+            "cf-check-file-exists",
+            {
+              url: `${publicDomain}/${fileName}`,
+            }
+          );
 
           if (exists) {
             throw new Error("file_exists");
@@ -230,12 +247,16 @@ export function FileUpload({
     Array.from(evtFiles).forEach(handleSignleFileUpload);
   };
 
-  usePaste((files) => uploadFile(files[0], {
-    fromPaste: true,
-  }), {
-    publicDomain,
-    delimiter,
-  });
+  usePaste(
+    (files) =>
+      uploadFile(files[0], {
+        fromPaste: true,
+      }),
+    {
+      publicDomain,
+      delimiter,
+    }
+  );
 
   const handleOpenChange = (isOpen) => {
     if (!isOpen) {
@@ -258,7 +279,9 @@ export function FileUpload({
 
     const currentFile = files[idx];
 
-    if (!(currentFile.status === "completed" || currentFile.status === "error")) {
+    if (
+      !(currentFile.status === "completed" || currentFile.status === "error")
+    ) {
       return;
     }
 
@@ -279,7 +302,7 @@ export function FileUpload({
     }
 
     uploadFile(currentFile.file, { newName });
-  }
+  };
 
   const handleDragOver = (e: React.DragEvent<HTMLDivElement>) => {
     e.preventDefault();
@@ -328,7 +351,9 @@ export function FileUpload({
         >
           <label
             htmlFor="dropzone-file"
-            className={`flex flex-col items-center justify-center w-full border-gray-300 border-dashed cursor-pointer dark:hover:bg-gray-800 dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600 border py-6 rounded-lg ${isDraggingOver ? 'bg-gray-100' : ''}`}
+            className={`flex flex-col items-center justify-center w-full border-gray-300 border-dashed cursor-pointer dark:hover:bg-gray-800 dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600 border py-6 rounded-lg ${
+              isDraggingOver ? "bg-gray-100" : ""
+            }`}
           >
             <div className="flex flex-col items-center justify-center">
               <CloudUpload />
@@ -363,34 +388,58 @@ export function FileUpload({
         {files?.length ? (
           <ScrollArea className="max-h-44">
             {files.map((file) => {
-              const FileIcon = FileTypeIcons[getFiletype(file.file.type)]
+              const FileIcon = FileTypeIcons[getFiletype(file.file.type)];
               const fileName = file.newName ?? file.file.name;
 
               return (
                 <div
-                key={file.file.path}
-                className="bg-gray-100 rounded-lg p-4 flex items-center justify-between mt-1"
-              >
-                <div className="flex items-center gap-4 text-sm">
-                  <div className="text-2xl">
-
-                  <FileIcon  />
-                  </div>
-                  <div>
-                    <EditableConfettiCopyText text={shortenPath(fileName, 36)} shareUrl={`${publicDomain}/${fileName}`} canEdit={file.status === "completed" || file.status === "error"} onChangeName={(newName) => changeFileName(file, newName)} />
-                    <div className="text-xs text-secondary mt-1 flex items-center gap-1">
-                      {prettifySize(file.file.size)} ·{" "}
-                      <FileStatus status={file.status} message={file.message} />
+                  key={file.file.path}
+                  className="bg-gray-100 rounded-lg p-4 flex items-center justify-between mt-1"
+                >
+                  <div className="flex items-center gap-4 text-sm">
+                    <div className="text-2xl">
+                      <FileIcon />
+                    </div>
+                    <div>
+                      <EditableConfettiCopyText
+                        text={shortenPath(fileName, 36)}
+                        shareUrl={`${publicDomain}/${fileName}`}
+                        canEdit={
+                          file.status === "completed" || file.status === "error"
+                        }
+                        onChangeName={(newName) =>
+                          changeFileName(file, newName)
+                        }
+                      />
+                      <div className="text-xs text-secondary mt-1 flex items-center gap-1">
+                        {prettifySize(file.file.size)} ·{" "}
+                        <FileStatus
+                          status={file.status}
+                          message={file.message}
+                        />
+                      </div>
                     </div>
                   </div>
-                </div>
 
-                <div className="flex items-center gap-2 mr-2">
-                  <FileOperations status={file.status} message={file.message} onRetry={() => uploadFile(file.file, { fromPaste: file.from === 'paste' })} onForceUpload={() => uploadFile(file.file, { forceUpload: true, fromPaste: file.from === 'paste' })} />
+                  <div className="flex items-center gap-2 mr-2">
+                    <FileOperations
+                      status={file.status}
+                      message={file.message}
+                      onRetry={() =>
+                        uploadFile(file.file, {
+                          fromPaste: file.from === "paste",
+                        })
+                      }
+                      onForceUpload={() =>
+                        uploadFile(file.file, {
+                          forceUpload: true,
+                          fromPaste: file.from === "paste",
+                        })
+                      }
+                    />
+                  </div>
                 </div>
-
-              </div>
-              )
+              );
             })}
           </ScrollArea>
         ) : null}

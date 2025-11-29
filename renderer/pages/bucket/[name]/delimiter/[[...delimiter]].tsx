@@ -160,6 +160,19 @@ export default function BucketPage() {
     setFiles((files) => files.filter((file) => file.key !== object));
   };
 
+  const onRenameFile = (oldKey: string, newKey: string) => {
+    setFiles((files) =>
+      files.map((file) =>
+        file.key === oldKey
+          ? {
+              ...file,
+              key: newKey,
+            }
+          : file
+      )
+    );
+  };
+
   return (
     <div className="no-drag">
       <header
@@ -353,6 +366,7 @@ export default function BucketPage() {
                 itemRender={({ data, index }) => (
                   <FileWithSkeleton
                     bucket={bucketName}
+                    onRenameFile={onRenameFile}
                     key={data.key}
                     idx={index}
                     file={data}

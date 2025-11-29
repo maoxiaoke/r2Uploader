@@ -1,13 +1,22 @@
-import { ipcMain, clipboard } from "electron";
+import { ipcMain, clipboard, BrowserWindow } from "electron";
+import { download } from "electron-dl";
 import fetch from "node-fetch";
 import { getConfig } from "../helpers/get-config";
-import { getBuckets, getBucket, getBucketPublicDomain } from "../helpers/buckets";
+import {
+  getBuckets,
+  getBucket,
+  getBucketPublicDomain,
+} from "../helpers/buckets";
 import { storeBuckets } from "../helpers/buckets";
-import { appendBucketObjects, appendBucketDelimiters, deleteBucketObject } from '../helpers/data'
+import {
+  appendBucketObjects,
+  appendBucketDelimiters,
+  deleteBucketObject,
+} from "../helpers/data";
 import fs from "node:fs";
 import { createDefaultFileStream } from "../helpers/create-default-file-stream";
 import { getCover } from "../helpers/getCover";
-
+import { getCachePath } from "../helpers/cache";
 
 const qsStringify = (params: Record<string, any>) => {
   return Object.entries(params)
@@ -203,7 +212,7 @@ ipcMain.handle(
       cursor,
       prefix,
       per_page = 1000,
-      delimiter = '/'
+      delimiter = "/",
     }: {
       bucketName: string;
       cursor: string;
@@ -219,7 +228,9 @@ ipcMain.handle(
       delimiter,
     });
     const response = await _fetch(
-      `https://api.cloudflare.com/client/v4/accounts/*/r2/buckets/${bucketName}/objects${qs ? `?${qs}` : ""}`,
+      `https://api.cloudflare.com/client/v4/accounts/*/r2/buckets/${bucketName}/objects${
+        qs ? `?${qs}` : ""
+      }`,
       {
         method: "GET",
       }
@@ -230,26 +241,34 @@ ipcMain.handle(
         appendBucketObjects(bucketName, data?.result ?? []);
       }
       if (data?.result_info) {
-        appendBucketDelimiters(bucketName, (data?.result_info?.delimited ?? []).map(delimiter => ({
-          key: delimiter,
-        })  ));
+        appendBucketDelimiters(
+          bucketName,
+          (data?.result_info?.delimited ?? []).map((delimiter) => ({
+            key: delimiter,
+          }))
+        );
       }
 
-      const delimiterFromPrefix = prefix?.split('/')?.slice(0, -1).join('/') + '/';
+      const delimiterFromPrefix =
+        prefix?.split("/")?.slice(0, -1).join("/") + "/";
 
-      if (delimiterFromPrefix !== '/') {
-        const findTheFirstImageOfThisFolder = data?.result?.find(object => object.http_metadata?.contentType?.startsWith('image/'));
+      if (delimiterFromPrefix !== "/") {
+        const findTheFirstImageOfThisFolder = data?.result?.find((object) =>
+          object.http_metadata?.contentType?.startsWith("image/")
+        );
         const publicDomain = getBucketPublicDomain(bucketName);
         if (findTheFirstImageOfThisFolder) {
           const cover = `${publicDomain}/${findTheFirstImageOfThisFolder.key}`;
-          appendBucketDelimiters(bucketName, [{
-            key: delimiterFromPrefix,
-            coverImage: cover
-          }]);
+          appendBucketDelimiters(bucketName, [
+            {
+              key: delimiterFromPrefix,
+              coverImage: cover,
+            },
+          ]);
         }
       }
     } catch (error) {
-      console.log('error', error);
+      console.log("error", error);
       // do nothing...
     }
 
@@ -284,7 +303,7 @@ ipcMain.handle(
       fileName,
       filePath,
       fileType,
-      fromPaste
+      fromPaste,
     }: {
       bucketName: string;
       fileName: string;
@@ -309,14 +328,14 @@ ipcMain.handle(
       etag: string;
       version: string;
       uploaded: string;
-      storage_class: 'Standard';
+      storage_class: "Standard";
     }>(
       `https://api.cloudflare.com/client/v4/accounts/*/r2/buckets/${bucketName}/objects/${fileName}`,
       {
         method: "PUT",
         body: file,
         headers: {
-          "Content-Type": fileType ?? "application/octet-stream"
+          "Content-Type": fileType ?? "application/octet-stream",
         },
       }
     );
@@ -327,15 +346,16 @@ ipcMain.handle(
         const cover = await getCover(filePath, fileType);
 
         if (cover) {
-          appendBucketObjects(bucketName, [{
-            ...data?.result,
-            cover: cover
-          }]);
+          appendBucketObjects(bucketName, [
+            {
+              ...data?.result,
+              cover: cover,
+            },
+          ]);
         }
       }
-
     } catch (error) {
-      console.log('error', error);
+      console.log("error", error);
     }
 
     return data;
@@ -466,6 +486,89 @@ ipcMain.handle("cf-delete-object", async (evt, { bucket, object }) => {
 
   return data;
 });
+
+ipcMain.handle(
+  "cf-rename-object",
+  async (
+    evt,
+    {
+      bucket,
+      oldObjectKey,
+      newObjectKey,
+      publicDomain,
+      contentType,
+    }: {
+      bucket: string;
+      oldObjectKey: string;
+      newObjectKey: string;
+      publicDomain: string;
+      contentType?: string;
+    }
+  ) => {
+    let cachePath: string | null = null;
+
+    try {
+      const win = BrowserWindow.getFocusedWindow();
+      const cacheDir = getCachePath();
+
+      // Step 1: Download the old object to local cache
+      const oldUrl = `${publicDomain}/${oldObjectKey}`;
+      const downloadRes = await download(win, oldUrl, {
+        directory: cacheDir,
+      });
+      cachePath = downloadRes.getSavePath();
+
+      if (!cachePath) {
+        throw new Error("Failed to download original file");
+      }
+
+      // Step 2: Upload with the new key
+      const file = fs.createReadStream(cachePath);
+      const uploadResponse = await _fetch(
+        `https://api.cloudflare.com/client/v4/accounts/*/r2/buckets/${bucket}/objects/${newObjectKey}`,
+        {
+          method: "PUT",
+          body: file,
+          headers: {
+            "Content-Type": contentType ?? "application/octet-stream",
+          },
+        }
+      );
+      const uploadData = await uploadResponse.json();
+
+      if (!uploadData?.success) {
+        return uploadData;
+      }
+
+      // Step 3: Delete the old object
+      await _fetch(
+        `https://api.cloudflare.com/client/v4/accounts/*/r2/buckets/${bucket}/objects`,
+        {
+          method: "DELETE",
+          body: JSON.stringify([oldObjectKey]),
+        }
+      );
+
+      return uploadData;
+    } catch (error) {
+      return {
+        success: false,
+        errors: [
+          {
+            code: 500,
+            message: (error as Error)?.message ?? "Unknown error",
+          },
+        ],
+        messages: [],
+      };
+    } finally {
+      // Clean up cache file
+      if (cachePath && fs.existsSync(cachePath)) {
+        fs.unlinkSync(cachePath);
+      }
+    }
+  }
+);
 
 ipcMain.handle("cf-create-folder", async (event, { bucketName, fileName }) => {
   const defaultFileStream = await createDefaultFileStream();
