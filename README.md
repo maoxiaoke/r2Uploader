@@ -111,39 +111,41 @@ For Win: [Download EXE](https://github.com/maoxiaoke/r2Uploader/releases/latest/
 1. When you log in to the [Cloudflare dashboard](https://dash.cloudflare.com/), the account ID is displayed in the browser's address bar.
 
 <div style="text-align: center">
-<img src="https://pub-388464a2ac764e37ba36c5ea17d573ee.r2.dev/SCR-20250118-knlp.png" style="width: 90%;" />
+<img src="https://pub-388464a2ac764e37ba36c5ea17d573ee.r2.dev/r2uplaoder-get-account-id.png" style="width: 90%;" />
 
 </div>
 
 
-2. On the R2 homepage, select "**Manage API Tokens**".
+2. On the R2 homepage, click the "**Manage**" button on the right side of the page.
 
 <div style="text-align: center">
-<img src="https://pub-388464a2ac764e37ba36c5ea17d573ee.r2.dev/SCR-20250118-kqky.png" style="width: 90%;" />
+<img src="https://pub-388464a2ac764e37ba36c5ea17d573ee.r2.dev/r2uplaoder-manage-api-token.png" style="width: 90%;" />
 
 
 </div>
 
-3. Then, click on "Create API Token".
+3. Then, choose the "Create Account API Token" button ("Create User API Token also works for use").
 
 <div style="text-align: center">
-<img src="https://pub-388464a2ac764e37ba36c5ea17d573ee.r2.dev/SCR-20250118-krkr.png" style="width: 90%;" />
+<img src="https://pub-388464a2ac764e37ba36c5ea17d573ee.r2.dev/r2uplaoder-create-api-token.png" style="width: 90%;" />
 
 
 </div>
 
 Please ensure that you name your API token in a manner that is relevant to the service that will utilize it. Grant it "**Admin Read & Write**" and Write" permissions for objects, and we recommend applying it solely to a single bucket.
 
-You may leave the remaining settings (TTL, Client IP Address Filtering) unchanged, and then proceed to click on "**Create API Token**".
+You may leave the remaining settings (TTL, Client IP Address Filtering) unchanged, and then click the "**Create API Token**" button.
+
+<div style="text-align: center">
+<img src="https://pub-388464a2ac764e37ba36c5ea17d573ee.r2.dev/r2uplaoder-make-sure-write-and-read-rights.png" style="width: 90%;" />
+</div>
+
 
 4. Upon successful creation of the token, make sure to copy your Token Value.
 
 <div style="text-align: center">
-<img src="https://pub-388464a2ac764e37ba36c5ea17d573ee.r2.dev/SCR-20250118-krpl.png" style="width: 90%;" />
-
-
+<img src="https://pub-388464a2ac764e37ba36c5ea17d573ee.r2.dev/r2uplaoder-get-your-api-token.png" style="width: 90%;" />
 </div>
-
 
 > The token will be stored locally and will not be publicly uploaded.
 
