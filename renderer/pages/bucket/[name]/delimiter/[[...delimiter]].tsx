@@ -67,8 +67,6 @@ export default function BucketPage() {
   const [files, setFiles] = useState<BucketObject[]>([]);
   const [delimiters, setDelimiters] = useState<string[]>([]);
 
-  console.log("delimiters", delimiters);
-
   const [loading, setLoading] = useState(true);
   const [isLoadingMore, setIsLoadingMore] = useState(false);
   const [cursor, setCursor] = useState({
@@ -94,7 +92,6 @@ export default function BucketPage() {
         prefix: prefixByDelimiterAndSearch,
       })
       .then((data) => {
-        console.log("data", data);
         setCursor(data?.result_info);
 
         setFiles(data?.result || []);
