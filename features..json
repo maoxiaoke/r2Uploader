@@ -1,18 +1,22 @@
 [
   {
     "name": "支持在 /delimiter 页面的修改 Objects 的名称",
-    "status": "done"
+    "status": "backlog"
   },
   {
     "name": "支持移动文件到其他目录",
-    "status": "done"
+    "status": "backlog"
   },
   {
     "name": "支持直接在 /delimiter 直接拖拽文件上传",
-    "status": "done"
+    "status": "backlog"
   },
   {
     "name": "支持文件排序(创建时间, 文件大小)",
-    "status": "done"
+    "status": "backlog"
+  },
+  {
+    "name": "Give a hit when r2 operation reach the free limit",
+    "status": "backlog"
   }
 ]
