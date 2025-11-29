@@ -27,16 +27,11 @@ import { usePlateform } from "@/hooks/usePlateform";
 import { SearchArea } from "@/components/search-area";
 import { shortenPath } from "@/lib/utils";
 import { CreateFolder } from "@/components/create-folder";
-// import { Masonry } from "react-plock";
 import { useDelimiters } from "@/hooks/useDelimiters";
 import { Masonry } from "antd";
 
 import type { UploadFile } from "@/components/file-upload";
 import type { BucketObject } from "../../../../../shared/types";
-
-export async function generateStaticParams() {
-  return [{ name: "example" }];
-}
 
 export default function BucketPage() {
   const router = useRouter();
@@ -72,6 +67,8 @@ export default function BucketPage() {
   const [files, setFiles] = useState<BucketObject[]>([]);
   const [delimiters, setDelimiters] = useState<string[]>([]);
 
+  console.log("delimiters", delimiters);
+
   const [loading, setLoading] = useState(true);
   const [isLoadingMore, setIsLoadingMore] = useState(false);
   const [cursor, setCursor] = useState({
@@ -97,6 +94,7 @@ export default function BucketPage() {
         prefix: prefixByDelimiterAndSearch,
       })
       .then((data) => {
+        console.log("data", data);
         setCursor(data?.result_info);
 
         setFiles(data?.result || []);
@@ -288,7 +286,7 @@ export default function BucketPage() {
         </div>
       )}
 
-      {!loading && files.length === 0 && (
+      {!loading && files.length === 0 && delimiters.length === 0 && (
         <NoBuckets>
           <FileUpload
             bucket={bucketName}
@@ -302,7 +300,7 @@ export default function BucketPage() {
         </NoBuckets>
       )}
 
-      {!loading && files.length > 0 && (
+      {!loading && (files.length > 0 || delimiters.length > 0) && (
         <div className="h-80 no-drag">
           <ScrollArea className={cn(styl.bodyHeight, "")}>
             {hasDelimiters ? (
