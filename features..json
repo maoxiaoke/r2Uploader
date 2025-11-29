@@ -18,5 +18,9 @@
   {
     "name": "Give a hit when r2 operation reach the free limit",
     "status": "backlog"
+  },
+  {
+    "name": "file preview of images",
+    "status": "backlog"
   }
 ]
