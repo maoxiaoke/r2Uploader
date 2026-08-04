@@ -1,0 +1,49 @@
+name: Release
+
+on:
+  push:
+    tags: ["v*"]
+
+permissions:
+  contents: write
+
+jobs:
+  validate-version:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npm run verify
+      - run: npm run audit:prod
+      - name: Match tag and package version
+        shell: bash
+        run: test "${GITHUB_REF_NAME#v}" = "$(node -p "require('./package.json').version")"
+
+  build:
+    needs: validate-version
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [macos-14, windows-latest]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - name: Build signed artifacts
+        run: npm run publish
+        env:
+          RELEASE_BUILD: "true"
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          CSC_LINK: ${{ matrix.os == 'macos-14' && secrets.MAC_CSC_LINK || secrets.WINDOWS_CSC_LINK }}
+          CSC_KEY_PASSWORD: ${{ matrix.os == 'macos-14' && secrets.MAC_CSC_KEY_PASSWORD || secrets.WINDOWS_CSC_KEY_PASSWORD }}
+          APPLE_ID: ${{ secrets.APPLE_ID }}
+          APPLE_APP_SPECIFIC_PASSWORD: ${{ secrets.APPLE_APP_SPECIFIC_PASSWORD }}
+          APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}

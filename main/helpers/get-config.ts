@@ -2,7 +2,6 @@ import path from "path";
 import fs from "fs";
 import { ensureAppHome } from "./path";
 import { safeParse } from "./json";
-import { log } from "./log";
 
 const ConfigName = "r2uploader.json";
 

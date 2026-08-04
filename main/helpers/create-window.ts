@@ -1,25 +1,31 @@
 import {
+  app,
   screen,
   BrowserWindow,
   BrowserWindowConstructorOptions,
   Rectangle,
 } from 'electron'
-import Store from 'electron-store'
+import fs from 'node:fs'
+import path from 'node:path'
 
 export const createWindow = (
   windowName: string,
   options: BrowserWindowConstructorOptions
 ): BrowserWindow => {
-  const key = 'window-state'
-  const name = `window-state-${windowName}`
-  const store = new Store<Rectangle>({ name })
+  const statePath = path.join(app.getPath('userData'), `window-state-${windowName}.json`)
   const defaultSize = {
     width: options.width,
     height: options.height,
   }
   let state = {}
 
-  const restore = () => store.get(key, defaultSize)
+  const restore = () => {
+    try {
+      return { ...defaultSize, ...JSON.parse(fs.readFileSync(statePath, 'utf8')) }
+    } catch {
+      return defaultSize
+    }
+  }
 
   const getCurrentPosition = () => {
     const position = win.getPosition()
@@ -65,7 +71,10 @@ export const createWindow = (
     if (!win.isMinimized() && !win.isMaximized()) {
       Object.assign(state, getCurrentPosition())
     }
-    store.set(key, state)
+    const temporary = `${statePath}.${process.pid}.tmp`
+    fs.mkdirSync(path.dirname(statePath), { recursive: true })
+    fs.writeFileSync(temporary, JSON.stringify(state), { mode: 0o600 })
+    fs.renameSync(temporary, statePath)
   }
 
   state = ensureVisibleOnSomeDisplay(restore())

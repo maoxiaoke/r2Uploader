@@ -1,0 +1,31 @@
+import { dialog, type BrowserWindow } from "electron";
+import fs from "node:fs";
+import path from "node:path";
+import { AppError } from "../core/app-error";
+import { getBootstrapState } from "./config-vault";
+import { registerAutomationFile } from "./local-file-registry";
+import { planUploads } from "./upload-planner";
+import { transferManager } from "./transfer-manager";
+
+export const handleR2UploaderUrl = async (rawUrl: string, window: BrowserWindow) => {
+  const url = new URL(rawUrl);
+  if (url.protocol !== "r2uploader:" || url.hostname !== "upload") throw new AppError({ kind: "VALIDATION", code: "PROTOCOL_ACTION_INVALID", message: "Unsupported R2Uploader protocol action.", retryable: false });
+  if (url.searchParams.get("v") !== "1") throw new AppError({ kind: "VALIDATION", code: "PROTOCOL_VERSION_UNSUPPORTED", message: "This external request uses an unsupported or missing protocol version.", action: "Update the caller to use r2uploader://upload?v=1.", retryable: false });
+  const client = (url.searchParams.get("client") || "unknown-client").slice(0, 80);
+  if (!/^[a-zA-Z0-9._-]+$/.test(client)) throw new AppError({ kind: "VALIDATION", code: "PROTOCOL_CLIENT_INVALID", message: "The external caller identity is invalid.", retryable: false });
+  const paths = url.searchParams.getAll("path").slice(0, 100).map((value) => path.resolve(value));
+  const bootstrap = getBootstrapState();
+  const zh = bootstrap.preferences.locale === "zh-CN";
+  const profileId = url.searchParams.get("profile") || bootstrap.preferences.quickUpload.profileId || bootstrap.activeProfileId;
+  const bucket = url.searchParams.get("bucket") || bootstrap.preferences.quickUpload.bucket;
+  const prefix = (url.searchParams.get("prefix") || bootstrap.preferences.quickUpload.prefix || "").replace(/^\/+/, "");
+  if (!profileId || !bootstrap.profiles.some((profile) => profile.id === profileId) || !bucket || !paths.length) throw new AppError({ kind: "VALIDATION", code: "PROTOCOL_TARGET_INCOMPLETE", message: "The CLI request needs existing files and a valid Profile/bucket target.", action: "Pass --profile and --bucket or configure Quick Upload defaults.", retryable: false });
+  for (const filePath of paths) if (!fs.existsSync(filePath) || !fs.statSync(filePath).isFile()) throw new AppError({ kind: "NOT_FOUND", code: "PROTOCOL_FILE_NOT_FOUND", message: `The requested file is unavailable: ${filePath}`, retryable: false });
+  window.show(); window.focus();
+  const result = await dialog.showMessageBox(window, { type: "question", title: zh ? "外部上传请求" : "External upload request", message: zh ? `允许 ${client} 上传 ${paths.length} 个本地文件？` : `Allow ${client} to upload ${paths.length} local file${paths.length === 1 ? "" : "s"}?`, detail: `${zh ? "协议" : "Protocol"}: v1\n${zh ? "调用方" : "Caller"}: ${client}\n${zh ? "目标" : "Target"}: r2://${bucket}/${prefix}\n\n${paths.slice(0, 8).join("\n")}${paths.length > 8 ? `\n${zh ? `……以及另外 ${paths.length - 8} 个` : `…and ${paths.length - 8} more`}` : ""}`, buttons: [zh ? "检查并加入队列" : "Review and queue", zh ? "拒绝" : "Deny"], defaultId: 0, cancelId: 1 });
+  if (result.response !== 0) return { queued: 0, denied: true };
+  const handles = paths.map((filePath) => registerAutomationFile(filePath));
+  const plan = await planUploads({ profileId, bucket, prefix, handles: handles.map((handle) => handle.id), imagePreset: bootstrap.preferences.uploadImagePreset, namingRule: bootstrap.preferences.uploadNamingRule });
+  const ids = transferManager.enqueue({ profileId, bucket, entries: plan.map((item) => ({ handleId: item.handleId, targetKey: item.targetKey })), conflictPolicy: "ask", duplicatePolicy: "ask" });
+  return { queued: ids.length, denied: false };
+};

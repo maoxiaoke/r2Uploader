@@ -14,3 +14,4 @@ dist
 .local.env
 .vercel
 *.DS_Store
+*.tsbuildinfo

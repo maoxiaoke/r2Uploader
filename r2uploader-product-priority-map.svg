@@ -1,0 +1,138 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 1280" width="1200" height="1280">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Solway:wght@400;500;600;700&amp;family=Inter:wght@400;500;600&amp;family=Geist+Mono:wght@400;500;600&amp;display=swap');
+    .title { font-family: 'Solway', Georgia, 'PingFang SC', serif; }
+    .sans { font-family: 'Inter', 'PingFang SC', 'Noto Sans CJK SC', system-ui, sans-serif; }
+    .mono { font-family: 'Geist Mono', ui-monospace, 'SFMono-Regular', monospace; }
+  </style>
+
+  <defs>
+    <marker id="arrow" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+      <polygon points="0 0, 8 3, 0 6" fill="#64748b"/>
+    </marker>
+    <marker id="arrow-accent" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+      <polygon points="0 0, 8 3, 0 6" fill="#4d80e6"/>
+    </marker>
+    <marker id="arrow-link" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+      <polygon points="0 0, 8 3, 0 6" fill="#2b5bbb"/>
+    </marker>
+  </defs>
+
+  <!-- Page -->
+  <rect width="1200" height="1280" fill="#fdfcfb"/>
+
+  <!-- Brand mark -->
+  <polygon points="1064,104 1104,64 1144,104" fill="#64748b" opacity="0.12"/>
+  <polygon points="1064,88 1104,48 1144,88" fill="#64748b" opacity="0.20"/>
+  <polygon points="1064,72 1104,32 1144,72" fill="#64748b" opacity="0.28"/>
+  <circle cx="1104" cy="72" r="4" fill="#64748b"/>
+
+  <!-- Header -->
+  <text x="48" y="48" fill="#64748b" font-size="8" font-weight="600" class="mono" letter-spacing="0.20em">PRODUCT PRIORITY · CODE-GROUNDED REVIEW</text>
+  <text x="48" y="96" fill="#0b0b0b" font-size="40" font-weight="600" class="title">R2Uploader · Build the trust layer first</text>
+  <text x="48" y="136" fill="#64748b" font-size="16" class="sans">
+    <tspan x="48" dy="0">真正的路线不是继续堆功能，而是从安全、可靠的私有对象操作开始，</tspan>
+    <tspan x="48" dy="24">逐层完成高频素材工作流，最后才扩展个人效率与生态能力。</tspan>
+  </text>
+
+  <!-- Direction -->
+  <text x="64" y="260" fill="#64748b" font-size="8" font-weight="600" class="mono" letter-spacing="0.16em">USER VALUE</text>
+  <line x1="104" y1="288" x2="104" y2="568" stroke="rgba(11,11,11,0.20)" stroke-width="1" marker-end="url(#arrow)"/>
+  <text x="64" y="600" fill="#64748b" font-size="8" font-weight="600" class="mono" letter-spacing="0.16em">TRUST BASE</text>
+
+  <!-- Stack outer edges -->
+  <line x1="160" y1="248" x2="1120" y2="248" stroke="rgba(11,11,11,0.12)" stroke-width="1"/>
+  <line x1="160" y1="608" x2="1120" y2="608" stroke="rgba(11,11,11,0.12)" stroke-width="1"/>
+
+  <!-- L5: target state -->
+  <rect x="160" y="248" width="960" height="72" fill="#ffffff"/>
+  <line x1="160" y1="320" x2="1120" y2="320" stroke="rgba(11,11,11,0.12)" stroke-width="1"/>
+  <text x="184" y="292" fill="#64748b" font-size="8" font-weight="600" class="mono" letter-spacing="0.16em">TARGET</text>
+  <text x="304" y="292" fill="#0b0b0b" font-size="16" font-weight="600" class="sans">可信任的可视化 R2 素材管理器</text>
+  <text x="1096" y="292" fill="#64748b" font-size="12" class="mono" text-anchor="end">safe · visual · low-friction</text>
+
+  <!-- L4: P3 -->
+  <rect x="160" y="320" width="960" height="72" fill="#f6f6f6"/>
+  <line x1="160" y1="392" x2="1120" y2="392" stroke="rgba(11,11,11,0.12)" stroke-width="1"/>
+  <text x="184" y="364" fill="#64748b" font-size="8" font-weight="600" class="mono" letter-spacing="0.16em">P3</text>
+  <text x="304" y="364" fill="#0b0b0b" font-size="16" font-weight="600" class="sans">个人效率与生态</text>
+  <text x="1096" y="364" fill="#64748b" font-size="12" class="mono" text-anchor="end">sync · automation · plugins · AI</text>
+
+  <!-- L3: P2 -->
+  <rect x="160" y="392" width="960" height="72" fill="#ffffff"/>
+  <line x1="160" y1="464" x2="1120" y2="464" stroke="rgba(11,11,11,0.12)" stroke-width="1"/>
+  <text x="184" y="436" fill="#64748b" font-size="8" font-weight="600" class="mono" letter-spacing="0.16em">P2</text>
+  <text x="304" y="436" fill="#0b0b0b" font-size="16" font-weight="600" class="sans">产品差异化</text>
+  <text x="1096" y="436" fill="#64748b" font-size="12" class="mono" text-anchor="end">metrics · lifecycle · sync · backup</text>
+
+  <!-- L2: P1 -->
+  <rect x="160" y="464" width="960" height="72" fill="#f6f6f6"/>
+  <line x1="160" y1="536" x2="1120" y2="536" stroke="rgba(11,11,11,0.12)" stroke-width="1"/>
+  <text x="184" y="508" fill="#64748b" font-size="8" font-weight="600" class="mono" letter-spacing="0.16em">P1</text>
+  <text x="304" y="508" fill="#0b0b0b" font-size="16" font-weight="600" class="sans">完成日常素材工作流</text>
+  <text x="1096" y="508" fill="#64748b" font-size="12" class="mono" text-anchor="end">bulk · search · preview · share · trash</text>
+
+  <!-- L1: P0 focal -->
+  <rect x="160" y="536" width="960" height="72" fill="rgba(77,128,230,0.10)"/>
+  <rect x="160" y="536" width="960" height="72" fill="none" stroke="#4d80e6" stroke-width="1.2"/>
+  <text x="184" y="580" fill="#4d80e6" font-size="8" font-weight="600" class="mono" letter-spacing="0.16em">P0</text>
+  <text x="304" y="580" fill="#0b0b0b" font-size="16" font-weight="600" class="sans">信任与可靠性地基</text>
+  <text x="1096" y="580" fill="#2b5bbb" font-size="12" font-weight="600" class="mono" text-anchor="end">private-first · vault · errors · upload · release</text>
+
+  <!-- Editorial annotation -->
+  <text x="1120" y="676" fill="#4d80e6" font-size="16" font-style="italic" class="title" text-anchor="end">P0 未完成前，不应继续向上堆功能。</text>
+  <path d="M 832 684 Q 960 656 1056 572" fill="none" stroke="rgba(77,128,230,0.50)" stroke-width="1" stroke-dasharray="4,4"/>
+  <circle cx="1056" cy="572" r="2" fill="#4d80e6"/>
+
+  <!-- Card 1: current breaks -->
+  <rect x="48" y="736" width="520" height="256" rx="8" fill="#ffffff" stroke="rgba(11,11,11,0.12)" stroke-width="1"/>
+  <text x="72" y="768" fill="#64748b" font-size="8" font-weight="600" class="mono" letter-spacing="0.18em">CURRENT USER BREAKS</text>
+  <circle cx="76" cy="796" r="4" fill="#0b0b0b"/>
+  <text x="92" y="800" fill="#0b0b0b" font-size="16" font-weight="600" class="sans">今天，用户在哪些地方失去信任</text>
+  <line x1="72" y1="820" x2="544" y2="820" stroke="rgba(11,11,11,0.08)" stroke-width="1"/>
+  <text x="72" y="852" fill="#94a3b8" font-size="12" class="sans">—</text>
+  <text x="96" y="852" fill="#64748b" font-size="12" class="sans">打开 bucket，可能在无确认的情况下开启公网访问</text>
+  <text x="72" y="884" fill="#94a3b8" font-size="12" class="sans">—</text>
+  <text x="96" y="884" fill="#64748b" font-size="12" class="sans">查重依赖公开 URL，Token 边界扩展到非 API host</text>
+  <text x="72" y="916" fill="#94a3b8" font-size="12" class="sans">—</text>
+  <text x="96" y="916" fill="#64748b" font-size="12" class="sans">权限、网络和接口失败，最终都可能显示成“空 bucket”</text>
+  <text x="72" y="948" fill="#94a3b8" font-size="12" class="sans">—</text>
+  <text x="96" y="948" fill="#64748b" font-size="12" class="sans">当前源码能力远超 v1.0.4，但真实用户仍拿不到</text>
+
+  <!-- Card 2: next release definition -->
+  <rect x="592" y="736" width="560" height="256" rx="8" fill="#ffffff" stroke="rgba(11,11,11,0.12)" stroke-width="1"/>
+  <text x="616" y="768" fill="#64748b" font-size="8" font-weight="600" class="mono" letter-spacing="0.18em">NEXT RELEASE DEFINITION</text>
+  <circle cx="620" cy="796" r="4" fill="#4d80e6"/>
+  <text x="636" y="800" fill="#0b0b0b" font-size="16" font-weight="600" class="sans">Private by default. Every mutation verifiable.</text>
+  <line x1="616" y1="820" x2="1128" y2="820" stroke="rgba(11,11,11,0.08)" stroke-width="1"/>
+  <text x="616" y="852" fill="#94a3b8" font-size="12" class="sans">01</text>
+  <text x="656" y="852" fill="#64748b" font-size="12" class="sans">连接成功不等于静默改变 bucket 权限</text>
+  <text x="616" y="884" fill="#94a3b8" font-size="12" class="sans">02</text>
+  <text x="656" y="884" fill="#64748b" font-size="12" class="sans">上传、重命名、移动、删除均有明确结果与恢复路径</text>
+  <text x="616" y="916" fill="#94a3b8" font-size="12" class="sans">03</text>
+  <text x="656" y="916" fill="#64748b" font-size="12" class="sans">私有 bucket 可完整浏览、预览、下载和临时分享</text>
+  <text x="616" y="948" fill="#94a3b8" font-size="12" class="sans">04</text>
+  <text x="656" y="948" fill="#64748b" font-size="12" class="sans">同版本发布 macOS 与 Windows，并可可靠自动升级</text>
+
+  <!-- Product focus -->
+  <rect x="48" y="1016" width="1104" height="120" rx="8" fill="#f6f6f6" stroke="rgba(11,11,11,0.12)" stroke-width="1"/>
+  <text x="72" y="1048" fill="#64748b" font-size="8" font-weight="600" class="mono" letter-spacing="0.18em">PRODUCT FOCUS</text>
+  <text x="72" y="1084" fill="#0b0b0b" font-size="20" font-weight="600" class="sans">不要复制完整的 Cloudflare Dashboard。</text>
+  <text x="504" y="1084" fill="#4d80e6" font-size="20" font-weight="600" class="sans">占领“安全、可视化素材工作流”。</text>
+  <text x="72" y="1112" fill="#64748b" font-size="12" class="sans">瀑布流、粘贴上传、快速分享是已有差异点；平台管理能力只在它能增强这条主线时才进入路线图。</text>
+
+  <!-- Legend -->
+  <line x1="48" y1="1180" x2="1152" y2="1180" stroke="rgba(11,11,11,0.12)" stroke-width="1"/>
+  <text x="48" y="1208" fill="#64748b" font-size="8" font-weight="600" class="mono" letter-spacing="0.18em">LEGEND</text>
+  <rect x="168" y="1196" width="20" height="12" rx="4" fill="rgba(77,128,230,0.10)" stroke="#4d80e6" stroke-width="1"/>
+  <text x="200" y="1208" fill="#64748b" font-size="8" class="mono" letter-spacing="0.08em">RELEASE GATE / P0</text>
+  <rect x="384" y="1196" width="20" height="12" rx="4" fill="#f6f6f6" stroke="rgba(11,11,11,0.12)" stroke-width="1"/>
+  <text x="416" y="1208" fill="#64748b" font-size="8" class="mono" letter-spacing="0.08em">CAPABILITY LAYER</text>
+  <line x1="608" y1="1204" x2="644" y2="1204" stroke="#64748b" stroke-width="1" marker-end="url(#arrow)"/>
+  <text x="660" y="1208" fill="#64748b" font-size="8" class="mono" letter-spacing="0.08em">VALUE RISES FROM TRUST</text>
+
+  <!-- Footer -->
+  <line x1="48" y1="1236" x2="1152" y2="1236" stroke="rgba(11,11,11,0.08)" stroke-width="1"/>
+  <text x="48" y="1264" fill="#94a3b8" font-size="8" class="mono" letter-spacing="0.08em">r2uploader · code + issues + current Cloudflare R2 capabilities</text>
+  <text x="1152" y="1264" fill="#94a3b8" font-size="8" class="mono" text-anchor="end" letter-spacing="0.08em">2026-07-31 · product priority map</text>
+</svg>

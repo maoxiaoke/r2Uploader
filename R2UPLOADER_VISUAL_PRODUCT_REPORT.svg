@@ -1,0 +1,275 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1400 3160" width="1400" height="3160">
+  <defs>
+    <marker id="arrow" markerWidth="8" markerHeight="8" refX="8" refY="4" orient="auto">
+      <polygon points="0 0, 8 4, 0 8" fill="#64748b"/>
+    </marker>
+    <marker id="arrow-accent" markerWidth="8" markerHeight="8" refX="8" refY="4" orient="auto">
+      <polygon points="0 0, 8 4, 0 8" fill="#4d80e6"/>
+    </marker>
+    <marker id="arrow-link" markerWidth="8" markerHeight="8" refX="8" refY="4" orient="auto">
+      <polygon points="0 0, 8 4, 0 8" fill="#2b5bbb"/>
+    </marker>
+  </defs>
+
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Solway:wght@400;500;600;700&amp;family=Inter:wght@400;500;600&amp;family=Geist+Mono:wght@400;500;600&amp;display=swap');
+    .title { font-family: 'Solway', Georgia, serif; fill: #0b0b0b; font-weight: 600; }
+    .callout { font-family: 'Solway', Georgia, serif; fill: #4d80e6; font-style: italic; }
+    .sans { font-family: 'Inter', system-ui, sans-serif; fill: #0b0b0b; }
+    .muted { font-family: 'Inter', system-ui, sans-serif; fill: #64748b; }
+    .mono { font-family: 'Geist Mono', ui-monospace, monospace; fill: #64748b; }
+    .soft { font-family: 'Geist Mono', ui-monospace, monospace; fill: #94a3b8; }
+    .strong { font-weight: 600; }
+  </style>
+
+  <rect width="1400" height="3160" fill="#fdfcfb"/>
+
+  <!-- Header -->
+  <text x="80" y="80" class="mono" font-size="12" letter-spacing="3">PRODUCT REVIEW · CODE-GROUNDED · 2026-08-01</text>
+  <text x="80" y="148" class="title" font-size="40">R2Uploader 产品优化审视</text>
+  <text x="80" y="192" class="muted" font-size="20">从用户故事出发，先修复信任，再补齐素材工作流，最后扩张个人效率与生态。</text>
+
+  <g transform="translate(1212 68)">
+    <polygon points="48,0 96,48 0,48" fill="#64748b" opacity="0.28"/>
+    <polygon points="48,24 96,72 0,72" fill="#64748b" opacity="0.18"/>
+    <polygon points="48,48 96,96 0,96" fill="#64748b" opacity="0.10"/>
+    <circle cx="48" cy="48" r="4" fill="#64748b"/>
+  </g>
+
+  <line x1="80" y1="240" x2="1320" y2="240" stroke="rgba(11,11,11,0.12)" stroke-width="1"/>
+
+  <!-- Executive verdict -->
+  <text x="80" y="300" class="mono" font-size="12" letter-spacing="3">EXECUTIVE VERDICT</text>
+  <rect x="80" y="328" width="1240" height="200" rx="8" fill="#ffffff" stroke="rgba(11,11,11,0.12)"/>
+  <text x="112" y="372" class="mono" font-size="8" letter-spacing="2">NORTH STAR</text>
+  <text x="112" y="420" class="sans strong" font-size="28">Private-first、低摩擦的 Cloudflare R2 可视化素材管理器</text>
+  <text x="112" y="460" class="muted" font-size="16">不要复制完整 Dashboard。占领“安全浏览 → 高频上传 → 可控分享 → 素材整理”这一条主线。</text>
+  <text x="112" y="496" class="mono" font-size="12">CURRENT STRENGTH  /  masonry · paste upload · prefix search · quick share</text>
+
+  <!-- Journey arrows behind nodes -->
+  <line x1="304" y1="672" x2="344" y2="672" stroke="#64748b" stroke-width="1" marker-end="url(#arrow)"/>
+  <line x1="548" y1="672" x2="588" y2="672" stroke="#64748b" stroke-width="1" marker-end="url(#arrow)"/>
+  <line x1="792" y1="672" x2="832" y2="672" stroke="#64748b" stroke-width="1" marker-end="url(#arrow)"/>
+  <line x1="1036" y1="672" x2="1076" y2="672" stroke="#64748b" stroke-width="1" marker-end="url(#arrow)"/>
+
+  <!-- User journey -->
+  <text x="80" y="592" class="mono" font-size="12" letter-spacing="3">USER STORY JOURNEY</text>
+
+  <g>
+    <rect x="80" y="620" width="224" height="112" rx="8" fill="#ffffff" stroke="rgba(11,11,11,0.12)"/>
+    <text x="96" y="648" class="mono" font-size="8" letter-spacing="2">01 · CONNECT</text>
+    <text x="96" y="680" class="sans strong" font-size="16">安全地连接账号</text>
+    <text x="96" y="708" class="muted" font-size="12">凭据类型与失败原因不清</text>
+  </g>
+  <g>
+    <rect x="324" y="620" width="224" height="112" rx="8" fill="#ffffff" stroke="rgba(11,11,11,0.12)"/>
+    <text x="340" y="648" class="mono" font-size="8" letter-spacing="2">02 · OPEN</text>
+    <text x="340" y="680" class="sans strong" font-size="16">只读打开 bucket</text>
+    <text x="340" y="708" class="muted" font-size="12">当前可能自动开启公开访问</text>
+  </g>
+  <g>
+    <rect x="568" y="620" width="224" height="112" rx="8" fill="#ffffff" stroke="rgba(11,11,11,0.12)"/>
+    <text x="584" y="648" class="mono" font-size="8" letter-spacing="2">03 · BROWSE</text>
+    <text x="584" y="680" class="sans strong" font-size="16">确认远端真实内容</text>
+    <text x="584" y="708" class="muted" font-size="12">权限/网络失败可能显示为空</text>
+  </g>
+  <g>
+    <rect x="812" y="620" width="224" height="112" rx="8" fill="#ffffff" stroke="rgba(11,11,11,0.12)"/>
+    <text x="828" y="648" class="mono" font-size="8" letter-spacing="2">04 · MUTATE</text>
+    <text x="828" y="680" class="sans strong" font-size="16">上传、改名、移动</text>
+    <text x="828" y="708" class="muted" font-size="12">结果未完全验证，恢复路径弱</text>
+  </g>
+  <g>
+    <rect x="1056" y="620" width="264" height="112" rx="8" fill="#ffffff" stroke="rgba(11,11,11,0.12)"/>
+    <text x="1072" y="648" class="mono" font-size="8" letter-spacing="2">05 · SHARE</text>
+    <text x="1072" y="680" class="sans strong" font-size="16">选择永久或限时分享</text>
+    <text x="1072" y="708" class="muted" font-size="12">当前几乎等同于永久公开 URL</text>
+  </g>
+
+  <!-- Evidence -->
+  <text x="80" y="804" class="mono" font-size="12" letter-spacing="3">WHAT THE CODE PROVES</text>
+  <rect x="80" y="832" width="600" height="224" rx="8" fill="#ffffff" stroke="rgba(11,11,11,0.12)"/>
+  <text x="108" y="868" class="mono" font-size="8" letter-spacing="2">TRUST BREAKS</text>
+  <circle cx="112" cy="908" r="4" fill="#0b0b0b"/>
+  <text x="132" y="912" class="sans strong" font-size="16">打开 bucket 会触发 managed domain enable</text>
+  <text x="132" y="936" class="mono" font-size="8">home.tsx:113–130 → cf-service.ts:365–399</text>
+  <circle cx="112" cy="972" r="4" fill="#0b0b0b"/>
+  <text x="132" y="976" class="sans strong" font-size="16">通用 fetch 会向传入 URL 附加 Bearer Token</text>
+  <text x="132" y="1000" class="mono" font-size="8">cf-service.ts:28–70 · check-file-exists:282–291</text>
+  <circle cx="112" cy="1036" r="4" fill="#0b0b0b"/>
+  <text x="132" y="1040" class="sans strong" font-size="16">失败路径被压成空列表或通用失败</text>
+
+  <rect x="712" y="832" width="608" height="224" rx="8" fill="#ffffff" stroke="rgba(11,11,11,0.12)"/>
+  <text x="740" y="868" class="mono" font-size="8" letter-spacing="2">PRODUCT REALITY</text>
+  <text x="740" y="912" class="sans strong" font-size="20">源码 ≠ 用户手里的产品</text>
+  <text x="740" y="948" class="muted" font-size="16">最新 Release v1.0.4 停留在 2025-03-10；</text>
+  <text x="740" y="976" class="muted" font-size="16">当前 main 在其后还有 29 个提交，但版本号仍为 1.0.4。</text>
+  <text x="740" y="1012" class="muted" font-size="16">公开 Issues 已出现“有对象却显示为空”、文件夹被裁切、</text>
+  <text x="740" y="1040" class="muted" font-size="16">凭据教程和 License 契约不清等真实问题。</text>
+
+  <!-- Direction indicator -->
+  <line x1="104" y1="1168" x2="104" y2="1608" stroke="#64748b" stroke-width="1" marker-end="url(#arrow)"/>
+  <text x="80" y="1140" class="mono" font-size="8" letter-spacing="2">USER VALUE</text>
+  <text x="80" y="1640" class="mono" font-size="8" letter-spacing="2">TRUST BASE</text>
+
+  <!-- Priority stack -->
+  <text x="160" y="1140" class="mono" font-size="12" letter-spacing="3">PRIORITY STACK</text>
+
+  <rect x="160" y="1168" width="1160" height="88" fill="#ffffff" stroke="rgba(11,11,11,0.12)"/>
+  <text x="184" y="1204" class="mono" font-size="8" letter-spacing="2">TARGET</text>
+  <text x="312" y="1220" class="sans strong" font-size="20">可信任的可视化 R2 素材管理器</text>
+  <text x="1288" y="1220" class="mono" font-size="12" text-anchor="end">safe · visual · low-friction</text>
+
+  <rect x="160" y="1256" width="1160" height="88" fill="#f6f6f6" stroke="rgba(11,11,11,0.12)"/>
+  <text x="184" y="1308" class="mono" font-size="12">P3</text>
+  <text x="312" y="1308" class="sans strong" font-size="20">个人效率与生态</text>
+  <text x="1288" y="1308" class="mono" font-size="12" text-anchor="end">sync · automation · plugins · multi-provider · AI</text>
+
+  <rect x="160" y="1344" width="1160" height="88" fill="#ffffff" stroke="rgba(11,11,11,0.12)"/>
+  <text x="184" y="1396" class="mono" font-size="12">P2</text>
+  <text x="312" y="1396" class="sans strong" font-size="20">产品差异化</text>
+  <text x="1288" y="1396" class="mono" font-size="12" text-anchor="end">optimize · sync · metrics · lifecycle</text>
+
+  <rect x="160" y="1432" width="1160" height="88" fill="#f6f6f6" stroke="rgba(11,11,11,0.12)"/>
+  <text x="184" y="1484" class="mono" font-size="12">P1</text>
+  <text x="312" y="1484" class="sans strong" font-size="20">完成日常素材工作流</text>
+  <text x="1288" y="1484" class="mono" font-size="12" text-anchor="end">bulk · move · preview · sort · share</text>
+
+  <rect x="160" y="1520" width="1160" height="112" fill="rgba(77,128,230,0.10)" stroke="#4d80e6" stroke-width="1.2"/>
+  <text x="184" y="1584" class="mono strong" font-size="12" fill="#4d80e6">P0</text>
+  <text x="312" y="1584" class="sans strong" font-size="20">信任与可靠性地基</text>
+  <text x="1288" y="1584" font-family="'Geist Mono', ui-monospace" font-size="12" font-weight="600" fill="#2b5bbb" text-anchor="end">private-first · vault · errors · upload · release</text>
+
+  <text x="1000" y="1688" class="callout" font-size="20">P0 未完成前，不应继续向上堆功能。</text>
+  <path d="M 992 1672 Q 1080 1640 1184 1592" fill="none" stroke="rgba(77,128,230,0.50)" stroke-width="1" stroke-dasharray="4,3"/>
+  <circle cx="1184" cy="1592" r="4" fill="#4d80e6"/>
+
+  <!-- Complete backlog inventory -->
+  <text x="80" y="1760" class="mono" font-size="12" letter-spacing="3">COMPLETE WORTH-DOING INVENTORY</text>
+
+  <!-- P0 focal inventory -->
+  <rect x="80" y="1788" width="1240" height="268" rx="8" fill="rgba(77,128,230,0.10)" stroke="#4d80e6" stroke-width="1.2"/>
+  <text x="108" y="1828" font-family="'Geist Mono', ui-monospace" font-size="8" font-weight="600" fill="#2b5bbb" letter-spacing="2">P0 · RELEASE GATE · 17 ITEMS</text>
+  <text x="108" y="1872" class="sans strong" font-size="16">
+    <tspan x="108" dy="0">01  Private-first bucket</tspan>
+    <tspan x="108" dy="28">02  认证对象访问层</tspan>
+    <tspan x="108" dy="28">03  系统安全凭据保险库</tspan>
+    <tspan x="108" dy="28">04  连接测试与权限诊断</tspan>
+    <tspan x="108" dy="28">05  统一错误模型</tspan>
+    <tspan x="108" dy="28">06  认证式对象查重</tspan>
+  </text>
+  <text x="520" y="1872" class="sans strong" font-size="16">
+    <tspan x="520" dy="0">07  原子化重命名与移动</tspan>
+    <tspan x="520" dy="28">08  可靠上传引擎</tspan>
+    <tspan x="520" dy="28">09  安全删除与恢复</tspan>
+    <tspan x="520" dy="28">10  可见的访问状态</tspan>
+    <tspan x="520" dy="28">11  空列表 / 文件夹 / 拖动缺陷</tspan>
+    <tspan x="520" dy="28">12  双平台发布闭环</tspan>
+  </text>
+  <text x="944" y="1872" class="sans strong" font-size="16">
+    <tspan x="944" dy="0">13  License 与开源策略</tspan>
+    <tspan x="944" dy="28">14  Electron 安全基线</tspan>
+    <tspan x="944" dy="28">15  脱敏诊断支持包</tspan>
+    <tspan x="944" dy="28">16  URL / 对象 key 正确编码</tspan>
+    <tspan x="944" dy="28">17  依赖安全治理</tspan>
+  </text>
+
+  <!-- P1 and P2 varied cards -->
+  <rect x="80" y="2088" width="760" height="468" rx="8" fill="#ffffff" stroke="rgba(11,11,11,0.12)"/>
+  <text x="108" y="2128" class="mono" font-size="8" letter-spacing="2">P1 · DAILY WORKFLOW · 20 ITEMS</text>
+  <text x="108" y="2172" class="sans strong" font-size="16">
+    <tspan x="108" dy="0">01  全局传输中心</tspan>
+    <tspan x="108" dy="32">02  页面级拖拽上传</tspan>
+    <tspan x="108" dy="32">03  文件夹递归上传</tspan>
+    <tspan x="108" dy="32">04  多选与批量操作</tspan>
+    <tspan x="108" dy="32">05  完整文件夹操作</tspan>
+    <tspan x="108" dy="32">06  移动与复制对象</tspan>
+    <tspan x="108" dy="32">07  排序与筛选</tspan>
+    <tspan x="108" dy="32">08  可理解的搜索</tspan>
+    <tspan x="108" dy="32">09  列表 / 网格双视图</tspan>
+    <tspan x="108" dy="32">10  统一预览面板</tspan>
+  </text>
+  <text x="480" y="2172" class="sans strong" font-size="16">
+    <tspan x="480" dy="0">11  对象详情与元数据</tspan>
+    <tspan x="480" dy="32">12  面包屑与导航历史</tspan>
+    <tspan x="480" dy="32">13  永久与限时分享</tspan>
+    <tspan x="480" dy="32">14  分享格式模板</tspan>
+    <tspan x="480" dy="32">15  自定义域名管理</tspan>
+    <tspan x="480" dy="32">16  多账号与连接配置</tspan>
+    <tspan x="480" dy="32">17  中英文国际化</tspan>
+    <tspan x="480" dy="32">18  键盘与无障碍</tspan>
+    <tspan x="480" dy="32">19  同步与刷新状态</tspan>
+    <tspan x="480" dy="32">20  本地小文件缓存</tspan>
+  </text>
+
+  <rect x="872" y="2088" width="448" height="468" rx="8" fill="#f6f6f6" stroke="rgba(11,11,11,0.12)"/>
+  <text x="900" y="2128" class="mono" font-size="8" letter-spacing="2">P2 · DIFFERENTIATION · 15 ITEMS</text>
+  <text x="900" y="2172" class="sans strong" font-size="16">
+    <tspan x="900" dy="0">01  图片处理预设</tspan>
+    <tspan x="900" dy="24">02  智能命名规则</tspan>
+    <tspan x="900" dy="24">03  重复文件检测</tspan>
+    <tspan x="900" dy="24">04  素材属性索引</tspan>
+    <tspan x="900" dy="24">05  使用量与操作指标</tspan>
+    <tspan x="900" dy="24">06  免费额度与成本提示</tspan>
+    <tspan x="900" dy="24">07  本地目录同步</tspan>
+    <tspan x="900" dy="24">08  备份任务</tspan>
+    <tspan x="900" dy="24">09  Lifecycle 管理</tspan>
+    <tspan x="900" dy="24">10  Cache-Control / CORS 预设</tspan>
+    <tspan x="900" dy="24">11  CDN 与域名健康检查</tspan>
+    <tspan x="900" dy="24">12  事件驱动刷新</tspan>
+    <tspan x="900" dy="24">13  快速上传器</tspan>
+    <tspan x="900" dy="24">14  批量链接清单</tspan>
+    <tspan x="900" dy="24">15  操作历史</tspan>
+  </text>
+
+  <!-- P3 -->
+  <rect x="80" y="2588" width="1240" height="152" rx="8" fill="#ffffff" stroke="rgba(11,11,11,0.12)" stroke-dasharray="4,3"/>
+  <text x="108" y="2628" class="mono" font-size="8" letter-spacing="2">P3 · PERSONAL ECOSYSTEM · 6 ITEMS</text>
+  <text x="108" y="2680" class="sans strong" font-size="16">01  加密设置同步</text>
+  <text x="512" y="2680" class="sans strong" font-size="16">02  自动化规则</text>
+  <text x="916" y="2680" class="sans strong" font-size="16">03  CLI / 插件 / 扩展</text>
+  <text x="108" y="2716" class="sans strong" font-size="16">04  S3 兼容存储扩展</text>
+  <text x="512" y="2716" class="sans strong" font-size="16">05  个人 Web / 移动伴侣</text>
+  <text x="916" y="2716" class="sans strong" font-size="16">06  AI 标签与语义搜索</text>
+
+  <!-- Release route arrows behind nodes -->
+  <line x1="368" y1="2872" x2="412" y2="2872" stroke="#64748b" stroke-width="1" marker-end="url(#arrow)"/>
+  <line x1="672" y1="2872" x2="716" y2="2872" stroke="#64748b" stroke-width="1" marker-end="url(#arrow)"/>
+  <line x1="976" y1="2872" x2="1020" y2="2872" stroke="#64748b" stroke-width="1" marker-end="url(#arrow)"/>
+
+  <!-- Release route -->
+  <text x="80" y="2808" class="mono" font-size="12" letter-spacing="3">RELEASE ROUTE</text>
+  <rect x="80" y="2836" width="288" height="128" rx="8" fill="rgba(77,128,230,0.10)" stroke="#4d80e6"/>
+  <text x="104" y="2872" font-family="'Geist Mono', ui-monospace" font-size="8" fill="#2b5bbb" letter-spacing="2">A · TRUST RECOVERY</text>
+  <text x="104" y="2912" class="sans strong" font-size="20">先恢复信任</text>
+  <text x="104" y="2940" class="muted" font-size="12">只做 P0；建议形成 1.1.0 基线</text>
+
+  <rect x="384" y="2836" width="288" height="128" rx="8" fill="#ffffff" stroke="rgba(11,11,11,0.12)"/>
+  <text x="408" y="2872" class="mono" font-size="8" letter-spacing="2">B · DAILY WORKFLOW</text>
+  <text x="408" y="2912" class="sans strong" font-size="20">补全高频任务</text>
+  <text x="408" y="2940" class="muted" font-size="12">传输、多选、移动、预览、分享</text>
+
+  <rect x="688" y="2836" width="288" height="128" rx="8" fill="#f6f6f6" stroke="rgba(11,11,11,0.12)"/>
+  <text x="712" y="2872" class="mono" font-size="8" letter-spacing="2">C · ASSET ADVANTAGE</text>
+  <text x="712" y="2912" class="sans strong" font-size="20">建立差异化</text>
+  <text x="712" y="2940" class="muted" font-size="12">优化、同步、指标、快速上传</text>
+
+  <rect x="992" y="2836" width="328" height="128" rx="8" fill="#ffffff" stroke="rgba(11,11,11,0.12)" stroke-dasharray="4,3"/>
+  <text x="1016" y="2872" class="mono" font-size="8" letter-spacing="2">D · PERSONAL ECOSYSTEM</text>
+  <text x="1016" y="2912" class="sans strong" font-size="20">验证留存后扩张</text>
+  <text x="1016" y="2940" class="muted" font-size="12">同步、自动化、插件、多云、AI</text>
+
+  <!-- Legend and footer -->
+  <line x1="80" y1="3024" x2="1320" y2="3024" stroke="rgba(11,11,11,0.12)" stroke-width="1"/>
+  <text x="80" y="3064" class="mono" font-size="8" letter-spacing="2">LEGEND</text>
+  <rect x="176" y="3048" width="40" height="24" rx="4" fill="rgba(77,128,230,0.10)" stroke="#4d80e6"/>
+  <text x="232" y="3064" class="mono" font-size="8">RELEASE GATE / P0</text>
+  <rect x="424" y="3048" width="40" height="24" rx="4" fill="#ffffff" stroke="rgba(11,11,11,0.12)"/>
+  <text x="480" y="3064" class="mono" font-size="8">CAPABILITY LAYER</text>
+  <line x1="680" y1="3060" x2="736" y2="3060" stroke="#64748b" marker-end="url(#arrow)"/>
+  <text x="760" y="3064" class="mono" font-size="8">VALUE MUST RISE FROM TRUST</text>
+
+  <line x1="80" y1="3104" x2="1320" y2="3104" stroke="rgba(11,11,11,0.12)" stroke-width="1"/>
+  <text x="80" y="3140" class="soft" font-size="8" letter-spacing="2">R2UPLOADER · MAIN@162131C · SOURCE + ISSUES + CLOUDFLARE R2 CAPABILITIES</text>
+  <text x="1320" y="3140" class="soft" font-size="8" text-anchor="end" letter-spacing="2">VISUAL PRODUCT REPORT</text>
+</svg>

@@ -1,44 +1,20 @@
-import React from "react";
 import type { AppProps } from "next/app";
-import { motion, AnimatePresence } from "motion/react";
-import { ConfigProvider } from "@/context/config";
-import { BucketsProvider } from "@/context/buckets";
+import { AppsSDKUIProvider } from "@openai/apps-sdk-ui/components/AppsSDKUIProvider";
+import { AppStateProvider } from "../context/app-state";
+import { TransferProvider } from "../context/transfers";
+import { AppShell } from "../components/new/app-shell";
 
 import "../styles/globals.css";
 
-const transition = {
-  type: "spring",
-  stiffness: 100,
-  damping: 20,
-  duration: 0.1,
-};
-
-const AnimatedPage = ({ children, down = false }) => {
-  return (
-    <motion.div
-      initial={{ opacity: 0, translateY: down ? 0 : 40 }}
-      animate={{ opacity: 1, translateY: 0 }}
-      exit={{ opacity: 0, translateY: down ? 0 : 140 }}
-      transition={transition}
-    >
-      {children}
-    </motion.div>
-  );
-};
-
 function MyApp({ Component, pageProps }: AppProps) {
   return (
-    <ConfigProvider>
-      <BucketsProvider>
-        {/* <AnimatePresence mode="wait"> */}
-        <div className="w-full h-screen relative">
-          {/* <AnimatedPage> */}
-          <Component {...pageProps} />
-          {/* </AnimatedPage> */}
-        </div>
-        {/* </AnimatePresence> */}
-      </BucketsProvider>
-    </ConfigProvider>
+    <AppsSDKUIProvider linkComponent="a">
+      <AppStateProvider>
+        <TransferProvider>
+          <AppShell><Component {...pageProps} /></AppShell>
+        </TransferProvider>
+      </AppStateProvider>
+    </AppsSDKUIProvider>
   );
 }
 

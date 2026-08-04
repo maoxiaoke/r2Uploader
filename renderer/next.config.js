@@ -1,4 +1,6 @@
 /** @type {import('next').NextConfig} */
+const CssMinimizerPlugin = require('css-minimizer-webpack-plugin')
+
 module.exports = {
   output: 'export',
   distDir: process.env.NODE_ENV === 'production' ? '../app' : '.next',
@@ -7,6 +9,7 @@ module.exports = {
     unoptimized: true,
   },
   transpilePackages: [
+    '@openai/apps-sdk-ui',
     'antd',
     '@ant-design',
     'rc-util',
@@ -18,7 +21,20 @@ module.exports = {
     'rc-table',
     '@rc-component', // 关键：解决 @rc-component/util 的报错
   ],
-  webpack: (config) => {
+  webpack: (config, { dev }) => {
+    if (!dev) {
+      config.optimization.minimizer = (config.optimization.minimizer || []).filter(
+        (plugin) => !(
+          plugin?.constructor?.name === 'CssMinimizerPlugin' ||
+          (typeof plugin === 'function' && plugin.toString().includes('CssMinimizerPlugin'))
+        )
+      )
+      config.optimization.minimizer.push(
+        new CssMinimizerPlugin({
+          minify: CssMinimizerPlugin.lightningCssMinify,
+        })
+      )
+    }
     return config
   },
 }

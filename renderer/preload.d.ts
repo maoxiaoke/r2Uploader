@@ -1,7 +1,7 @@
-import { IpcHandler } from "../main/preload";
+import type { R2DesktopApi } from "../main/preload";
 
 declare global {
   interface Window {
-    electron: IpcHandler;
+    r2: R2DesktopApi;
   }
 }
